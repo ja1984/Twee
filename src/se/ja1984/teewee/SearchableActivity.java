@@ -30,7 +30,7 @@ public class SearchableActivity extends ListActivity {
 
 	private DatabaseHandler db;
 	static final String KEY_URL = "http://www.thetvdb.com/api/GetSeries.php?seriesname=";
-	static final String KEY_FULLURL = "http://www.thetvdb.com//data/series/%s/all/";
+	static final String KEY_FULLURL = "http://www.thetvdb.com/DDFA315CB3513C1D/data/series/%s/all/";
 	static final String KEY_SERIES = "Series";
 	static final String KEY_EPISODE = "Episode";
 	static final String KEY_ID = "seriesid";

@@ -343,7 +343,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		ContentValues values = new ContentValues();
 		values.put(KEY_WATCHED, "1");
 		//WHERE date("+ KEY_AIRED +") < date('"+ dateWithoutTime +"')
-		db.update(TABLE_EPISODES, values, "date(?) < date(?) AND ? = ?", new String[] {KEY_AIRED, dateWithoutTime, KEY_SERIESID, id});
+		db.update(TABLE_EPISODES, values, KEY_AIRED + " < date('"+ dateWithoutTime +"') AND "+ KEY_SERIESID +" = ?", new String[] {id});
 		Log.d("Event","Updatering klar");
 		db.close();
 
