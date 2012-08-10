@@ -1,0 +1,56 @@
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <string name="app_name">Twee</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_main">Twee</string>
+    <string name="title_activity_details">Twee</string>
+    <string name="details_lastaired">Last aired</string>
+    <string name="details_upcoming">Upcoming episodes</string>
+    <string name="details_totalwatched">Episodes watched</string>
+    <string name="summary_header">Summary</string>
+    <string name="actors_header">Actors</string>
+    <string name="text_seriesrating">Rating</string>
+    <string name="search_hint">Search series</string>
+    <string name="search_header">Searching for</string>
+
+    <item name="EPISODE_ID" type="id"/>
+
+    
+    <string name="settings_theme_header">Twee theme</string>
+    
+    <string name="settings_theme_option_light">Light theme</string>
+    <string name="settings_theme_option_darklight">Light theme w. dark actionbar</string>
+    <string name="settings_theme_option_dark">Dark theme</string>
+    
+    <!-- Menu -->
+    <string name="menu_settings">Settings</string>
+    <string name="menu_add">Add</string>
+    <string name="menu_about">About</string>
+    <string name="menu_refresh">Refresh</string>
+    <string name="menu_markseries">Mark series as watched</string>
+    <!-- /Menu -->
+
+
+    <!-- Messages -->
+    <string name="message_series_watched">All episodes has been marked as watched</string>
+    <string name="message_series_fetching">Downloading series data</string>
+    <string name="message_series_fetching_done">Done downloading series data</string>
+    <string name="message_nointernet">Problem downloading series data, do you have internet?</string>
+    <!-- /Messages -->
+
+
+    <!-- About -->
+    <string name="about_title">About Twee</string>
+    <string name="about_close">Close</string>
+    <string name="about_text">Twee is getting all it´s information from http://thetvdb.com, you should probably support them in any way possible!</string>
+    <!-- /About -->
+
+    <string name="title_activity_searchable">SearchableActivity</string>
+    <string name="title_section3">Episodes</string>
+    <string name="title_section2">Overview</string>
+    <string name="title_section1">Summary</string>
+    <string name="title_activity_overview">Overview</string>
+    <string name="title_activity_episode">Episode</string>
+    <string name="title_activity_settings">Settings</string>
+
+</resources>
