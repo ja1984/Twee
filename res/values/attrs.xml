@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="menu_search" format="integer" />
+    <attr name="menu_refresh" format="integer" />
+    <attr name="menu_delete" format="integer" />
+    <attr name="menu_calendar" format="integer" />
+</resources>
