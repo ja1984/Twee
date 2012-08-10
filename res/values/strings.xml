@@ -35,7 +35,8 @@
     <string name="message_series_watched">All episodes have been marked as watched</string>
     <string name="message_series_fetching">Downloading series data</string>
     <string name="message_series_fetching_done">Done downloading series data</string>
-    <string name="message_nointernet">Problem downloading series data, do you have internet?</string>
+    <string name="message_nointernet">No connection!\nClick to try again</string>
+    <string name="message_noresult">No results found!</string>
     <!-- /Messages -->
 
 

@@ -48,18 +48,19 @@ containing a value of this type.
         public static final int padding_small=0x7f050000;
     }
     public static final class drawable {
-        public static final int ic_calendar_dark=0x7f020000;
-        public static final int ic_calendar_light=0x7f020001;
-        public static final int ic_delete_dark=0x7f020002;
-        public static final int ic_delete_light=0x7f020003;
-        public static final int ic_launcher=0x7f020004;
-        public static final int ic_refresh_dark=0x7f020005;
-        public static final int ic_refresh_light=0x7f020006;
-        public static final int ic_search_dark=0x7f020007;
-        public static final int ic_search_light=0x7f020008;
-        public static final int listitem=0x7f020009;
-        public static final int noimage=0x7f02000a;
-        public static final int noimage_large=0x7f02000b;
+        public static final int chucknnorris=0x7f020000;
+        public static final int ic_calendar_dark=0x7f020001;
+        public static final int ic_calendar_light=0x7f020002;
+        public static final int ic_delete_dark=0x7f020003;
+        public static final int ic_delete_light=0x7f020004;
+        public static final int ic_launcher=0x7f020005;
+        public static final int ic_refresh_dark=0x7f020006;
+        public static final int ic_refresh_light=0x7f020007;
+        public static final int ic_search_dark=0x7f020008;
+        public static final int ic_search_light=0x7f020009;
+        public static final int listitem=0x7f02000a;
+        public static final int noimage=0x7f02000b;
+        public static final int noimage_large=0x7f02000c;
     }
     public static final class id {
         public static final int EPISODE_ID=0x7f070000;
@@ -129,12 +130,12 @@ containing a value of this type.
         public static final int activity_settings=0x7f090005;
     }
     public static final class string {
-        public static final int about_close=0x7f06001a;
-        public static final int about_text=0x7f06001b;
+        public static final int about_close=0x7f06001b;
+        public static final int about_text=0x7f06001c;
         /**  /Messages 
  About 
          */
-        public static final int about_title=0x7f060019;
+        public static final int about_title=0x7f06001a;
         public static final int actors_header=0x7f060008;
         public static final int app_name=0x7f060000;
         public static final int details_lastaired=0x7f060004;
@@ -149,6 +150,7 @@ containing a value of this type.
          */
         public static final int menu_settings=0x7f060010;
         public static final int message_nointernet=0x7f060018;
+        public static final int message_noresult=0x7f060019;
         public static final int message_series_fetching=0x7f060016;
         public static final int message_series_fetching_done=0x7f060017;
         /**  /Menu 
@@ -164,16 +166,16 @@ containing a value of this type.
         public static final int summary_header=0x7f060007;
         public static final int text_seriesrating=0x7f060009;
         public static final int title_activity_details=0x7f060003;
-        public static final int title_activity_episode=0x7f060021;
+        public static final int title_activity_episode=0x7f060022;
         public static final int title_activity_main=0x7f060002;
-        public static final int title_activity_overview=0x7f060020;
+        public static final int title_activity_overview=0x7f060021;
         /**  /About 
          */
-        public static final int title_activity_searchable=0x7f06001c;
-        public static final int title_activity_settings=0x7f060022;
-        public static final int title_section1=0x7f06001f;
-        public static final int title_section2=0x7f06001e;
-        public static final int title_section3=0x7f06001d;
+        public static final int title_activity_searchable=0x7f06001d;
+        public static final int title_activity_settings=0x7f060023;
+        public static final int title_section1=0x7f060020;
+        public static final int title_section2=0x7f06001f;
+        public static final int title_section3=0x7f06001e;
     }
     public static final class style {
         public static final int AppTheme=0x7f080003;

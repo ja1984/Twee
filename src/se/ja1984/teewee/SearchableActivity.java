@@ -20,9 +20,11 @@ import android.support.v4.app.NavUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class SearchableActivity extends ListActivity {
@@ -53,7 +55,8 @@ public class SearchableActivity extends ListActivity {
 	static final String KEY_EP_SEASON = "SeasonNumber";
 	static final String KEY_EP_SUMMARY = "Overview";
 	static final String KEY_EP_TITLE = "EpisodeName";
-
+	TextView emptyView;
+	String searchQuery;
 
 
 	@Override
@@ -69,15 +72,25 @@ public class SearchableActivity extends ListActivity {
 		ActionBar actionBar = getActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
 
+		setContentView(R.layout.search);
+
+		ListView searchResult = (ListView)getListView();
+		emptyView = (TextView)findViewById(android.R.id.empty);
+
 		Intent intent = getIntent();
 		if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
 			String query = intent.getStringExtra(SearchManager.QUERY);
-
+			searchQuery = query;
 			actionBar.setTitle( getString(R.string.search_header) +" " + query);
 			doSearchQuery(query);
 		}
 
-		ListView searchResult = (ListView)getListView();
+		emptyView.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				doSearchQuery(searchQuery);
+			}
+		}); 
+
 		searchResult.setOnItemClickListener(new android.widget.AdapterView.OnItemClickListener() {
 
 			public void onItemClick(AdapterView<?> arg0, View rowView, int arg2, long arg3) {
@@ -123,9 +136,16 @@ public class SearchableActivity extends ListActivity {
 
 	private void doSearchQuery(String query)
 	{
-		db = new DatabaseHandler(SearchableActivity.this);
-		Search search = new Search();
-		search.execute(query);
+		if(isNetworkAvailable())
+		{
+			db = new DatabaseHandler(SearchableActivity.this);
+			Search search = new Search();
+			search.execute(query);
+		}
+		else
+		{
+			emptyView.setText(R.string.message_nointernet);
+		}
 	}
 
 
@@ -139,7 +159,7 @@ public class SearchableActivity extends ListActivity {
 			String xml = parser.getXmlFromUrl(completeAddress);
 
 			ArrayList<Series> series = new ArrayList<Series>();
-			
+
 			if (xml != null)
 			{
 				Document doc = parser.getDomElement(xml);
@@ -157,10 +177,11 @@ public class SearchableActivity extends ListActivity {
 					series.add(s);
 				}
 			}
-//			else
-//			{
-//				Toast.makeText(getApplication(), getText(R.string.message_nointernet), Toast.LENGTH_SHORT).show();
-//			}
+			//else
+			//{
+
+			//				Toast.makeText(getApplication(), getText(R.string.message_nointernet), Toast.LENGTH_SHORT).show();
+			//}
 
 			return series;
 
@@ -169,6 +190,9 @@ public class SearchableActivity extends ListActivity {
 		@Override
 		protected void onPostExecute(ArrayList<Series> series) {
 			setProgressBarIndeterminateVisibility(false);
+			
+			emptyView.setText(R.string.message_noresult);
+
 			SearchAdapter sa = new SearchAdapter(getBaseContext(),R.layout.search_result,series);
 
 			setListAdapter(sa);

@@ -30,7 +30,7 @@ public class SettingsActivity extends BaseActivity {
         else if(theme == R.style.LightDark)
         {
         	oldCheckedButton = (RadioButton)findViewById(R.id.radioTheme1);
-        }
+        }       
         else
         {
         	oldCheckedButton = (RadioButton)findViewById(R.id.radioTheme2);
@@ -98,7 +98,7 @@ public class SettingsActivity extends BaseActivity {
     	else if(selectedTheme.equals("Light theme w. dark actionbar"))
     	{
     		option = R.style.LightDark;
-    	}
+    	}	
     	else
     	{
     		option = R.style.Dark;
