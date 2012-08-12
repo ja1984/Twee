@@ -122,7 +122,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		db.setTransactionSuccessful();
 		db.endTransaction();
 		db.close();
-		
+
 	}
 
 	public ArrayList<Series> getAllSeries()
@@ -151,15 +151,15 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 			s.setSeriesId(cursor.getString(12));
 
 			s.Episodes = new ArrayList<Episode>();
-			
+
 			s.Episodes.add(GetNextEpisodeForSeries(s.getSeriesId()));
-			
+
 			series.add(s);
 			cursor.moveToNext();
 		}
 
-		
-		
+
+
 		cursor.close();
 		db.close();
 		return series;
@@ -169,14 +169,14 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	{
 		Episode e = new Episode();
 		try {
-			
+
 			String dateWithoutTime  = android.text.format.DateFormat.format("yyyy-MM-dd", new java.util.Date()).toString();
-			
+
 			String sql = "SELECT * FROM "+ TABLE_EPISODES +" WHERE date("+ KEY_AIRED +") < date('"+ dateWithoutTime +"') AND "+KEY_SERIESID+" = "+ seriesId +" AND "+KEY_SEASON+" != 0 ORDER BY "+ KEY_AIRED +" DESC LIMIT 1";	
 			SQLiteDatabase db = this.getReadableDatabase();
-			
+
 			Cursor cursor = db.rawQuery(sql, null);
-			
+
 			if(cursor != null)
 			{
 				if(cursor.moveToFirst())
@@ -191,32 +191,32 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 					e.setWatched(cursor.getString(5));
 				}
 			}
-			
+
 			cursor.close();
 			db.close();
-			
+
 		} catch (Exception e2) {
 			// TODO: handle exception
 			Log.d("Error",e2.getLocalizedMessage());
 		}
-		
+
 		return e;
-		
+
 	}
 
-	
+
 	public Episode GetNextEpisodeForSeries(String seriesId)
 	{
 		Episode e = new Episode();
 		try {
-			
+
 			String dateWithoutTime  = android.text.format.DateFormat.format("yyyy-MM-dd", new java.util.Date()).toString();
-			
+
 			String sql = "SELECT * FROM "+ TABLE_EPISODES +" WHERE date("+ KEY_AIRED +") > date('"+ dateWithoutTime +"') AND "+KEY_SERIESID+" = "+ seriesId +" AND "+KEY_SEASON+" != 0 ORDER BY "+ KEY_AIRED +" DESC LIMIT 1";	
 			SQLiteDatabase db = this.getReadableDatabase();
-			
+
 			Cursor cursor = db.rawQuery(sql, null);
-			
+
 			if(cursor != null)
 			{
 				if(cursor.moveToFirst())
@@ -227,31 +227,31 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 					e.setTitle(cursor.getString(3));
 				}
 			}
-			
+
 			cursor.close();
 			db.close();
-			
+
 		} catch (Exception e2) {
 			// TODO: handle exception
 			Log.d("Error",e2.getLocalizedMessage());
 		}
-		
+
 		return e;
-		
+
 	}
-	
-	
+
+
 	public Episode GetEpisodeById(String episodeId)
 	{
 		Episode e = new Episode();
 		try {
-			
-						
+
+
 			String sql = "SELECT * FROM "+ TABLE_EPISODES +" WHERE "+KEY_ID+" = "+ episodeId;	
 			SQLiteDatabase db = this.getReadableDatabase();
-			
+
 			Cursor cursor = db.rawQuery(sql, null);
-			
+
 			if(cursor != null)
 			{
 				if(cursor.moveToFirst())
@@ -266,18 +266,18 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 					e.setWatched(cursor.getString(5));
 				}
 			}
-			
+
 			cursor.close();
 			db.close();
-			
+
 		} catch (Exception e2) {
 			// TODO: handle exception
 			Log.d("Error",e2.getLocalizedMessage());
 		}
-		
+
 		return e;
 	}
-	
+
 	public Series getSeriesById(String id)
 	{
 		Series s = new Series();
@@ -339,7 +339,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		SQLiteDatabase db = this.getWritableDatabase();
 
 		String dateWithoutTime  = android.text.format.DateFormat.format("yyyy-MM-dd", new java.util.Date()).toString();
-		
+
 		ContentValues values = new ContentValues();
 		values.put(KEY_WATCHED, "1");
 		//WHERE date("+ KEY_AIRED +") < date('"+ dateWithoutTime +"')
@@ -348,11 +348,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		db.close();
 
 	}
-	
+
 	private ArrayList<Episode> GetEpisodes(String seriesId)
 	{
 		ArrayList<Episode> episodes = new ArrayList<Episode>();
-		String sql = "SELECT * FROM " + TABLE_EPISODES + " WHERE " + KEY_SEASON + " != 0 AND " + KEY_AIRED + " != '' AND " +  KEY_SERIESID + " = " + seriesId;
+		String sql = "SELECT * FROM " + TABLE_EPISODES + " WHERE " + KEY_SEASON + " != 0 AND " + KEY_AIRED + " != '' AND " +  KEY_SERIESID + " = " + seriesId + " ORDER BY "+KEY_AIRED+" DESC";
 		SQLiteDatabase db = this.getReadableDatabase();
 		Cursor cursor = db.rawQuery(sql, null);
 

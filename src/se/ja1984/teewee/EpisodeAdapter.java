@@ -20,6 +20,7 @@ public class EpisodeAdapter extends ArrayAdapter<Episode> {
 	private final ArrayList<Episode> episodes;
 	private static  DateService dateService;
 	private ArrayList<Boolean> itemChecked = new ArrayList<Boolean>();
+	private ArrayList<Boolean> visibleItems = new ArrayList<Boolean>();
 
 	public EpisodeAdapter(Context context, int resource, ListView lv, ArrayList<Episode> objects)
 	{
@@ -31,6 +32,11 @@ public class EpisodeAdapter extends ArrayAdapter<Episode> {
 		for (int i = 0; i < objects.size(); i++) {
 			itemChecked.add(i, objects.get(i).getWatched().equals("1"));
 		}
+		
+		for (int i = 0; i < objects.size(); i++) {
+			visibleItems.add(i, dateService.CompareDates(episodes.get(i).getAired(), dateService.GetTodaysDate()) >= 0);
+		}
+		
 	}
 
 	static class ViewHolder {
@@ -83,6 +89,15 @@ public class EpisodeAdapter extends ArrayAdapter<Episode> {
 //			}
 			
 			checkBox.setChecked(itemChecked.get(pos));
+			if(visibleItems.get(pos))
+			{
+				checkBox.setVisibility(8);
+			}
+			else
+			{
+				checkBox.setVisibility(View.VISIBLE);
+			}
+			
 			title.setText(episodes.get(pos).getTitle());
 			information.setText(dateService.Episodenumber(episodes.get(pos)) + " | " + dateService.DisplayDate(episodes.get(pos).getAired()));
 			

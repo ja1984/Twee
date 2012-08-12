@@ -36,6 +36,8 @@ public class OverviewActivity extends FragmentActivity {
     SectionsPagerAdapter mSectionsPagerAdapter;
     ArrayList<Fragment> fragments;
     Series series;
+    int totalEpisodes;
+    int watchedEpisodes;
     
     /**
      * The {@link ViewPager} that will host the section contents.
@@ -64,7 +66,7 @@ public class OverviewActivity extends FragmentActivity {
         fragments = new ArrayList<Fragment>();
         fragments.add(new SummaryFragment(series));
         fragments.add(new OverviewFragment(series));
-        fragments.add(new EpisodesFragment(series));
+        fragments.add(new EpisodesFragment(series, totalEpisodes, watchedEpisodes));
         // Create the adapter that will return a fragment for each of the three primary sections
         // of the app.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
@@ -173,7 +175,7 @@ public class OverviewActivity extends FragmentActivity {
     	
     	Series s;
     	
-    	public EpisodesFragment(Series s){
+    	public EpisodesFragment(Series s, int totalEpisodes, int watchedEpisodes){
     		this.s = s;
     	}
     	
