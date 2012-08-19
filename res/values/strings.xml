@@ -8,6 +8,8 @@
     <string name="details_totalwatched">Episodes watched</string>
     <string name="summary_header">Summary</string>
     <string name="actors_header">Actors</string>
+    <string name="imdb_header">Imdb</string>
+    <string name="button_imdb">More information</string>
     <string name="text_seriesrating">Rating</string>
     <string name="search_header">Searching for</string>
     <string name="settings_theme_header">Twee theme</string>

@@ -7,11 +7,15 @@ import se.goagubbar.twee.Adapters.EpisodeAdapter;
 import se.goagubbar.twee.Models.Episode;
 import se.goagubbar.twee.Models.Series;
 import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -34,7 +38,9 @@ public class Fragments {
         	View v = inflater.inflate(R.layout.view_summary, container, false);
         	TextView summary = (TextView)v.findViewById(R.id.txtSummary);
         	TextView actors = (TextView)v.findViewById(R.id.txtActors);
-        	        	
+        	Button btnImdb = (Button)v.findViewById(R.id.btnOpenImdb);
+        	
+        	
         	summary.setText(s.getSummary());
         	
         	StringTokenizer separatedActors = new StringTokenizer(s.getActors(),"|");
@@ -45,6 +51,27 @@ public class Fragments {
 			}
         	
         	actors.setText(_actors);
+        	
+        	
+        	btnImdb.setOnClickListener(new OnClickListener() {
+				
+				public void onClick(View v) {
+					String uri = "imdb:///title/" + s.getImdbId();
+					Intent test = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+				    if(getActivity().getPackageManager().resolveActivity(test, 0) != null)
+				    {
+				    	startActivity(test);
+				    }
+				    else
+				    {
+				    	String uri2 = "http://m.imdb.com/title/" + s.getImdbId();
+				    	Intent imdbIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri2));               
+				    	startActivity(imdbIntent);
+
+				    }
+				}
+			});
+        	
         	
             return v;
         }

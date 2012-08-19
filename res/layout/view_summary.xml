@@ -56,6 +56,26 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <TextView
+            style="?android:attr/listSeparatorTextViewStyle"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:text="@string/imdb_header"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@android:color/holo_blue_light"
+            android:textSize="11sp"
+            android:textStyle="normal|bold"
+            android:typeface="normal" />
+
+        <Button
+            android:id="@+id/btnOpenImdb"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/button_imdb" />
     </LinearLayout>
 
 </ScrollView>
