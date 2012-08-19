@@ -209,7 +209,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
 			String dateWithoutTime  = android.text.format.DateFormat.format("yyyy-MM-dd", new java.util.Date()).toString();
 
-			String sql = "SELECT * FROM "+ TABLE_EPISODES +" WHERE date("+ KEY_AIRED +") > date('"+ dateWithoutTime +"') AND "+KEY_SERIESID+" = "+ seriesId +" AND "+KEY_SEASON+" != 0 ORDER BY "+ KEY_AIRED +" ASC LIMIT 1";	
+			String sql = "SELECT * FROM "+ TABLE_EPISODES +" WHERE date("+ KEY_AIRED +") >= date('"+ dateWithoutTime +"') AND "+KEY_SERIESID+" = "+ seriesId +" AND "+KEY_SEASON+" != 0 ORDER BY "+ KEY_AIRED +" ASC LIMIT 1";	
 			SQLiteDatabase db = this.getReadableDatabase();
 
 			Cursor cursor = db.rawQuery(sql, null);

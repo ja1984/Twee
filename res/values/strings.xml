@@ -11,7 +11,9 @@
     <string name="text_seriesrating">Rating</string>
     <string name="search_header">Searching for</string>
     <string name="settings_theme_header">Twee theme</string>
-    
+    <string name="settings_header_header">Download header</string>
+    <string name="settings_header_switch">Download header image</string>
+    <string name="settings_header_description">Choose weither to download the large image header or not (aprox. 1.5MB)</string>
     <!-- /General -->
 
 

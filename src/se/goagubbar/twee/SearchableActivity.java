@@ -63,13 +63,15 @@ public class SearchableActivity extends ListActivity {
 	String searchQuery;
 	ImageService imageService;
 	ListView searchResult;
-
+	Boolean downloadHeader;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 
 		SharedPreferences settings = getSharedPreferences("Twee", 0);
 		int theme = settings.getInt("Theme", R.style.Light);
+		downloadHeader = settings.getBoolean("downloadHeaderImage", true);
+
 		setTheme(theme);
 
 		super.onCreate(savedInstanceState);
@@ -97,7 +99,7 @@ public class SearchableActivity extends ListActivity {
 			}
 		}); 
 
-		
+
 
 		searchResult.setOnItemClickListener(new android.widget.AdapterView.OnItemClickListener() {
 
@@ -114,13 +116,13 @@ public class SearchableActivity extends ListActivity {
 
 	}
 
-    private void setupSearchView(Menu menu) {
+	private void setupSearchView(Menu menu) {
 		SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
 		SearchView searchView = (SearchView) menu.findItem(R.id.menu_add).getActionView();
 		searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
 		searchView.setIconifiedByDefault(false); // Do not iconify the widget; expand it by default
 	}
-	
+
 	private boolean isNetworkAvailable() {
 		ConnectivityManager connectivityManager 
 		= (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -250,14 +252,17 @@ public class SearchableActivity extends ListActivity {
 				s.setImage(imageService.getBitmapFromURL(image, SearchableActivity.this));
 			}
 
-			Log.d("Event","Laddar ner bild 2");
+			if(downloadHeader){
 
-			String header = parser.getValue(e, KEY_HEADER);
-			Log.d("Test",header.toString());
+				Log.d("Event","Laddar ner bild 2");
+				String header = parser.getValue(e, KEY_HEADER);
+				Log.d("Test",header.toString());
 
-			if(header != null){
-				s.setHeader(imageService.getBitmapFromURL(header, SearchableActivity.this));
+				if(header != null){
+					s.setHeader(imageService.getBitmapFromURL(header, SearchableActivity.this));
+				}
 			}
+
 			Log.d("Event","Laddar ner bild 2 - klar!");
 
 			s.setImdbId(parser.getValue(e, KEY_IMDBID));

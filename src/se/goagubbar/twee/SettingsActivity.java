@@ -1,25 +1,33 @@
 package se.goagubbar.twee;
 
-import android.os.Bundle;
 import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.support.v4.app.NavUtils;
+import android.widget.Switch;
 
 public class SettingsActivity extends BaseActivity {
 
+	SharedPreferences settings;
+	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_settings);
         getActionBar().setDisplayHomeAsUpEnabled(true);
         
-        SharedPreferences settings = getSharedPreferences("Twee", 0);
+        settings = getSharedPreferences("Twee", 0);
 	    int theme = settings.getInt("Theme", R.style.Light);
+	    boolean downloadHeader = settings.getBoolean("downloadHeaderImage", true);
 	    
 	    RadioButton oldCheckedButton = null;
+	    
+	    
 	    
         if((int) theme == R.style.Light)
         {
@@ -38,27 +46,34 @@ public class SettingsActivity extends BaseActivity {
         
         
         
-     // This will get the radiogroup
+
         RadioGroup radioGroup = (RadioGroup)findViewById(R.id.grpTheme);
-        // This will get the radiobutton in the radiogroup that is checked
-        //RadioButton checkedRadioButton = (RadioButton)radioGroup.findViewById(radioGroup.getCheckedRadioButtonId());
+        final Switch switchHeader	 = (Switch)findViewById(R.id.switchHeader);
         
+        switchHeader.setChecked(downloadHeader);
         
-     // This overrides the radiogroup onCheckListener
+        switchHeader.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+			
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				
+		        SharedPreferences.Editor editor = settings.edit();
+		        editor.putBoolean("downloadHeaderImage", switchHeader.isChecked());
+
+		        editor.commit();
+
+			}
+		});
+        
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
         {
             public void onCheckedChanged(RadioGroup rGroup, int checkedId)
             {
-                // This will get the radiobutton that has changed in its check state
+
                 RadioButton checkedRadioButton = (RadioButton)rGroup.findViewById(checkedId);
-                // This puts the value (true/false) into the variable
                 boolean isChecked = checkedRadioButton.isChecked();
-                // If the radiobutton that has changed in check state is now checked...
                 if (isChecked)
                 {
-                    // Changes the textview's text to "Checked: example radiobutton text"
                 	saveTheme(checkedRadioButton.getText().toString());
-                    //Log.d("Checked", checkedRadioButton.getText().toString());
                 }
             }
         });
@@ -100,11 +115,8 @@ public class SettingsActivity extends BaseActivity {
     		option = R.style.Dark;
     	}
     	
-    	SharedPreferences settings = getSharedPreferences("Twee", 0);
         SharedPreferences.Editor editor = settings.edit();
         editor.putInt("Theme", option);
-
-        // Commit the edits!
         editor.commit();
     }
     

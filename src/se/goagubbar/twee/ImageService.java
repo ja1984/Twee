@@ -11,7 +11,6 @@ import java.net.URL;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.BitmapFactory.Options;
 import android.util.Log;
 
 public class ImageService {
@@ -29,7 +28,14 @@ public class ImageService {
 			InputStream input = connection.getInputStream();
 			//Bitmap myBitmap = BitmapFactory.decodeStream(input,null,new Options().);
 			Bitmap myBitmap = BitmapFactory.decodeStream(input);
-						return SaveImage(myBitmap, name, ctx);
+
+			if((int)myBitmap.getWidth() > 800)
+			{
+				myBitmap = Bitmap.createScaledBitmap(myBitmap,(int)(myBitmap.getWidth()*0.8), (int)(myBitmap.getHeight()*0.8), true);
+			}
+			
+			
+			return SaveImage(myBitmap, name, ctx);
 		} catch (IOException e) {
 			e.printStackTrace();
 			return null;
@@ -43,7 +49,7 @@ public class ImageService {
 		FileOutputStream fos = null;
 		try {
 			fos = context.openFileOutput(filename, Context.MODE_PRIVATE);
-			bitmap.compress(Bitmap.CompressFormat.PNG, 90, fos);
+			bitmap.compress(Bitmap.CompressFormat.PNG , 90, fos);
 
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
