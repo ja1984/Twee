@@ -25,6 +25,8 @@ import android.widget.TextView;
 
 public class Fragments {
 
+	static Activity activity;
+	
 	public static class SummaryFragment extends Fragment{
     	Series s;
     	public SummaryFragment(Series s){
@@ -100,6 +102,7 @@ public class Fragments {
         	
             return v;
         }
+        
     	
     }
     
@@ -118,7 +121,7 @@ public class Fragments {
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         	View v = inflater.inflate(R.layout.view_overview, container, false);
         	        	
-        	final Activity activity = getActivity();
+        	activity = getActivity();
         	
             final Episode lastAiredApisode = new DatabaseHandler(activity).GetLastAiredEpisodeForSeries(s.getSeriesId());
             TextView seriesName = (TextView)v.findViewById(R.id.txtSeriesName);
@@ -170,13 +173,8 @@ public class Fragments {
             
             String today = dateHelper.GetTodaysDate();
             
-            int watched = 0;
-            int numberOfEpisodes = s.Episodes.size();
+
             for (Episode episode : s.Episodes) {
-    			if(episode.getWatched().equals("1"))
-    			{
-    				watched ++;
-    			}
     			
     			if(dateHelper.CompareDates(episode.getAired(), today) >= 0)
     			{
@@ -184,14 +182,7 @@ public class Fragments {
     			}
     		}
             
-            TextView textWatched = (TextView)v.findViewById(R.id.txtWatched);
-            ProgressBar progressWatched = (ProgressBar)v.findViewById(R.id.pgrWatched);
-            
-            progressWatched.setMax(numberOfEpisodes);
-            progressWatched.setProgress(watched);
-            
-            textWatched.setText(watched + "/" + numberOfEpisodes);
-            
+            SetProgress(v, s.getSeriesId());
             episodes.setAdapter(new EpisodeAdapter(getActivity(), R.id.lstEpisodes, episodes,newEps));
             
             seriesName.setText(s.getName());
@@ -203,4 +194,27 @@ public class Fragments {
     }
     
 	
+    public static void SetProgress(View view, String seriesId)
+    {
+    	
+    	ArrayList<Episode> episodes = new DatabaseHandler(activity).GetAiredEpisodes(seriesId);
+    	
+    	int watched = 0;
+    	int totalEpisodes = episodes.size();
+    	
+    	for (Episode episode : episodes) {
+			if(episode.getWatched().equals("1"))
+			{
+				watched ++;
+			}
+		}
+    	
+    	ProgressBar progressWatched = (ProgressBar)view.findViewById(R.id.pgrWatched);
+        progressWatched.setMax(totalEpisodes);
+        progressWatched.setProgress(watched);
+    	
+        TextView textWatched = (TextView)view.findViewById(R.id.txtWatched);
+        textWatched.setText( watched +  "/" + totalEpisodes);
+    }
+    
 }

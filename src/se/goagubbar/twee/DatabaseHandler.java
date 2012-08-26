@@ -330,6 +330,31 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		db.close();
 
 	}
+	
+	public void ToggleSeasonWatched(String id, String season, boolean watched)
+	{
+		SQLiteDatabase db = this.getWritableDatabase();
+
+		String value;
+		String dateWithoutTime  = android.text.format.DateFormat.format("yyyy-MM-dd", new java.util.Date()).toString();
+		
+		if(watched)
+		{
+			value = "1";
+		}
+		else
+		{
+			value = "0";
+		}
+
+		ContentValues values = new ContentValues();
+		values.put(KEY_WATCHED, value);
+
+		db.update(TABLE_EPISODES, values, KEY_AIRED + " < date('"+ dateWithoutTime +"') AND "+KEY_SERIESID + " = ? AND " + KEY_SEASON + " = ?", new String[] { id, season });
+		Log.d("Event","Updatering klar");
+		db.close();
+
+	}
 
 	public void MarkSeriesAsWatched(String id)
 	{
@@ -380,28 +405,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		return episodes;
 	}
 
-
-	public ArrayList<Episode> GetAllEpisodesForGivenTimePeriod(int timeperiod)
+	public ArrayList<Episode> GetAiredEpisodes(String seriesId)
 	{
-		ArrayList<Episode> episodes = new ArrayList<Episode>();
 		String dateWithoutTime  = android.text.format.DateFormat.format("yyyy-MM-dd", new java.util.Date()).toString();
-		String sql = "";
-		
-		switch (timeperiod) {
-		case 0: //Today
-			sql = "SELECT * FROM "+ TABLE_EPISODES +" WHERE STRFTIME('%j', "+ KEY_AIRED +") = STRFTIME('%j', '"+ dateWithoutTime +"') AND STRFTIME('%Y', "+ KEY_AIRED +") = STRFTIME('%Y', '"+ dateWithoutTime +"')";		
-			break;
-		case 1: //This week
-			sql = "SELECT * FROM "+ TABLE_EPISODES +" WHERE STRFTIME('%W', "+ KEY_AIRED +") = STRFTIME('%W', '"+ dateWithoutTime +"') AND STRFTIME('%Y', "+ KEY_AIRED +") = STRFTIME('%Y', '"+ dateWithoutTime +"')";
-			break;
-		case 2: //This month
-			sql = "SELECT * FROM "+ TABLE_EPISODES +" WHERE STRFTIME('%m', "+ KEY_AIRED +") = STRFTIME('%m', '"+ dateWithoutTime +"') AND STRFTIME('%Y', "+ KEY_AIRED +") = STRFTIME('%Y', '"+ dateWithoutTime +"')";
-			break;
-		default:
-			break;
-		}
-
-		//String sql = "SELECT * FROM " + TABLE_EPISODES + " WHERE " + KEY_SEASON + " != 0 AND " + KEY_AIRED + " != '' AND " +  KEY_SERIESID + " = " + seriesId + " ORDER BY "+KEY_AIRED+" DESC";
+		ArrayList<Episode> episodes = new ArrayList<Episode>();
+		String sql = "SELECT * FROM " + TABLE_EPISODES + " WHERE " + KEY_SEASON + " != 0 AND " + KEY_AIRED + " != '' AND " + KEY_AIRED + " <= date('" + dateWithoutTime + "') AND " +  KEY_SERIESID + " = " + seriesId + " ORDER BY "+KEY_AIRED+" DESC";
 		SQLiteDatabase db = this.getReadableDatabase();
 		Cursor cursor = db.rawQuery(sql, null);
 
@@ -432,6 +440,67 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		return episodes;
 	}
 
+
+
+	public ArrayList<Episode> GetAllEpisodesForGivenTimePeriod(int timeperiod)
+	{
+		ArrayList<Episode> episodes = new ArrayList<Episode>();
+		String dateWithoutTime  = android.text.format.DateFormat.format("yyyy-MM-dd", new java.util.Date()).toString();
+		String sql = "";
+		//"SELECT * FROM table_a a INNER JOIN table_b b ON a.id=b.other_id WHERE b.property_id=?";
+		switch (timeperiod) {
+		case 0: //Today
+			sql = "SELECT * FROM "+ TABLE_EPISODES + " e INNER JOIN "+TABLE_SERIES+" s ON e.seriesId = s.SeriesId WHERE STRFTIME('%j', "+ KEY_AIRED +") = STRFTIME('%j', '"+ dateWithoutTime +"') AND STRFTIME('%Y', "+ KEY_AIRED +") = STRFTIME('%Y', '"+ dateWithoutTime +"')";		
+			break;
+		case 1: //This week
+			sql = "SELECT * FROM "+ TABLE_EPISODES +" e INNER JOIN "+TABLE_SERIES+" s ON e.seriesId = s.SeriesId WHERE STRFTIME('%W', "+ KEY_AIRED +") = STRFTIME('%W', '"+ dateWithoutTime +"') AND STRFTIME('%Y', "+ KEY_AIRED +") = STRFTIME('%Y', '"+ dateWithoutTime +"')";
+			break;
+		case 2: //This month
+			sql = "SELECT * FROM "+ TABLE_EPISODES +" e INNER JOIN "+TABLE_SERIES+" s ON e.seriesId = s.SeriesId WHERE STRFTIME('%m', "+ KEY_AIRED +") = STRFTIME('%m', '"+ dateWithoutTime +"') AND STRFTIME('%Y', "+ KEY_AIRED +") = STRFTIME('%Y', '"+ dateWithoutTime +"')";
+			break;
+		default:
+			break;
+		}
+
+		//String sql = "SELECT * FROM " + TABLE_EPISODES + " WHERE " + KEY_SEASON + " != 0 AND " + KEY_AIRED + " != '' AND " +  KEY_SERIESID + " = " + seriesId + " ORDER BY "+KEY_AIRED+" DESC";
+		SQLiteDatabase db = this.getReadableDatabase();
+		Cursor cursor = db.rawQuery(sql, null);
+
+		cursor.moveToFirst();
+
+		while(!cursor.isAfterLast())
+		{
+			Episode e = new Episode();
+
+			e.setAired(cursor.getString(4));
+			e.setEpisode(cursor.getString(2));
+			e.setID(Integer.parseInt(cursor.getString(0)));
+			e.setSeason(cursor.getString(1));
+			e.setSeriesId(cursor.getString(7));
+			e.setSummary(cursor.getString(6));
+			e.setTitle( cursor.getString(3));
+			e.setWatched(cursor.getString(5));
+			e.setLastUpdated(cursor.getString(11));
+
+			episodes.add(e);
+
+			cursor.moveToNext();
+		}
+		cursor.close();
+		db.close();
+
+
+
+		return episodes;
+	}
+
+	public void DeleteSeries(String seriesId)
+	{
+		SQLiteDatabase db = this.getWritableDatabase();
+		db.delete(TABLE_EPISODES, KEY_SERIESID + " = ?", new String[] { String.valueOf(seriesId) });
+		db.delete(TABLE_SERIES, KEY_SERIESID + " = ?", new String[] { String.valueOf(seriesId) });
+		db.close();
+	}
 }
 
 

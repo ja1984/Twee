@@ -24,6 +24,7 @@ import android.widget.SearchView;
 
 public class HomeActivity extends BaseActivity {
 
+	
 	private DatabaseHandler db;
 	static final String KEY_URL = "http://www.thetvdb.com/api/GetSeries.php?seriesname=";
 	static final String KEY_FULLURL = "http://www.thetvdb.com//data/series/%s/all/";
@@ -52,6 +53,7 @@ public class HomeActivity extends BaseActivity {
 
 	static List<Series> series;
 	private ListView mySeries;
+	Object mActionMode;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -60,19 +62,26 @@ public class HomeActivity extends BaseActivity {
         db = new DatabaseHandler(this);
         setContentView(R.layout.layout_home);
         
+        
+        
         new GetMySeries().execute();
 
+        
+        
 		mySeries = (ListView)findViewById(R.id.lstMySeries);
+			
 		mySeries.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
 				Intent intent = new Intent(getBaseContext(), OverviewActivity.class);
-				intent.putExtra("SeriesId", view.getTag().toString());
+				intent.putExtra("SeriesId", view.getTag(R.string.homeactivity_tag_seriesid).toString());
 				startActivity(intent);
 
 			}
 		});
     }
+
+    
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -83,14 +92,12 @@ public class HomeActivity extends BaseActivity {
         return true;
     }
 
-    
     private void setupSearchView(Menu menu) {
 		SearchManager searchManager =                (SearchManager) getSystemService(Context.SEARCH_SERVICE);
 		SearchView searchView =                 (SearchView) menu.findItem(R.id.menu_add).getActionView();
 		searchView.setSearchableInfo(
 				searchManager.getSearchableInfo(getComponentName()));
 	}
-    
     
     public boolean onOptionsItemSelected(MenuItem item){
 

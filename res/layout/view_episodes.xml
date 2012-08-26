@@ -3,6 +3,5 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/lstAllEpisodes"
-    android:paddingLeft="5dp"
-    android:paddingRight="5dp" >
+>
 </ListView>

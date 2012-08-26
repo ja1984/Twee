@@ -2,6 +2,7 @@ package se.goagubbar.twee;
 
 import java.util.ArrayList;
 
+import se.goagubbar.twee.Adapters.CalendarAdapter;
 import se.goagubbar.twee.Adapters.EpisodeAdapter;
 import se.goagubbar.twee.Models.Episode;
 import android.app.ActionBar;
@@ -18,7 +19,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 
 public class CalendarActivity extends FragmentActivity implements ActionBar.OnNavigationListener {
 
@@ -119,8 +119,8 @@ public class CalendarActivity extends FragmentActivity implements ActionBar.OnNa
                 Bundle savedInstanceState) {
         	ListView listView = new ListView(getActivity());
             Bundle args = getArguments();
-            EpisodeAdapter episodeAdapter = new EpisodeAdapter(getActivity(), R.id.lstEpisodes, listView, new DatabaseHandler(getActivity()).GetAllEpisodesForGivenTimePeriod(args.getInt(ARG_SECTION_NUMBER)));
-            listView.setAdapter(episodeAdapter);
+            CalendarAdapter calendarAdapter = new CalendarAdapter(getActivity(), R.id.lstEpisodes, listView, new DatabaseHandler(getActivity()).GetAllEpisodesForGivenTimePeriod(args.getInt(ARG_SECTION_NUMBER)));
+            listView.setAdapter(calendarAdapter);
             return listView;
         }
     }

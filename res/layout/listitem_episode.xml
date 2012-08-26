@@ -1,15 +1,69 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/background_listitem"
+    android:clickable="true"
+    android:orientation="vertical" >
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:clickable="true"
-        android:background="@drawable/background_listitem" >
-
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/holo_blue_light"
+        android:orientation="vertical"
+        android:id="@+id/seasonTest"
+		android:visibility="gone"
+		android:clickable="false"
+         >
+
+        <TextView
+            android:id="@+id/txtSeasonNumber"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dip"
+            android:scrollHorizontally="true"
+            android:scrollbars="none"
+            android:shadowColor="@android:color/black"
+            android:shadowDx="1"
+            android:shadowDy="1"
+            android:shadowRadius="1"
+            android:textAllCaps="true"
+            android:textColor="#ffffffff"
+            android:textSize="11sp"
+            android:text="heeej"
+            android:textStyle="normal|bold"
+            android:typeface="normal" />
+        
+        <CheckBox
+            android:id="@+id/chkWatchedSeason"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/txtSeasonNumber"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_margin="0dp" />
+        
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/layoutEpisode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/txtExtra"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textSize="12sp"
+            android:visibility="gone" />
+
         <TextView
             android:id="@+id/txtTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
+            android:layout_below="@id/txtExtra"
             android:layout_toLeftOf="@+id/chkWatched"
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
@@ -26,7 +80,9 @@
             android:id="@+id/chkWatched"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignBaseline="@id/txtTitle"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true" />
-
     </RelativeLayout>
+
+</LinearLayout>

@@ -11,8 +11,10 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 import se.goagubbar.twee.Models.Series;
 
@@ -56,15 +58,20 @@ public class OverviewActivity extends FragmentActivity {
         fragments = new ArrayList<Fragment>();
         fragments.add(new Fragments.SummaryFragment(series));
         fragments.add(new Fragments.OverviewFragment(series));
+        
         fragments.add(new Fragments.EpisodesFragment(series, totalEpisodes, watchedEpisodes));
         // Create the adapter that will return a fragment for each of the three primary sections
         // of the app.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
+       
+        
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mSectionsPagerAdapter);
         mViewPager.setCurrentItem(1);
+        
+        
     }
 
     @Override
@@ -84,6 +91,9 @@ public class OverviewActivity extends FragmentActivity {
             case R.id.menu_markseries:
             	new DatabaseHandler(getBaseContext()).MarkSeriesAsWatched(series.getSeriesId());
             	Toast.makeText(getBaseContext(), R.string.message_series_watched, Toast.LENGTH_SHORT).show();
+            	
+            	View v = (View)fragments.get(1).getView();
+            	Fragments.SetProgress(v, series.getSeriesId());
         }
         return super.onOptionsItemSelected(item);
     }

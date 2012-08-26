@@ -25,7 +25,6 @@ import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 import se.goagubbar.twee.Adapters.SearchAdapter;
@@ -116,12 +115,7 @@ public class SearchableActivity extends ListActivity {
 
 	}
 
-	private void setupSearchView(Menu menu) {
-		SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-		SearchView searchView = (SearchView) menu.findItem(R.id.menu_add).getActionView();
-		searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-		searchView.setIconifiedByDefault(false); // Do not iconify the widget; expand it by default
-	}
+
 
 	private boolean isNetworkAvailable() {
 		ConnectivityManager connectivityManager 
@@ -147,7 +141,6 @@ public class SearchableActivity extends ListActivity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.menu_searchable, menu);
-		setupSearchView(menu);
 		return true;
 	}
 
