@@ -3,15 +3,14 @@ package se.goagubbar.twee;
 import java.util.ArrayList;
 
 import se.goagubbar.twee.Adapters.CalendarAdapter;
-import se.goagubbar.twee.Adapters.EpisodeAdapter;
 import se.goagubbar.twee.Models.Episode;
 import android.app.ActionBar;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.NavUtils;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -28,6 +27,11 @@ public class CalendarActivity extends FragmentActivity implements ActionBar.OnNa
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
+    	
+		SharedPreferences settings = getSharedPreferences("Twee", 0);
+	    int theme = settings.getInt("Theme", R.style.Light);
+		setTheme(theme);
+    	
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_calendar);
         getActionBar().setDisplayHomeAsUpEnabled(true);
@@ -72,7 +76,7 @@ public class CalendarActivity extends FragmentActivity implements ActionBar.OnNa
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.layout_calendar, menu);
+        getMenuInflater().inflate(R.menu.menu_calendar, menu);
         return true;
     }
 

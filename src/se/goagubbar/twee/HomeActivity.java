@@ -14,17 +14,21 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ActionMode;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnLongClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ListView;
 import android.widget.SearchView;
 
 public class HomeActivity extends BaseActivity {
 
-	
+
 	private DatabaseHandler db;
 	static final String KEY_URL = "http://www.thetvdb.com/api/GetSeries.php?seriesname=";
 	static final String KEY_FULLURL = "http://www.thetvdb.com//data/series/%s/all/";
@@ -53,53 +57,109 @@ public class HomeActivity extends BaseActivity {
 
 	static List<Series> series;
 	private ListView mySeries;
-	Object mActionMode;
-	
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-                
-        db = new DatabaseHandler(this);
-        setContentView(R.layout.layout_home);
-        
-        
-        
-        new GetMySeries().execute();
+	protected Object mActionMode;
+	public String selectedItem = null;
 
-        
-        
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+
+		db = new DatabaseHandler(this);
+		setContentView(R.layout.layout_home);
+
 		mySeries = (ListView)findViewById(R.id.lstMySeries);
+		mySeries.setDividerHeight(0);
+		mySeries.setLongClickable(true);
+
+		registerForContextMenu(mySeries);
+		
+		
+		mySeries.setOnItemLongClickListener(new OnItemLongClickListener() {
+
+			@Override
+			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+				if(mActionMode != null){
+					return false;
+				}
+
+				
+				mActionMode = mySeries.startActionMode(mActionModeCallback);
+				view.setSelected(true);
+				selectedItem = view.getTag(R.string.homeactivity_tag_seriesid).toString();
+				return true;
+			}
 			
+		});
+				
+		
 		mySeries.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
 				Intent intent = new Intent(getBaseContext(), OverviewActivity.class);
-				intent.putExtra("SeriesId", view.getTag(R.string.homeactivity_tag_seriesid).toString());
+				intent.putExtra("SeriesId", view.getTag(R.string.homeactivity_tag_id).toString());
 				startActivity(intent);
 
 			}
 		});
-    }
 
-    
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_home, menu);
-        
-        setupSearchView(menu);
-        
-        return true;
-    }
+		new GetMySeries().execute();
 
-    private void setupSearchView(Menu menu) {
+	}
+
+	private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
+
+		@Override
+		public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+			return false;
+		}
+
+		@Override
+		public void onDestroyActionMode(ActionMode mode) {
+			selectedItem = null;
+			mActionMode = null;
+		}
+
+		@Override
+		public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+			MenuInflater inflater = mode.getMenuInflater();
+			inflater.inflate(R.menu.menu_contextual_home, menu);
+
+			return true;
+		}
+
+		@Override
+		public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+			switch (item.getItemId()) {
+			case R.id.menu_delete:
+				
+				deleteSeries(selectedItem);
+
+				mode.finish();		
+			default:
+				return false;
+			}
+		}
+	};
+
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.menu_home, menu);
+
+		setupSearchView(menu);
+
+		return true;
+	}
+
+	private void setupSearchView(Menu menu) {
 		SearchManager searchManager =                (SearchManager) getSystemService(Context.SEARCH_SERVICE);
 		SearchView searchView =                 (SearchView) menu.findItem(R.id.menu_add).getActionView();
 		searchView.setSearchableInfo(
 				searchManager.getSearchableInfo(getComponentName()));
 	}
-    
-    public boolean onOptionsItemSelected(MenuItem item){
+
+	public boolean onOptionsItemSelected(MenuItem item){
 
 		switch(item.getItemId()){
 		case android.R.id.home:
@@ -118,7 +178,7 @@ public class HomeActivity extends BaseActivity {
 		case R.id.menu_calendar:
 			startActivity(new Intent(this,CalendarActivity.class));
 			return true;
-			
+
 		case R.id.menu_settings:
 			startActivity(new Intent(this,SettingsActivity.class));
 			return true;
@@ -131,8 +191,8 @@ public class HomeActivity extends BaseActivity {
 			return super.onOptionsItemSelected(item);
 		}
 	}
-    
-    private void displayAboutDialog()
+
+	private void displayAboutDialog()
 	{
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setMessage(R.string.about_text)
@@ -144,8 +204,27 @@ public class HomeActivity extends BaseActivity {
 			}
 		}).create().show();
 	}
-    
-    public class GetMySeries extends AsyncTask<String, Void, ArrayList<Series>>{
+
+	private void deleteSeries(final String seriesId)
+	{
+		
+		new AlertDialog.Builder(this)
+        .setMessage(R.string.delete_text)
+        .setTitle(R.string.delete_title)
+        .setCancelable(false)
+        .setPositiveButton(R.string.delete_proceed, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+        		db.DeleteSeries(seriesId);
+        		new GetMySeries().execute();
+            }
+        })
+        .setNegativeButton(R.string.delete_cancel, null)
+        .show();
+		
+
+	}
+	
+	public class GetMySeries extends AsyncTask<String, Void, ArrayList<Series>>{
 
 		@Override
 		protected ArrayList<Series> doInBackground(String... params) {
@@ -163,7 +242,7 @@ public class HomeActivity extends BaseActivity {
 		}
 
 	}
-    
-    
-    
+
+
+
 }

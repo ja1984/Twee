@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.StringTokenizer;
 
 import se.goagubbar.twee.Adapters.EpisodeAdapter;
+import se.goagubbar.twee.Adapters.UpcomingEpisodesAdapter;
 import se.goagubbar.twee.Models.Episode;
 import se.goagubbar.twee.Models.Series;
 import android.app.Activity;
@@ -11,6 +12,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -82,9 +84,9 @@ public class Fragments {
     }
     
     public static class EpisodesFragment extends Fragment{
-    	
     	Series s;
     	DateHelper dateHelper;
+    	    
     	
     	public EpisodesFragment(Series s, int totalEpisodes, int watchedEpisodes){
     		this.s = s;
@@ -98,7 +100,10 @@ public class Fragments {
         	
         	ListView episodes = (ListView)v.findViewById(R.id.lstAllEpisodes);
         		
-        	episodes.setAdapter(new EpisodeAdapter(getActivity(), R.layout.listitem_episode, episodes, s.Episodes));
+        	episodes.setAdapter(new EpisodeAdapter(getActivity(), R.layout.listitem_allepisodes, episodes, s.Episodes));
+        	
+        	TextView t = (TextView) episodes.findViewById(R.id.txtMarkSeasonAsWatched);      	
+
         	
             return v;
         }
@@ -183,7 +188,7 @@ public class Fragments {
     		}
             
             SetProgress(v, s.getSeriesId());
-            episodes.setAdapter(new EpisodeAdapter(getActivity(), R.id.lstEpisodes, episodes,newEps));
+            episodes.setAdapter(new UpcomingEpisodesAdapter(getActivity(), R.id.lstEpisodes, episodes,newEps));
             
             seriesName.setText(s.getName());
             seriesRating.setText(s.getRating());

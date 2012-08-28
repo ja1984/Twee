@@ -4,6 +4,7 @@ package se.goagubbar.twee;
 import java.util.ArrayList;
 
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -15,7 +16,10 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ListView;
 import android.widget.Toast;
+import se.goagubbar.twee.Adapters.EpisodeAdapter;
+import se.goagubbar.twee.Fragments.EpisodesFragment;
 import se.goagubbar.twee.Models.Series;
 
 public class OverviewActivity extends FragmentActivity {
@@ -64,16 +68,26 @@ public class OverviewActivity extends FragmentActivity {
         // of the app.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
+        
        
+        
         
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mSectionsPagerAdapter);
         mViewPager.setCurrentItem(1);
-        
+               
         
     }
+    
+	public void Reload()
+	{
+		EpisodesFragment test = (EpisodesFragment) fragments.get(2);
+		test = new Fragments.EpisodesFragment(series, totalEpisodes, watchedEpisodes);
+	}
 
+    
+    
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_overview, menu);

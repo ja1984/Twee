@@ -2,6 +2,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
+    android:layout_marginBottom="10dp"
     >
 
     <ImageView
@@ -9,14 +10,17 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:scaleType="matrix"
-        android:src="@drawable/noimage" />
+        android:src="@drawable/noimage"
+        android:focusable="false"
+         />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:background="@android:color/holo_blue_light"
+        android:background="@drawable/background_home_listitems"
             android:layout_marginBottom="10dp"
+            android:focusable="false"
          >
         
         <TextView
@@ -36,6 +40,7 @@
         android:textSize="11sp"
         android:textStyle="normal|bold"
         android:typeface="normal"
+        android:focusable="false"
          />
     </LinearLayout>
 

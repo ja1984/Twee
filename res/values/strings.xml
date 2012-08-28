@@ -17,6 +17,8 @@
     <string name="settings_header_switch">Download header image</string>
     <string name="settings_header_description">Choose weither to download the large image header or not (aprox. 1.5MB)</string>
     <string name="homeactivity_tag_seriesid">seriesId</string>
+    <string name="homeactivity_tag_id">Id</string>
+    <string name="season_markaswatched">Mark season as watched</string>
     <!-- /General -->
 
 
@@ -46,11 +48,13 @@
     <string name="menu_refresh">Refresh</string>
     <string name="menu_calendar">Calendar</string>
     <string name="menu_markseries">Mark series as watched</string>
+    <string name="menu_delete">Delete</string>
     <!-- /Menu -->
 
 
     <!-- Messages -->
     <string name="message_series_watched">All episodes have been marked as watched</string>
+    <string name="message_season_watched">Season have been marked as watched</string>
     <string name="message_series_fetching">Downloading series data</string>
     <string name="message_series_fetching_done">Done downloading series data</string>
     <string name="message_nointernet">No connection!\nClick to try again</string>
@@ -67,10 +71,16 @@
 
     <!-- About -->
     <string name="about_title">About Twee</string>
-    <string name="about_close">Close</string>
+    <string name="about_close">Yes</string>
     <string name="about_text">Twee is getting all it´s information from http://thetvdb.com, you should probably support them in any way possible!</string>
     <!-- /About -->
 
+    <!-- Delete -->
+    <string name="delete_title">Delete Series</string>
+    <string name="delete_proceed">Proceed</string>
+    <string name="delete_cancel">Cancel</string>
+    <string name="delete_text">This can not be undone!</string>
+    <!-- /Delete -->
 
     <!-- ContentDescriptions -->
     <string name="cd_series_header">Header image</string>

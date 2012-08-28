@@ -18,6 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class Adapters {
 
@@ -135,7 +136,8 @@ public class Adapters {
 				Episode e = series.get(position).Episodes.get(0);
 
 				Bitmap bm = imageService.GetImage(series.get(position).getImage(), getContext());
-				convertView.setTag(R.string.homeactivity_tag_seriesid,s.getID());
+				convertView.setTag(R.string.homeactivity_tag_id,s.getID());
+				convertView.setTag(R.string.homeactivity_tag_seriesid,s.getSeriesId());
 				if(bm != null){
 					holder.image.setImageBitmap(bm);
 				}
@@ -166,7 +168,7 @@ public class Adapters {
 
 		public EpisodeAdapter(Context context, int resource, ListView lv, ArrayList<Episode> objects)
 		{
-			super(context, R.layout.listitem_episode, objects);
+			super(context, R.layout.listitem_allepisodes, objects);
 			this.context = context;
 			this.episodes = objects;
 			this.dateHelper = new DateHelper();
@@ -197,11 +199,11 @@ public class Adapters {
 
 			if(convertView == null){
 				LayoutInflater inflator = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-				convertView = inflator.inflate(R.layout.listitem_episode, null);
+				convertView = inflator.inflate(R.layout.listitem_allepisodes, null);
 			}
 
 			final CheckBox checkBox = (CheckBox) convertView.findViewById(R.id.chkWatched);
-			final CheckBox seasonCheckBox = (CheckBox)convertView.findViewById(R.id.chkWatchedSeason);
+			final TextView seasonCheckBox = (TextView)convertView.findViewById(R.id.txtMarkSeasonAsWatched);
 			final TextView title = (TextView) convertView.findViewById(R.id.txtTitle);
 			final TextView information = (TextView) convertView.findViewById(R.id.txtEpisodeNumber);
 			final TextView seasonNumber = (TextView) convertView.findViewById(R.id.txtSeasonNumber);
@@ -228,17 +230,8 @@ public class Adapters {
 			seasonCheckBox.setOnClickListener(new OnClickListener() {
 
 				public void onClick(View v) {
-					CheckBox cb = (CheckBox) v.findViewById(R.id.chkWatchedSeason);
-					new DatabaseHandler(context).ToggleSeasonWatched("" + episodes.get(pos).getSeriesId(), episodes.get(pos).getSeason(), cb.isChecked());
-					Log.d("Test", "" + cb.isChecked());
-					if (cb.isChecked()) {
-						itemChecked.set(pos, true);
-						// do some operations here
-					} else if (!cb.isChecked()) {
-						itemChecked.set(pos, false);
-						// do some operations here
-					}
-
+					MarkSeasonAsWatched(episodes.get(pos).getSeriesId(), episodes.get(pos).getSeason());
+					
 				}
 			});
 			
@@ -280,8 +273,79 @@ public class Adapters {
 
 
 		}
+		
+		private void MarkSeasonAsWatched(String seriesId, String season)
+		{
+			new DatabaseHandler(context).ToggleSeasonWatched("" + seriesId, season, true);
+			Toast.makeText(context, R.string.message_season_watched, Toast.LENGTH_SHORT).show();
+			
+			for (int i = 0; i < episodes.size(); i++) {
+				
+				if(episodes.get(i).getSeason().equals(season))
+				{
+					itemChecked.set(i, true);
+				}
+				notifyDataSetChanged();
+			}	
+			
+		}
+		
 	}
 
+	public static class UpcomingEpisodesAdapter extends ArrayAdapter<Episode> {
+
+		private final Context context;
+		private final ArrayList<Episode> episodes;
+		private DateHelper dateHelper;
+
+		public UpcomingEpisodesAdapter(Context context, int resource, ListView lv, ArrayList<Episode> objects)
+		{
+			super(context, R.layout.listitem_episode, objects);
+			this.context = context;
+			this.episodes = objects;
+			this.dateHelper = new DateHelper();		
+
+		}
+
+		static class ViewHolder {
+			protected TextView title;
+			protected TextView information;
+			protected CheckBox watched;
+		}
+
+		@Override
+		public View getView(final int pos, View convertView, ViewGroup parent)
+		{
+
+			if(convertView == null){
+				LayoutInflater inflator = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+				convertView = inflator.inflate(R.layout.listitem_episode, null);
+			}
+
+			final TextView title = (TextView) convertView.findViewById(R.id.txtTitle);
+			final TextView information = (TextView) convertView.findViewById(R.id.txtEpisodeNumber);
+			final CheckBox checkBox = (CheckBox)convertView.findViewById(R.id.chkWatched);
+			checkBox.setVisibility(View.GONE);
+			convertView.setOnClickListener(new OnClickListener() {
+
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					new SeriesHelper().displayPlot(episodes.get(pos), getContext());
+				}
+			});
+		
+			
+
+			title.setText(episodes.get(pos).getTitle());
+			information.setText(dateHelper.Episodenumber(episodes.get(pos)) + " | " + dateHelper.DisplayDate(episodes.get(pos).getAired()));
+
+			return convertView;
+
+
+		}
+	}
+
+	
 	public static class CalendarAdapter extends ArrayAdapter<Episode> {
 
 		private final Context context;
