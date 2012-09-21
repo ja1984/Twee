@@ -52,6 +52,7 @@ public class SearchableActivity extends ListActivity {
 	static final String KEY_SUMMARY = "Overview";
 	static final String KEY_IMDBID = "IMDB_ID";
 	static final String KEY_LASTUPDATED = "lastupdated";
+	static final String KEY_EPISODEID = "id";
 
 	static final String KEY_EP_AIRED = "FirstAired";
 	static final String KEY_EP_EPISODE = "EpisodeNumber";
@@ -103,11 +104,20 @@ public class SearchableActivity extends ListActivity {
 		searchResult.setOnItemClickListener(new android.widget.AdapterView.OnItemClickListener() {
 
 			public void onItemClick(AdapterView<?> arg0, View rowView, int arg2, long arg3) {
-				setProgressBarIndeterminateVisibility(true);
 				String seriesId = rowView.getTag().toString();
-				Toast.makeText(getBaseContext(), R.string.message_series_fetching, Toast.LENGTH_SHORT).show();
-				FetchAndSaveSeries fas = new FetchAndSaveSeries();
-				fas.execute(seriesId);
+
+				if(!db.SeriesExist(seriesId))
+				{
+					setProgressBarIndeterminateVisibility(true);
+
+					Toast.makeText(getBaseContext(), R.string.message_series_fetching, Toast.LENGTH_SHORT).show();
+					FetchAndSaveSeries fas = new FetchAndSaveSeries();
+					fas.execute(seriesId);
+				}
+				else
+				{
+					Toast.makeText(getBaseContext(), R.string.message_series_double, Toast.LENGTH_SHORT).show();	
+				}
 
 			}
 
@@ -281,6 +291,7 @@ public class SearchableActivity extends ListActivity {
 				ep.setSummary(parser.getValue(e, KEY_EP_SUMMARY));
 				ep.setTitle(parser.getValue(e, KEY_EP_TITLE));
 				ep.setLastUpdated(parser.getValue(e, KEY_LASTUPDATED));
+				ep.setEpisodeId(parser.getValue(e,KEY_EPISODEID));
 				ep.setWatched("0");
 
 
@@ -308,4 +319,6 @@ public class SearchableActivity extends ListActivity {
 
 	}
 
+	
+	
 }

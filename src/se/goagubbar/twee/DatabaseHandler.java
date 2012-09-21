@@ -13,7 +13,7 @@ import android.util.Log;
 
 public class DatabaseHandler extends SQLiteOpenHelper {
 
-	private static final int DATABASE_VERSION = 6;
+	private static final int DATABASE_VERSION = 7;
 	private static final String DATABASE_NAME = "Teewee";
 
 	private static final String TABLE_SERIES = "Series";
@@ -24,6 +24,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	private static final String KEY_SUMMARY = "Summary";
 	private static final String KEY_LASTUPDATED = "LastUpdated";
 	private static final String KEY_SERIESID = "SeriesId";
+	private static final String KEY_EPISODEID = "EpisodeId";
 
 	//Series
 	private static final String KEY_NAME = "Name";
@@ -56,7 +57,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		String CREATE_SERIES_TABLE = String.format("CREATE TABLE %s(%s INTEGER PRIMARY KEY autoincrement, %s TEXT,%s TEXT,%s TEXT,%s TEXT,%s TEXT,%s TEXT,%s TEXT,%s TEXT,%s TEXT, %s TEXT, %s TEXT, %s TEXT, %s TEXT)", TABLE_SERIES, KEY_ID, KEY_SUMMARY, KEY_NAME,KEY_ACTORS,KEY_DAYTIME,KEY_GENRE,KEY_IMDBID,KEY_RATING,KEY_STATUS,KEY_IMAGE, KEY_FIRSTAIRED, KEY_HEADER, KEY_SERIESID, KEY_LASTUPDATED);
 		db.execSQL(CREATE_SERIES_TABLE);
 
-		String CREATE_EPISODE_TABLE = String.format("CREATE TABLE %s(%s INTEGER PRIMARY KEY autoincrement,%s TEXT,%s TEXT,%s TEXT,%s TEXT,%s TEXT,%s TEXT, %s TEXT, %s TEXT)", TABLE_EPISODES, KEY_ID, KEY_SEASON, KEY_EPISODE, KEY_TITLE, KEY_AIRED, KEY_WATCHED, KEY_SUMMARY, KEY_SERIESID, KEY_LASTUPDATED);
+		String CREATE_EPISODE_TABLE = String.format("CREATE TABLE %s(%s INTEGER PRIMARY KEY autoincrement,%s TEXT,%s TEXT,%s TEXT,%s TEXT,%s TEXT,%s TEXT, %s TEXT, %s TEXT, %s TEXT)", TABLE_EPISODES, KEY_ID, KEY_SEASON, KEY_EPISODE, KEY_TITLE, KEY_AIRED, KEY_WATCHED, KEY_SUMMARY, KEY_SERIESID, KEY_LASTUPDATED, KEY_EPISODEID);
 		db.execSQL(CREATE_EPISODE_TABLE);
 		Log.d("Build db", "Done");
 	}
@@ -113,8 +114,35 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 			values.put(KEY_TITLE, ep.getTitle());
 			values.put(KEY_WATCHED, ep.getWatched());
 			values.put(KEY_LASTUPDATED, ep.getLastUpdated());
+			values.put(KEY_EPISODEID, ep.getEpisodeId());
 
 			db.insert(TABLE_EPISODES, null, values);
+		}
+		db.setTransactionSuccessful();
+		db.endTransaction();
+		db.close();
+
+	}
+
+	public void updateAndAddEpisodes(ArrayList<Episode> episodes)
+	{
+		SQLiteDatabase db = this.getWritableDatabase();
+		ContentValues values = null;
+
+		db.beginTransaction();
+		for (Episode ep : episodes) {
+			values = new ContentValues();
+			values.put(KEY_AIRED, ep.getAired());
+			values.put(KEY_EPISODE, ep.getEpisode());
+			values.put(KEY_SEASON, ep.getSeason());
+			values.put(KEY_SERIESID, ep.getSeriesId());
+			values.put(KEY_SUMMARY, ep.getSummary());
+			values.put(KEY_TITLE, ep.getTitle());
+			values.put(KEY_LASTUPDATED, ep.getLastUpdated());
+
+			db.update(TABLE_EPISODES, values, KEY_EPISODEID +"="+ ep.getEpisodeId(),null);
+			Log.d("Updated",ep.getEpisodeId().toString());
+			//db.insert(TABLE_EPISODES, null, values);
 		}
 		db.setTransactionSuccessful();
 		db.endTransaction();
@@ -146,6 +174,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 			s.setFirstAired(cursor.getString(10));
 			s.setHeader(cursor.getString(11));
 			s.setSeriesId(cursor.getString(12));
+
+			Log.d("Test",cursor.getString(12));
 
 			s.Episodes = new ArrayList<Episode>();
 
@@ -307,6 +337,25 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		return s;
 	}
 
+	public Boolean SeriesExist(String seriesId)
+	{
+		String sql = "SELECT * FROM " + TABLE_SERIES + " WHERE " + KEY_SERIESID + " = " + seriesId;
+		SQLiteDatabase db = this.getReadableDatabase();
+		Cursor cursor = db.rawQuery(sql, null);
+
+		if(cursor != null)
+		{
+			if(cursor.moveToFirst())
+			{
+				cursor.close();
+				return true;
+			}
+			cursor.close();
+		}
+
+		return false;
+	}
+
 	public void ToggleEpisodeWatched(String id, boolean watched)
 	{
 		SQLiteDatabase db = this.getWritableDatabase();
@@ -330,14 +379,14 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		db.close();
 
 	}
-	
+
 	public void ToggleSeasonWatched(String id, String season, boolean watched)
 	{
 		SQLiteDatabase db = this.getWritableDatabase();
 
 		String value;
 		String dateWithoutTime  = android.text.format.DateFormat.format("yyyy-MM-dd", new java.util.Date()).toString();
-		
+
 		if(watched)
 		{
 			value = "1";

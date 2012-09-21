@@ -4,7 +4,12 @@ package se.goagubbar.twee;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+
 import se.goagubbar.twee.Adapters.SeriesAdapter;
+import se.goagubbar.twee.Models.Episode;
 import se.goagubbar.twee.Models.Series;
 import android.app.AlertDialog;
 import android.app.SearchManager;
@@ -54,6 +59,7 @@ public class HomeActivity extends BaseActivity {
 	static final String KEY_EP_SEASON = "SeasonNumber";
 	static final String KEY_EP_SUMMARY = "Overview";
 	static final String KEY_EP_TITLE = "EpisodeName";
+	static final String KEY_EP_ID = "id";
 
 	static List<Series> series;
 	private ListView mySeries;
@@ -68,12 +74,12 @@ public class HomeActivity extends BaseActivity {
 		setContentView(R.layout.layout_home);
 
 		mySeries = (ListView)findViewById(R.id.lstMySeries);
-		mySeries.setDividerHeight(0);
+		mySeries.setDividerHeight(1);
 		mySeries.setLongClickable(true);
 
 		registerForContextMenu(mySeries);
-		
-		
+
+
 		mySeries.setOnItemLongClickListener(new OnItemLongClickListener() {
 
 			@Override
@@ -82,16 +88,16 @@ public class HomeActivity extends BaseActivity {
 					return false;
 				}
 
-				
+
 				mActionMode = mySeries.startActionMode(mActionModeCallback);
 				view.setSelected(true);
 				selectedItem = view.getTag(R.string.homeactivity_tag_seriesid).toString();
 				return true;
 			}
-			
+
 		});
-				
-		
+
+
 		mySeries.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
@@ -132,10 +138,12 @@ public class HomeActivity extends BaseActivity {
 		public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
 			switch (item.getItemId()) {
 			case R.id.menu_delete:
-				
 				deleteSeries(selectedItem);
-
 				mode.finish();		
+
+			case R.id.menu_refresh:
+				new GetNewEpisodes().execute(selectedItem);
+				mode.finish();
 			default:
 				return false;
 			}
@@ -207,23 +215,23 @@ public class HomeActivity extends BaseActivity {
 
 	private void deleteSeries(final String seriesId)
 	{
-		
+
 		new AlertDialog.Builder(this)
-        .setMessage(R.string.delete_text)
-        .setTitle(R.string.delete_title)
-        .setCancelable(false)
-        .setPositiveButton(R.string.delete_proceed, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-        		db.DeleteSeries(seriesId);
-        		new GetMySeries().execute();
-            }
-        })
-        .setNegativeButton(R.string.delete_cancel, null)
-        .show();
-		
+		.setMessage(R.string.delete_text)
+		.setTitle(R.string.delete_title)
+		.setCancelable(false)
+		.setPositiveButton(R.string.delete_proceed, new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
+				db.DeleteSeries(seriesId);
+				new GetMySeries().execute();
+			}
+		})
+		.setNegativeButton(R.string.delete_cancel, null)
+		.show();
+
 
 	}
-	
+
 	public class GetMySeries extends AsyncTask<String, Void, ArrayList<Series>>{
 
 		@Override
@@ -243,6 +251,66 @@ public class HomeActivity extends BaseActivity {
 
 	}
 
+	public class GetNewEpisodes extends AsyncTask<String, Void, Boolean>
+	{
 
+		@Override
+		protected Boolean doInBackground(String... q) {
+
+
+			Episode lastEpisode = db.GetLastAiredEpisodeForSeries(q[0]);
+			int lastSeason = 0;
+
+			if(lastEpisode != null)
+			{
+				lastSeason = (lastEpisode.getSeason().equals("1") ? 1 : (Integer.parseInt(lastEpisode.getSeason()) - 1)) ;
+			}
+
+
+
+			String completeAddress = String.format(KEY_FULLURL, q[0]);
+			XMLParser parser = new XMLParser();
+
+			String xml = parser.getXmlFromUrl(completeAddress);		
+
+			Document doc = parser.getDomElement(xml);
+			NodeList nl = doc.getElementsByTagName(KEY_SERIES);
+			NodeList episodes = doc.getElementsByTagName(KEY_EPISODE);		
+
+			ArrayList<Episode> Episodes = new ArrayList<Episode>();
+
+			//Fetch series and save;
+
+			Series s = new Series();
+			Element e = (Element) nl.item(0);
+
+
+			for(int i = 0;i < episodes.getLength();i++)
+			{
+				Episode ep = new Episode();
+				e = (Element) episodes.item(i);
+
+				if(Integer.parseInt(parser.getValue(e, KEY_EP_SEASON)) >= lastSeason){
+
+					ep.setAired(parser.getValue(e, KEY_EP_AIRED));
+					ep.setEpisode(parser.getValue(e, KEY_EP_EPISODE));
+					ep.setSeason(parser.getValue(e, KEY_EP_SEASON));
+					ep.setSeriesId(q[0].toString());
+					ep.setSummary(parser.getValue(e, KEY_EP_SUMMARY));
+					ep.setTitle(parser.getValue(e, KEY_EP_TITLE));
+					ep.setLastUpdated(parser.getValue(e, KEY_LASTUPDATED));
+					ep.setEpisodeId(parser.getValue(e, KEY_EP_ID));
+					Episodes.add(ep);
+				}
+
+			}
+
+			db.updateAndAddEpisodes(Episodes);
+
+
+			return true;
+		}
+
+	}
 
 }

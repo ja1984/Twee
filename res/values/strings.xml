@@ -59,6 +59,7 @@
     <string name="message_series_fetching_done">Done downloading series data</string>
     <string name="message_nointernet">No connection!\nClick to try again</string>
     <string name="message_noresult">No results found!</string>
+    <string name="message_series_double">This series is already in your collection</string>
     <!-- /Messages -->
 
 

@@ -7,4 +7,11 @@
         android:showAsAction="always"
         android:icon="?menu_delete"
         android:title="@string/menu_delete"/>
+    
+        <item
+        android:id="@+id/menu_refresh"
+        android:orderInCategory="101"
+        android:showAsAction="always"
+        android:icon="?menu_refresh"
+        android:title="@string/menu_refresh"/>
 </menu>

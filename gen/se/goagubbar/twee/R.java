@@ -78,11 +78,11 @@ containing a value of this type.
         public static final int lstEpisodes=0x7f090025;
         public static final int lstMySeries=0x7f090001;
         public static final int menu_about=0x7f090030;
-        public static final int menu_add=0x7f09002c;
+        public static final int menu_add=0x7f09002d;
         public static final int menu_calendar=0x7f09002e;
         public static final int menu_delete=0x7f09002b;
         public static final int menu_markseries=0x7f090031;
-        public static final int menu_refresh=0x7f09002d;
+        public static final int menu_refresh=0x7f09002c;
         public static final int menu_settings=0x7f09002f;
         public static final int pager=0x7f090002;
         public static final int pager_title_strip=0x7f090003;
@@ -139,12 +139,12 @@ containing a value of this type.
         public static final int menu_settings=0x7f080005;
     }
     public static final class string {
-        public static final int about_close=0x7f06002e;
-        public static final int about_text=0x7f06002f;
+        public static final int about_close=0x7f06002f;
+        public static final int about_text=0x7f060030;
         /**  /Settings 
  About 
          */
-        public static final int about_title=0x7f06002d;
+        public static final int about_title=0x7f06002e;
         public static final int actors_header=0x7f060006;
         /**  General 
          */
@@ -153,20 +153,20 @@ containing a value of this type.
         /**  /Delete 
  ContentDescriptions 
          */
-        public static final int cd_series_header=0x7f060034;
-        public static final int delete_cancel=0x7f060032;
-        public static final int delete_proceed=0x7f060031;
-        public static final int delete_text=0x7f060033;
+        public static final int cd_series_header=0x7f060035;
+        public static final int delete_cancel=0x7f060033;
+        public static final int delete_proceed=0x7f060032;
+        public static final int delete_text=0x7f060034;
         /**  /About 
  Delete 
          */
-        public static final int delete_title=0x7f060030;
+        public static final int delete_title=0x7f060031;
         public static final int details_lastaired=0x7f060002;
         public static final int details_totalwatched=0x7f060004;
         public static final int details_upcoming=0x7f060003;
         /**  /ContentDescriptions 
          */
-        public static final int hello_world=0x7f060035;
+        public static final int hello_world=0x7f060036;
         public static final int homeactivity_tag_id=0x7f060010;
         public static final int homeactivity_tag_seriesid=0x7f06000f;
         public static final int imdb_header=0x7f060007;
@@ -183,6 +183,7 @@ containing a value of this type.
         public static final int message_nointernet=0x7f060028;
         public static final int message_noresult=0x7f060029;
         public static final int message_season_watched=0x7f060025;
+        public static final int message_series_double=0x7f06002a;
         public static final int message_series_fetching=0x7f060026;
         public static final int message_series_fetching_done=0x7f060027;
         /**  /Menu 
@@ -205,12 +206,12 @@ containing a value of this type.
         public static final int settings_header_header=0x7f06000c;
         public static final int settings_header_switch=0x7f06000d;
         public static final int settings_theme_header=0x7f06000b;
-        public static final int settings_theme_option_dark=0x7f06002c;
-        public static final int settings_theme_option_darklight=0x7f06002b;
+        public static final int settings_theme_option_dark=0x7f06002d;
+        public static final int settings_theme_option_darklight=0x7f06002c;
         /**  /Messages 
  Settings 
          */
-        public static final int settings_theme_option_light=0x7f06002a;
+        public static final int settings_theme_option_light=0x7f06002b;
         public static final int summary_header=0x7f060005;
         public static final int text_seriesrating=0x7f060009;
         public static final int title_activity_calendar=0x7f060016;
@@ -223,10 +224,12 @@ containing a value of this type.
         public static final int title_activity_settings=0x7f060013;
     }
     public static final class style {
-        public static final int AppTheme=0x7f070003;
+        public static final int AppTheme=0x7f070005;
         public static final int Dark=0x7f070002;
         public static final int Light=0x7f070000;
         public static final int LightDark=0x7f070001;
+        public static final int MyActionBar=0x7f070004;
+        public static final int SkypeStyle=0x7f070003;
     }
     public static final class xml {
         public static final int searchable=0x7f040000;

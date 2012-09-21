@@ -62,6 +62,7 @@ public class Models {
 		private String Aired;
 		private String Watched;
 		private boolean Selected;
+		private String EpisodeId;
 		
 		
 		public boolean isSelected()
@@ -73,6 +74,17 @@ public class Models {
 	        this.Selected = selected;
 	    }
 		
+	    public String getEpisodeId()
+	    {
+	    	return EpisodeId;
+	    }
+	    
+	    public void setEpisodeId(String episodeId)
+	    {
+	    	this.EpisodeId = episodeId;
+	    }
+	    
+	    
 		public String getSeason()
 		{
 			return Season;
