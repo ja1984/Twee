@@ -13,11 +13,13 @@ import android.util.Log;
 
 public class DatabaseHandler extends SQLiteOpenHelper {
 
-	private static final int DATABASE_VERSION = 7;
+	private static final int DATABASE_VERSION = 11;
 	private static final String DATABASE_NAME = "Teewee";
 
 	private static final String TABLE_SERIES = "Series";
 	private static final String TABLE_EPISODES = "Episodes";
+	
+	private static final String ENCODING_SETTING = "PRAGMA encoding = 'UTF-8'";
 
 	//BaseEntity
 	private static final String KEY_ID = "Id";
@@ -53,15 +55,22 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
 	@Override
 	public void onCreate(SQLiteDatabase db) {
-		Log.d("Build db", "Start");
+		db.execSQL(ENCODING_SETTING);
+		
 		String CREATE_SERIES_TABLE = String.format("CREATE TABLE %s(%s INTEGER PRIMARY KEY autoincrement, %s TEXT,%s TEXT,%s TEXT,%s TEXT,%s TEXT,%s TEXT,%s TEXT,%s TEXT,%s TEXT, %s TEXT, %s TEXT, %s TEXT, %s TEXT)", TABLE_SERIES, KEY_ID, KEY_SUMMARY, KEY_NAME,KEY_ACTORS,KEY_DAYTIME,KEY_GENRE,KEY_IMDBID,KEY_RATING,KEY_STATUS,KEY_IMAGE, KEY_FIRSTAIRED, KEY_HEADER, KEY_SERIESID, KEY_LASTUPDATED);
 		db.execSQL(CREATE_SERIES_TABLE);
 
 		String CREATE_EPISODE_TABLE = String.format("CREATE TABLE %s(%s INTEGER PRIMARY KEY autoincrement,%s TEXT,%s TEXT,%s TEXT,%s TEXT,%s TEXT,%s TEXT, %s TEXT, %s TEXT, %s TEXT)", TABLE_EPISODES, KEY_ID, KEY_SEASON, KEY_EPISODE, KEY_TITLE, KEY_AIRED, KEY_WATCHED, KEY_SUMMARY, KEY_SERIESID, KEY_LASTUPDATED, KEY_EPISODEID);
 		db.execSQL(CREATE_EPISODE_TABLE);
-		Log.d("Build db", "Done");
 	}
 
+	@Override
+	public void onOpen(SQLiteDatabase db) {
+	   if (!db.isReadOnly()) {
+	      db.execSQL(ENCODING_SETTING);
+	   }
+	} 
+	
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 		Log.d("Rebuild db", "Start");
@@ -115,7 +124,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 			values.put(KEY_WATCHED, ep.getWatched());
 			values.put(KEY_LASTUPDATED, ep.getLastUpdated());
 			values.put(KEY_EPISODEID, ep.getEpisodeId());
-
 			db.insert(TABLE_EPISODES, null, values);
 		}
 		db.setTransactionSuccessful();
@@ -124,8 +132,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
 	}
 
-	public void updateAndAddEpisodes(ArrayList<Episode> episodes)
+	public void updateAndAddEpisodes(ArrayList<Episode> episodes, int lastSeason)
 	{
+		
+		ArrayList<String> eps = GetEpisodesForSeason(lastSeason);
+		
 		SQLiteDatabase db = this.getWritableDatabase();
 		ContentValues values = null;
 
@@ -148,6 +159,27 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		db.endTransaction();
 		db.close();
 
+	}
+	
+	//DU HÖLL PÅ MED KOLLEN AV EPISODEERNA!!!!!	
+	private ArrayList<String> GetEpisodesForSeason(int season)
+	{
+		
+		ArrayList<String> episodes = new ArrayList<String>();
+		String sql = "SELECT Season FROM " + TABLE_EPISODES + " WHERE " + KEY_SEASON + " >= " + season;
+		SQLiteDatabase db = this.getReadableDatabase();
+		Cursor cursor = db.rawQuery(sql,null);
+
+		cursor.moveToFirst();
+		while (!cursor.isAfterLast()) {
+			episodes.add(cursor.getString(12));
+			cursor.moveToNext();
+		}
+
+		cursor.close();
+		db.close();
+		return episodes;
+		
 	}
 
 	public ArrayList<Series> getAllSeries()
@@ -499,13 +531,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		//"SELECT * FROM table_a a INNER JOIN table_b b ON a.id=b.other_id WHERE b.property_id=?";
 		switch (timeperiod) {
 		case 0: //Today
-			sql = "SELECT * FROM "+ TABLE_EPISODES + " e INNER JOIN "+TABLE_SERIES+" s ON e.seriesId = s.SeriesId WHERE STRFTIME('%j', "+ KEY_AIRED +") = STRFTIME('%j', '"+ dateWithoutTime +"') AND STRFTIME('%Y', "+ KEY_AIRED +") = STRFTIME('%Y', '"+ dateWithoutTime +"')";		
+			sql = "SELECT * FROM "+ TABLE_EPISODES + " e INNER JOIN "+TABLE_SERIES+" s ON e.seriesId = s.SeriesId WHERE "+KEY_AIRED+" >= date('"+dateWithoutTime+"') AND STRFTIME('%j', "+ KEY_AIRED +") = STRFTIME('%j', '"+ dateWithoutTime +"') AND STRFTIME('%Y', "+ KEY_AIRED +") = STRFTIME('%Y', '"+ dateWithoutTime +"') ORDER BY " + KEY_AIRED;		
 			break;
 		case 1: //This week
-			sql = "SELECT * FROM "+ TABLE_EPISODES +" e INNER JOIN "+TABLE_SERIES+" s ON e.seriesId = s.SeriesId WHERE STRFTIME('%W', "+ KEY_AIRED +") = STRFTIME('%W', '"+ dateWithoutTime +"') AND STRFTIME('%Y', "+ KEY_AIRED +") = STRFTIME('%Y', '"+ dateWithoutTime +"')";
+			sql = "SELECT * FROM "+ TABLE_EPISODES +" e INNER JOIN "+TABLE_SERIES+" s ON e.seriesId = s.SeriesId WHERE "+KEY_AIRED+" >= date('"+dateWithoutTime+"') AND STRFTIME('%W', "+ KEY_AIRED +") = STRFTIME('%W', '"+ dateWithoutTime +"') AND STRFTIME('%Y', "+ KEY_AIRED +") = STRFTIME('%Y', '"+ dateWithoutTime +"') ORDER BY" + KEY_AIRED;
 			break;
 		case 2: //This month
-			sql = "SELECT * FROM "+ TABLE_EPISODES +" e INNER JOIN "+TABLE_SERIES+" s ON e.seriesId = s.SeriesId WHERE STRFTIME('%m', "+ KEY_AIRED +") = STRFTIME('%m', '"+ dateWithoutTime +"') AND STRFTIME('%Y', "+ KEY_AIRED +") = STRFTIME('%Y', '"+ dateWithoutTime +"')";
+			sql = "SELECT * FROM "+ TABLE_EPISODES +" e INNER JOIN "+TABLE_SERIES+" s ON e.seriesId = s.SeriesId WHERE "+KEY_AIRED+" >= date('"+dateWithoutTime+"') AND STRFTIME('%m', "+ KEY_AIRED +") = STRFTIME('%m', '"+ dateWithoutTime +"') AND STRFTIME('%Y', "+ KEY_AIRED +") = STRFTIME('%Y', '"+ dateWithoutTime +"') ORDER BY" + KEY_AIRED;
 			break;
 		default:
 			break;

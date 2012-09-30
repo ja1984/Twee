@@ -1,5 +1,6 @@
 package se.goagubbar.twee;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
@@ -28,15 +29,18 @@ public class XMLParser {
 	
 	public String getXmlFromUrl(String url){
 		String xml = null;
-		
+
 		try {	
 			
 			DefaultHttpClient httpClient = new DefaultHttpClient();
+						
 			HttpPost httpPost = new HttpPost(url.replace(" ", "%20"));
-			
+
+						
 			HttpResponse httpResponse = httpClient.execute(httpPost);
 			HttpEntity httpEntity = httpResponse.getEntity();
-			xml = EntityUtils.toString(httpEntity);
+			xml = EntityUtils.toString(httpEntity, "UTF8");
+			//xml = EntityUtils.toString(httpEntity);
 			
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
@@ -52,12 +56,15 @@ public class XMLParser {
 	{
 		Document doc = null;
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-		
 		try {
 			DocumentBuilder db = dbf.newDocumentBuilder();
 			InputSource is = new InputSource();
-			
+
+			//ByteArrayInputStream encXML = new ByteArrayInputStream(xml.getBytes("UTF8"));
+			is.setEncoding("UTF8");
 			is.setCharacterStream(new StringReader(xml));
+			
+
 			doc = db.parse(is);
 		
 					

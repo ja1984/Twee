@@ -1,5 +1,6 @@
 package se.goagubbar.twee;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
 import org.w3c.dom.Document;
@@ -106,18 +107,18 @@ public class SearchableActivity extends ListActivity {
 			public void onItemClick(AdapterView<?> arg0, View rowView, int arg2, long arg3) {
 				String seriesId = rowView.getTag().toString();
 
-				if(!db.SeriesExist(seriesId))
-				{
+				//if(!db.SeriesExist(seriesId))
+				//{
 					setProgressBarIndeterminateVisibility(true);
 
 					Toast.makeText(getBaseContext(), R.string.message_series_fetching, Toast.LENGTH_SHORT).show();
 					FetchAndSaveSeries fas = new FetchAndSaveSeries();
 					fas.execute(seriesId);
-				}
-				else
-				{
-					Toast.makeText(getBaseContext(), R.string.message_series_double, Toast.LENGTH_SHORT).show();	
-				}
+				//}
+				//else
+				//{
+				//	Toast.makeText(getBaseContext(), R.string.message_series_double, Toast.LENGTH_SHORT).show();	
+				//}
 
 			}
 
@@ -172,6 +173,7 @@ public class SearchableActivity extends ListActivity {
 		protected ArrayList<Series> doInBackground(String... q) {
 			setProgressBarIndeterminateVisibility(true);
 			String completeAddress = KEY_URL + q[0];
+			
 			XMLParser parser = new XMLParser();
 			String xml = parser.getXmlFromUrl(completeAddress);
 
@@ -188,6 +190,7 @@ public class SearchableActivity extends ListActivity {
 					Element e = (Element) nl.item(i);
 
 					s.setName(parser.getValue(e, KEY_NAME));
+					Log.d("Namn",parser.getValue(e, KEY_NAME));
 					s.setID(Integer.parseInt(parser.getValue(e, KEY_ID)));
 					s.setAirs(parser.getValue(e, KEY_AIRED));
 
@@ -218,7 +221,8 @@ public class SearchableActivity extends ListActivity {
 		@Override
 		protected Boolean doInBackground(String... q) {
 
-			String completeAddress = String.format(KEY_FULLURL, q[0]);
+			//String completeAddress = String.format(KEY_FULLURL, q[0]);
+			String completeAddress = "http://www.thetvdb.com/data/series/" + q[0] +"/all/";
 			XMLParser parser = new XMLParser();
 
 			String xml = parser.getXmlFromUrl(completeAddress);		
@@ -270,6 +274,20 @@ public class SearchableActivity extends ListActivity {
 
 			s.setImdbId(parser.getValue(e, KEY_IMDBID));
 			s.setName(parser.getValue(e, KEY_NAME));
+			
+			String strJunk = parser.getValue(e, KEY_NAME);  
+			byte[] arrByteForSpanish;
+			try {
+				arrByteForSpanish = strJunk.getBytes("UTF-8");
+				String strSpanish = new String(arrByteForSpanish);  
+				
+				Log.d("TeTEST", strSpanish);
+				
+			} catch (UnsupportedEncodingException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}  
+			
 			s.setRating(parser.getValue(e, KEY_RATING));
 			s.setStatus(parser.getValue(e, KEY_STATUS));
 			s.setSummary(parser.getValue(e, KEY_SUMMARY));
@@ -290,6 +308,7 @@ public class SearchableActivity extends ListActivity {
 				ep.setSeriesId(q[0].toString());
 				ep.setSummary(parser.getValue(e, KEY_EP_SUMMARY));
 				ep.setTitle(parser.getValue(e, KEY_EP_TITLE));
+			
 				ep.setLastUpdated(parser.getValue(e, KEY_LASTUPDATED));
 				ep.setEpisodeId(parser.getValue(e,KEY_EPISODEID));
 				ep.setWatched("0");

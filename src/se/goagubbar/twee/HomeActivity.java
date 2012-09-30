@@ -298,6 +298,7 @@ public class HomeActivity extends BaseActivity {
 					ep.setSeriesId(q[0].toString());
 					ep.setSummary(parser.getValue(e, KEY_EP_SUMMARY));
 					ep.setTitle(parser.getValue(e, KEY_EP_TITLE));
+					Log.d("Namn",parser.getValue(e, KEY_EP_TITLE));
 					ep.setLastUpdated(parser.getValue(e, KEY_LASTUPDATED));
 					ep.setEpisodeId(parser.getValue(e, KEY_EP_ID));
 					Episodes.add(ep);
@@ -305,7 +306,7 @@ public class HomeActivity extends BaseActivity {
 
 			}
 
-			db.updateAndAddEpisodes(Episodes);
+			db.updateAndAddEpisodes(Episodes, lastSeason);
 
 
 			return true;
