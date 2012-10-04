@@ -107,18 +107,18 @@ public class SearchableActivity extends ListActivity {
 			public void onItemClick(AdapterView<?> arg0, View rowView, int arg2, long arg3) {
 				String seriesId = rowView.getTag().toString();
 
-				//if(!db.SeriesExist(seriesId))
-				//{
+				if(!db.SeriesExist(seriesId))
+				{
 					setProgressBarIndeterminateVisibility(true);
 
 					Toast.makeText(getBaseContext(), R.string.message_series_fetching, Toast.LENGTH_SHORT).show();
 					FetchAndSaveSeries fas = new FetchAndSaveSeries();
 					fas.execute(seriesId);
-				//}
-				//else
-				//{
-				//	Toast.makeText(getBaseContext(), R.string.message_series_double, Toast.LENGTH_SHORT).show();	
-				//}
+				}
+				else
+				{
+					Toast.makeText(getBaseContext(), R.string.message_series_double, Toast.LENGTH_SHORT).show();	
+				}
 
 			}
 
@@ -221,8 +221,8 @@ public class SearchableActivity extends ListActivity {
 		@Override
 		protected Boolean doInBackground(String... q) {
 
-			//String completeAddress = String.format(KEY_FULLURL, q[0]);
-			String completeAddress = "http://www.thetvdb.com/data/series/" + q[0] +"/all/";
+			String completeAddress = String.format(KEY_FULLURL, q[0]);
+			//String completeAddress = "http://www.thetvdb.com/data/series/" + q[0] +"/all/";
 			XMLParser parser = new XMLParser();
 
 			String xml = parser.getXmlFromUrl(completeAddress);		
@@ -273,21 +273,7 @@ public class SearchableActivity extends ListActivity {
 			Log.d("Event","Laddar ner bild 2 - klar!");
 
 			s.setImdbId(parser.getValue(e, KEY_IMDBID));
-			s.setName(parser.getValue(e, KEY_NAME));
-			
-			String strJunk = parser.getValue(e, KEY_NAME);  
-			byte[] arrByteForSpanish;
-			try {
-				arrByteForSpanish = strJunk.getBytes("UTF-8");
-				String strSpanish = new String(arrByteForSpanish);  
-				
-				Log.d("TeTEST", strSpanish);
-				
-			} catch (UnsupportedEncodingException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}  
-			
+			s.setName(parser.getValue(e, KEY_NAME));			
 			s.setRating(parser.getValue(e, KEY_RATING));
 			s.setStatus(parser.getValue(e, KEY_STATUS));
 			s.setSummary(parser.getValue(e, KEY_SUMMARY));

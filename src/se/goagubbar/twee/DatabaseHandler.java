@@ -13,7 +13,7 @@ import android.util.Log;
 
 public class DatabaseHandler extends SQLiteOpenHelper {
 
-	private static final int DATABASE_VERSION = 11;
+	private static final int DATABASE_VERSION = 12;
 	private static final String DATABASE_NAME = "Teewee";
 
 	private static final String TABLE_SERIES = "Series";
@@ -132,28 +132,41 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
 	}
 
-	public void updateAndAddEpisodes(ArrayList<Episode> episodes, int lastSeason)
+	public void updateAndAddEpisodes(ArrayList<Episode> episodes, String seriesId)
 	{
-		
-		ArrayList<String> eps = GetEpisodesForSeason(lastSeason);
-		
+		ArrayList<String> oldEpisodes = GetEpisodesForSearies(seriesId);
 		SQLiteDatabase db = this.getWritableDatabase();
 		ContentValues values = null;
 
 		db.beginTransaction();
+	
 		for (Episode ep : episodes) {
-			values = new ContentValues();
-			values.put(KEY_AIRED, ep.getAired());
-			values.put(KEY_EPISODE, ep.getEpisode());
-			values.put(KEY_SEASON, ep.getSeason());
-			values.put(KEY_SERIESID, ep.getSeriesId());
-			values.put(KEY_SUMMARY, ep.getSummary());
-			values.put(KEY_TITLE, ep.getTitle());
-			values.put(KEY_LASTUPDATED, ep.getLastUpdated());
+			if(oldEpisodes.contains(ep.getEpisodeId())){
+				values = new ContentValues();
+				values.put(KEY_AIRED, ep.getAired());
+				values.put(KEY_EPISODE, ep.getEpisode());
+				values.put(KEY_SEASON, ep.getSeason());
+				values.put(KEY_SERIESID, ep.getSeriesId());
+				values.put(KEY_SUMMARY, ep.getSummary());
+				values.put(KEY_TITLE, ep.getTitle());
+				values.put(KEY_LASTUPDATED, ep.getLastUpdated());
 
-			db.update(TABLE_EPISODES, values, KEY_EPISODEID +"="+ ep.getEpisodeId(),null);
-			Log.d("Updated",ep.getEpisodeId().toString());
-			//db.insert(TABLE_EPISODES, null, values);
+				db.update(TABLE_EPISODES, values, KEY_EPISODEID +"="+ ep.getEpisodeId(),null);
+			}
+			else
+			{
+				values = new ContentValues();
+				values.put(KEY_AIRED, ep.getAired());
+				values.put(KEY_EPISODE, ep.getEpisode());
+				values.put(KEY_SEASON, ep.getSeason());
+				values.put(KEY_SERIESID, ep.getSeriesId());
+				values.put(KEY_SUMMARY, ep.getSummary());
+				values.put(KEY_TITLE, ep.getTitle());
+				values.put(KEY_WATCHED, ep.getWatched());
+				values.put(KEY_LASTUPDATED, ep.getLastUpdated());
+				values.put(KEY_EPISODEID, ep.getEpisodeId());
+				db.insert(TABLE_EPISODES, null, values);
+			}
 		}
 		db.setTransactionSuccessful();
 		db.endTransaction();
@@ -161,18 +174,20 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
 	}
 	
+	
+	
 	//DU HÖLL PÅ MED KOLLEN AV EPISODEERNA!!!!!	
-	private ArrayList<String> GetEpisodesForSeason(int season)
+	private ArrayList<String> GetEpisodesForSearies(String seriesId)
 	{
 		
 		ArrayList<String> episodes = new ArrayList<String>();
-		String sql = "SELECT Season FROM " + TABLE_EPISODES + " WHERE " + KEY_SEASON + " >= " + season;
+		String sql = "SELECT "+ KEY_EPISODEID +" FROM " + TABLE_EPISODES + " WHERE " + KEY_SERIESID + " = " + seriesId;
 		SQLiteDatabase db = this.getReadableDatabase();
 		Cursor cursor = db.rawQuery(sql,null);
 
 		cursor.moveToFirst();
 		while (!cursor.isAfterLast()) {
-			episodes.add(cursor.getString(12));
+			episodes.add(cursor.getString(0));
 			cursor.moveToNext();
 		}
 
@@ -206,8 +221,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 			s.setFirstAired(cursor.getString(10));
 			s.setHeader(cursor.getString(11));
 			s.setSeriesId(cursor.getString(12));
-
-			Log.d("Test",cursor.getString(12));
 
 			s.Episodes = new ArrayList<Episode>();
 
@@ -534,10 +547,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 			sql = "SELECT * FROM "+ TABLE_EPISODES + " e INNER JOIN "+TABLE_SERIES+" s ON e.seriesId = s.SeriesId WHERE "+KEY_AIRED+" >= date('"+dateWithoutTime+"') AND STRFTIME('%j', "+ KEY_AIRED +") = STRFTIME('%j', '"+ dateWithoutTime +"') AND STRFTIME('%Y', "+ KEY_AIRED +") = STRFTIME('%Y', '"+ dateWithoutTime +"') ORDER BY " + KEY_AIRED;		
 			break;
 		case 1: //This week
-			sql = "SELECT * FROM "+ TABLE_EPISODES +" e INNER JOIN "+TABLE_SERIES+" s ON e.seriesId = s.SeriesId WHERE "+KEY_AIRED+" >= date('"+dateWithoutTime+"') AND STRFTIME('%W', "+ KEY_AIRED +") = STRFTIME('%W', '"+ dateWithoutTime +"') AND STRFTIME('%Y', "+ KEY_AIRED +") = STRFTIME('%Y', '"+ dateWithoutTime +"') ORDER BY" + KEY_AIRED;
+			sql = "SELECT * FROM "+ TABLE_EPISODES +" e INNER JOIN "+TABLE_SERIES+" s ON e.seriesId = s.SeriesId WHERE "+KEY_AIRED+" >= date('"+dateWithoutTime+"') AND STRFTIME('%W', "+ KEY_AIRED +") = STRFTIME('%W', '"+ dateWithoutTime +"') AND STRFTIME('%Y', "+ KEY_AIRED +") = STRFTIME('%Y', '"+ dateWithoutTime +"') ORDER BY " + KEY_AIRED;
 			break;
 		case 2: //This month
-			sql = "SELECT * FROM "+ TABLE_EPISODES +" e INNER JOIN "+TABLE_SERIES+" s ON e.seriesId = s.SeriesId WHERE "+KEY_AIRED+" >= date('"+dateWithoutTime+"') AND STRFTIME('%m', "+ KEY_AIRED +") = STRFTIME('%m', '"+ dateWithoutTime +"') AND STRFTIME('%Y', "+ KEY_AIRED +") = STRFTIME('%Y', '"+ dateWithoutTime +"') ORDER BY" + KEY_AIRED;
+			sql = "SELECT * FROM "+ TABLE_EPISODES +" e INNER JOIN "+TABLE_SERIES+" s ON e.seriesId = s.SeriesId WHERE "+KEY_AIRED+" >= date('"+dateWithoutTime+"') AND STRFTIME('%m', "+ KEY_AIRED +") = STRFTIME('%m', '"+ dateWithoutTime +"') AND STRFTIME('%Y', "+ KEY_AIRED +") = STRFTIME('%Y', '"+ dateWithoutTime +"') ORDER BY " + KEY_AIRED;
 			break;
 		default:
 			break;
@@ -552,17 +565,17 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		while(!cursor.isAfterLast())
 		{
 			Episode e = new Episode();
-
+		
+			e.setTitle(cursor.getString(3));
 			e.setAired(cursor.getString(4));
-			e.setEpisode(cursor.getString(2));
-			e.setID(Integer.parseInt(cursor.getString(0)));
-			e.setSeason(cursor.getString(1));
-			e.setSeriesId(cursor.getString(7));
 			e.setSummary(cursor.getString(6));
-			e.setTitle( cursor.getString(3));
-			e.setWatched(cursor.getString(5));
-			e.setLastUpdated(cursor.getString(11));
+			e.setSeason(cursor.getString(1));
+			e.setEpisode(cursor.getString(2));
+			e.setSeriesId(cursor.getString(12));
+			e.setWatched("0");
+			
 
+			
 			episodes.add(e);
 
 			cursor.moveToNext();

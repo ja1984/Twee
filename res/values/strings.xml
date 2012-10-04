@@ -28,6 +28,7 @@
     <string name="title_activity_overview">Overview</string>
     <string name="title_activity_searchable">Search</string>
     <string name="title_activity_calendar">Calendar</string>
+    <string name="title_activity_about">About Twee</string>
     <!-- /Titles -->
 
 
@@ -60,6 +61,8 @@
     <string name="message_nointernet">No connection!\nClick to try again</string>
     <string name="message_noresult">No results found!</string>
     <string name="message_series_double">This series is already in your collection</string>
+    <string name="message_episodes_updates">Updating episodes data</string>
+    <string name="message_episodes_updates_done">Episodes have been updated</string>
     <!-- /Messages -->
 
 
@@ -71,10 +74,14 @@
 
 
     <!-- About -->
-    <string name="about_title">About Twee</string>
-    <string name="about_close">Yes</string>
+    <string name="about_close">Close</string>
+    <string name="about_header">About Twee</string>
     <string name="about_text">Twee is getting all it´s information from http://thetvdb.com, you should probably support them in any way possible!</string>
+    <string name="thanks_header">Thanks to</string>
+    <string name="thanks_text">klizzer, vastis, M203, Reconnnn, mates, Arias, toffe, grief, zero, happyoccasion, helevorn, milky81 and Oxygen </string>
+    
     <!-- /About -->
+
 
     <!-- Delete -->
     <string name="delete_title">Delete Series</string>
@@ -83,10 +90,12 @@
     <string name="delete_text">This can not be undone!</string>
     <!-- /Delete -->
 
+
     <!-- ContentDescriptions -->
     <string name="cd_series_header">Header image</string>
     <!-- /ContentDescriptions -->
 
     <string name="hello_world">Hello world!</string>
+    
 
 </resources>

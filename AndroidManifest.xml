@@ -72,6 +72,13 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="se.goagubbar.twee.HomeActivity" />
         </activity>
+        <activity
+            android:name=".AboutActivity"
+            android:label="@string/title_activity_about" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="se.goagubbar.twee.HomeActivity" />
+        </activity>
     </application>
 
 </manifest>

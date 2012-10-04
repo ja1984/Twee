@@ -18,6 +18,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.InputFilter.LengthFilter;
 import android.util.Log;
 import android.view.ActionMode;
 import android.view.Menu;
@@ -30,6 +31,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.Toast;
 
 public class HomeActivity extends BaseActivity {
 
@@ -140,10 +142,14 @@ public class HomeActivity extends BaseActivity {
 			case R.id.menu_delete:
 				deleteSeries(selectedItem);
 				mode.finish();		
-
+				return true;
+				
 			case R.id.menu_refresh:
+				Toast.makeText(HomeActivity.this, R.string.message_episodes_updates, Toast.LENGTH_SHORT).show();
 				new GetNewEpisodes().execute(selectedItem);
 				mode.finish();
+				return true;
+				
 			default:
 				return false;
 			}
@@ -192,7 +198,7 @@ public class HomeActivity extends BaseActivity {
 			return true;
 
 		case R.id.menu_about:
-			displayAboutDialog();
+			startActivity(new Intent(this,AboutActivity.class));
 			return true;
 
 		default:
@@ -200,22 +206,9 @@ public class HomeActivity extends BaseActivity {
 		}
 	}
 
-	private void displayAboutDialog()
-	{
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setMessage(R.string.about_text)
-		.setCancelable(false)
-		.setTitle(R.string.about_title)
-		.setPositiveButton(R.string.about_close, new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int id) {
-				dialog.cancel();
-			}
-		}).create().show();
-	}
-
 	private void deleteSeries(final String seriesId)
 	{
-
+		Log.d("Del", "Borja deleta");
 		new AlertDialog.Builder(this)
 		.setMessage(R.string.delete_text)
 		.setTitle(R.string.delete_title)
@@ -236,9 +229,7 @@ public class HomeActivity extends BaseActivity {
 
 		@Override
 		protected ArrayList<Series> doInBackground(String... params) {
-			Log.d("Test","Nu skall serierna hamtas");
 			ArrayList<Series> series = db.getAllSeries();
-			Log.d("Test","Nu har de hamtats!");
 			return series;
 		}
 
@@ -256,18 +247,6 @@ public class HomeActivity extends BaseActivity {
 
 		@Override
 		protected Boolean doInBackground(String... q) {
-
-
-			Episode lastEpisode = db.GetLastAiredEpisodeForSeries(q[0]);
-			int lastSeason = 0;
-
-			if(lastEpisode != null)
-			{
-				lastSeason = (lastEpisode.getSeason().equals("1") ? 1 : (Integer.parseInt(lastEpisode.getSeason()) - 1)) ;
-			}
-
-
-
 			String completeAddress = String.format(KEY_FULLURL, q[0]);
 			XMLParser parser = new XMLParser();
 
@@ -289,27 +268,33 @@ public class HomeActivity extends BaseActivity {
 			{
 				Episode ep = new Episode();
 				e = (Element) episodes.item(i);
-
-				if(Integer.parseInt(parser.getValue(e, KEY_EP_SEASON)) >= lastSeason){
-
 					ep.setAired(parser.getValue(e, KEY_EP_AIRED));
 					ep.setEpisode(parser.getValue(e, KEY_EP_EPISODE));
 					ep.setSeason(parser.getValue(e, KEY_EP_SEASON));
 					ep.setSeriesId(q[0].toString());
 					ep.setSummary(parser.getValue(e, KEY_EP_SUMMARY));
 					ep.setTitle(parser.getValue(e, KEY_EP_TITLE));
-					Log.d("Namn",parser.getValue(e, KEY_EP_TITLE));
 					ep.setLastUpdated(parser.getValue(e, KEY_LASTUPDATED));
 					ep.setEpisodeId(parser.getValue(e, KEY_EP_ID));
+					ep.setWatched("0");
 					Episodes.add(ep);
-				}
-
 			}
-
-			db.updateAndAddEpisodes(Episodes, lastSeason);
-
-
+			
+			Log.d("Parsat episoderna","Klart");
+			
+			db.updateAndAddEpisodes(Episodes, q[0]);
+				
+			
+			
 			return true;
+		}
+		
+		@Override
+		protected void onPostExecute(Boolean result) {
+			// TODO Auto-generated method stub
+			super.onPostExecute(result);
+			Toast.makeText(HomeActivity.this, R.string.message_episodes_updates_done, Toast.LENGTH_SHORT).show();
+			
 		}
 
 	}

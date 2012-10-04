@@ -143,7 +143,7 @@ public class Adapters {
 				}
 				if(e.getAired() != null)
 				{
-					holder.information.setText(dateHelper.Episodenumber(e) + " " + e.getTitle() + " - " + dateHelper.DisplayDate(e.getAired()));
+					holder.information.setText(dateHelper.Episodenumber(e) + " " + e.getTitle() + " - " + dateHelper.DaysTilNextEpisode(e.getAired()));
 				}
 				else
 				{
@@ -425,8 +425,8 @@ public class Adapters {
 			{
 				checkBox.setVisibility(View.VISIBLE);
 			}
+			extra.setText(episodes.get(pos).getSeriesId());
 			extra.setVisibility(View.VISIBLE);
-			extra.setText(episodes.get(pos).getLastUpdated());
 			title.setText(episodes.get(pos).getTitle());
 			information.setText(dateHelper.Episodenumber(episodes.get(pos)) + " | " +dateHelper.DisplayDate(episodes.get(pos).getAired()));
 
