@@ -351,6 +351,7 @@ public class Adapters {
 		private final Context context;
 		private final ArrayList<Episode> episodes;
 		private DateHelper dateHelper;
+		private ImageService imageService;
 		private ArrayList<Boolean> itemChecked = new ArrayList<Boolean>();
 		private ArrayList<Boolean> visibleItems = new ArrayList<Boolean>();
 
@@ -360,6 +361,7 @@ public class Adapters {
 			this.context = context;
 			this.episodes = objects;
 			this.dateHelper = new DateHelper();
+			this.imageService = new ImageService();
 
 			for (int i = 0; i < objects.size(); i++) {
 				itemChecked.add(i, objects.get(i).getWatched().equals("1"));
@@ -376,6 +378,7 @@ public class Adapters {
 			protected TextView information;
 			protected CheckBox watched;
 			protected TextView extra;
+			protected ImageView image;
 		}
 
 		@Override
@@ -389,6 +392,7 @@ public class Adapters {
 
 			final CheckBox checkBox = (CheckBox) convertView.findViewById(R.id.chkWatched);
 			final TextView title = (TextView) convertView.findViewById(R.id.txtTitle);
+			final ImageView image = (ImageView) convertView.findViewById(R.id.imgSeriesImage);
 			final TextView information = (TextView) convertView.findViewById(R.id.txtEpisodeNumber);
 			final TextView extra = (TextView)convertView.findViewById(R.id.txtExtra);
 			checkBox.setOnClickListener(new OnClickListener() {
@@ -426,6 +430,17 @@ public class Adapters {
 				checkBox.setVisibility(View.VISIBLE);
 			}
 			extra.setText(episodes.get(pos).getSeriesId());
+			
+			Bitmap bm = imageService.GetImage(episodes.get(pos).getSeriesId(), getContext());
+			if(bm != null){
+				image.setImageBitmap(bm);
+			}
+			else
+			{
+				image.setVisibility(View.INVISIBLE);
+			}
+			
+			
 			extra.setVisibility(View.VISIBLE);
 			title.setText(episodes.get(pos).getTitle());
 			information.setText(dateHelper.Episodenumber(episodes.get(pos)) + " | " +dateHelper.DisplayDate(episodes.get(pos).getAired()));

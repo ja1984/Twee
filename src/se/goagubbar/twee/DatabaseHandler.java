@@ -571,7 +571,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 			e.setSummary(cursor.getString(6));
 			e.setSeason(cursor.getString(1));
 			e.setEpisode(cursor.getString(2));
-			e.setSeriesId(cursor.getString(12));
+			e.setSeriesId(cursor.getString(19));
+
 			e.setWatched("0");
 			
 

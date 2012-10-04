@@ -72,7 +72,7 @@ containing a value of this type.
         public static final int containerWatched=0x7f090021;
         public static final int grpTheme=0x7f090008;
         public static final int imgSeriesHeader=0x7f09001c;
-        public static final int imgSeriesImage=0x7f090019;
+        public static final int imgSeriesImage=0x7f090016;
         public static final int layoutEpisode=0x7f090011;
         public static final int lstAllEpisodes=0x7f09001b;
         public static final int lstEpisodes=0x7f090029;
@@ -87,7 +87,7 @@ containing a value of this type.
         public static final int pager=0x7f090006;
         public static final int pager_title_strip=0x7f090007;
         public static final int pgrWatched=0x7f090022;
-        public static final int progressBar1=0x7f090018;
+        public static final int progressBar1=0x7f090019;
         public static final int radioTheme0=0x7f090009;
         public static final int radioTheme1=0x7f09000a;
         public static final int radioTheme2=0x7f09000b;
@@ -103,7 +103,7 @@ containing a value of this type.
         public static final int txtLastAiredEpisodeNumber=0x7f090027;
         public static final int txtLastAiredTitle=0x7f090026;
         public static final int txtMarkSeasonAsWatched=0x7f090010;
-        public static final int txtName=0x7f090016;
+        public static final int txtName=0x7f090017;
         public static final int txtSeasonNumber=0x7f09000e;
         public static final int txtSeriesName=0x7f09001a;
         public static final int txtSeriesRating=0x7f09001e;
@@ -117,7 +117,7 @@ containing a value of this type.
         public static final int txtTotalWatched=0x7f090020;
         public static final int txtUpcomingEpisodes=0x7f090028;
         public static final int txtWatched=0x7f090023;
-        public static final int txtYear=0x7f090017;
+        public static final int txtYear=0x7f090018;
     }
     public static final class layout {
         public static final int layout_about=0x7f030000;
