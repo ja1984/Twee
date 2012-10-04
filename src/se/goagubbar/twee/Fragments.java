@@ -133,34 +133,44 @@ public class Fragments {
             TextView seriesRating = (TextView)v.findViewById(R.id.txtSeriesRating);
             TextView seriesStatus = (TextView)v.findViewById(R.id.txtSeriesStatus);
             ImageView seriesHeader = (ImageView)v.findViewById(R.id.imgSeriesHeader);
+            
             ListView episodes = (ListView)v.findViewById(R.id.lstEpisodes);
             RelativeLayout lastAiredEpisode = (RelativeLayout)v.findViewById(R.id.rllHeader1);
             TextView lastAiredEpisodeTitle = (TextView)v.findViewById(R.id.txtLastAiredTitle);
             TextView lastAiredEpisodeInformation = (TextView)v.findViewById(R.id.txtLastAiredEpisodeNumber);
             final CheckBox lastAiredEpisodeWatched = (CheckBox)v.findViewById(R.id.chkWatched);
-            if(lastAiredApisode != null)
+            
+            if(lastAiredApisode.getID() != 0)
             {
             	lastAiredEpisodeTitle.setText(lastAiredApisode.getTitle());
             	lastAiredEpisodeInformation.setText(dateHelper.Episodenumber(lastAiredApisode) + " | " + dateHelper.DisplayDate(lastAiredApisode.getAired()));
             	lastAiredEpisodeWatched.setChecked(lastAiredApisode.getWatched().equals("1"));
             	
+                lastAiredEpisodeWatched.setOnClickListener(new View.OnClickListener() {
+    				
+    				public void onClick(View v) {
+    					new DatabaseHandler(activity).ToggleEpisodeWatched("" + lastAiredApisode.getID(), lastAiredEpisodeWatched.isChecked());
+    				}
+    			});
+                
+                lastAiredEpisode.setOnClickListener(new View.OnClickListener() {
+        			
+        			public void onClick(View v) {
+        				
+        				new SeriesHelper().displayPlot(lastAiredApisode, activity);
+        			
+        			}
+        		});
+            	
+            	
+            }
+            else
+            {
+            	lastAiredEpisode.setVisibility(View.GONE);
+            	TextView lastAiredHeader = (TextView)v.findViewById(R.id.txtLastAired);
+            	lastAiredHeader.setVisibility(View.GONE);
             }
             
-            lastAiredEpisodeWatched.setOnClickListener(new View.OnClickListener() {
-				
-				public void onClick(View v) {
-					new DatabaseHandler(activity).ToggleEpisodeWatched("" + lastAiredApisode.getID(), lastAiredEpisodeWatched.isChecked());
-				}
-			});
-            
-            lastAiredEpisode.setOnClickListener(new View.OnClickListener() {
-    			
-    			public void onClick(View v) {
-    				
-    				new SeriesHelper().displayPlot(lastAiredApisode, activity);
-    			
-    			}
-    		});
             
             
             if(s.getHeader() != null){
