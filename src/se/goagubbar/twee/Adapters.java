@@ -214,7 +214,9 @@ public class Adapters {
 				public void onClick(View v) {
 					CheckBox cb = (CheckBox) v.findViewById(R.id.chkWatched);
 					new DatabaseHandler(context).ToggleEpisodeWatched("" + episodes.get(pos).getID(), cb.isChecked());
-
+						
+					RefreshOverView();			
+					
 					if (cb.isChecked()) {
 						itemChecked.set(pos, true);
 						// do some operations here
@@ -266,12 +268,20 @@ public class Adapters {
 			
 			
 			seasonNumber.setText("Season " + episodes.get(pos).getSeason());
-			title.setText(episodes.get(pos).getTitle());
+			
+			String _title = episodes.get(pos).getTitle();
+			title.setText(_title.equals("") ? "TBA" : _title);
 			information.setText(dateHelper.Episodenumber(episodes.get(pos)) + " | " + dateHelper.DisplayDate(episodes.get(pos).getAired()));
 
 			return convertView;
 
 
+		}
+		
+		private void RefreshOverView()
+		{
+			OverviewActivity overViewFragment = (OverviewActivity)context;
+			overViewFragment.Refresh();
 		}
 		
 		private void MarkSeasonAsWatched(String seriesId, String season)
@@ -285,8 +295,9 @@ public class Adapters {
 				{
 					itemChecked.set(i, true);
 				}
-				notifyDataSetChanged();
-			}	
+			}
+			notifyDataSetChanged();
+			RefreshOverView();
 			
 		}
 		
@@ -335,8 +346,8 @@ public class Adapters {
 			});
 		
 			
-
-			title.setText(episodes.get(pos).getTitle());
+			String _title = episodes.get(pos).getTitle(); 
+			title.setText(_title.equals("") ? "TBA" : _title);
 			information.setText(dateHelper.Episodenumber(episodes.get(pos)) + " | " + dateHelper.DisplayDate(episodes.get(pos).getAired()));
 
 			return convertView;
@@ -357,7 +368,7 @@ public class Adapters {
 
 		public CalendarAdapter(Context context, int resource, ListView lv, ArrayList<Episode> objects)
 		{
-			super(context, R.layout.listitem_episode, objects);
+			super(context, R.layout.listitem_calendar, objects);
 			this.context = context;
 			this.episodes = objects;
 			this.dateHelper = new DateHelper();
@@ -387,7 +398,7 @@ public class Adapters {
 
 			if(convertView == null){
 				LayoutInflater inflator = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-				convertView = inflator.inflate(R.layout.listitem_episode, null);
+				convertView = inflator.inflate(R.layout.listitem_calendar, null);
 			}
 
 			final CheckBox checkBox = (CheckBox) convertView.findViewById(R.id.chkWatched);

@@ -35,6 +35,8 @@ public class OverviewActivity extends FragmentActivity {
     Series series;
     int totalEpisodes;
     int watchedEpisodes;
+    String seriesId;
+    String tvdbSeriesId;
 
     /**
      * The {@link ViewPager} that will host the section contents.
@@ -53,9 +55,11 @@ public class OverviewActivity extends FragmentActivity {
         
         Bundle extras = getIntent().getExtras();
         
-        String seriesId = extras.getString("SeriesId");
+        seriesId = extras.getString("SeriesId");
         
         series = new DatabaseHandler(getBaseContext()).getSeriesById(seriesId);
+        
+        tvdbSeriesId = "" + series.getSeriesId();
         
         getActionBar().setTitle(series.getName());
         
@@ -82,11 +86,17 @@ public class OverviewActivity extends FragmentActivity {
     
 	public void Reload()
 	{
-		EpisodesFragment test = (EpisodesFragment) fragments.get(2);
-		test = new Fragments.EpisodesFragment(series, totalEpisodes, watchedEpisodes);
+		Log.d("Test","Reload");
+		EpisodesFragment fragment = (EpisodesFragment) fragments.get(2);
+		fragment = new Fragments.EpisodesFragment(series, totalEpisodes, watchedEpisodes);
 	}
 
-    
+    public void Refresh()
+    {
+    	View v = (View)fragments.get(1).getView();
+    	Fragments.SetProgress(v, tvdbSeriesId);
+    }
+	
     
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -105,9 +115,9 @@ public class OverviewActivity extends FragmentActivity {
             case R.id.menu_markseries:
             	new DatabaseHandler(getBaseContext()).MarkSeriesAsWatched(series.getSeriesId());
             	Toast.makeText(getBaseContext(), R.string.message_series_watched, Toast.LENGTH_SHORT).show();
-            	
-            	View v = (View)fragments.get(1).getView();
-            	Fragments.SetProgress(v, series.getSeriesId());
+            	Refresh();
+            	//View v = (View)fragments.get(1).getView();
+            	//Fragments.SetProgress(v, seriesId);
         }
         return super.onOptionsItemSelected(item);
     }

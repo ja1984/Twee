@@ -1,6 +1,8 @@
 package se.goagubbar.twee;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.StringTokenizer;
 
 import se.goagubbar.twee.Adapters.EpisodeAdapter;
@@ -198,6 +200,7 @@ public class Fragments {
     		}
             
             SetProgress(v, s.getSeriesId());
+            Collections.reverse(newEps);
             episodes.setAdapter(new UpcomingEpisodesAdapter(getActivity(), R.id.lstEpisodes, episodes,newEps));
             
             seriesName.setText(s.getName());
@@ -212,8 +215,9 @@ public class Fragments {
     public static void SetProgress(View view, String seriesId)
     {
     	
+    	Log.d("test","" + seriesId);
     	ArrayList<Episode> episodes = new DatabaseHandler(activity).GetAiredEpisodes(seriesId);
-    	
+    	Log.d("test","" + episodes.size());
     	int watched = 0;
     	int totalEpisodes = episodes.size();
     	
