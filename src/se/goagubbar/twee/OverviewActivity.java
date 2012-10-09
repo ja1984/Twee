@@ -116,8 +116,6 @@ public class OverviewActivity extends FragmentActivity {
             	new DatabaseHandler(getBaseContext()).MarkSeriesAsWatched(series.getSeriesId());
             	Toast.makeText(getBaseContext(), R.string.message_series_watched, Toast.LENGTH_SHORT).show();
             	Refresh();
-            	//View v = (View)fragments.get(1).getView();
-            	//Fragments.SetProgress(v, seriesId);
         }
         return super.onOptionsItemSelected(item);
     }
