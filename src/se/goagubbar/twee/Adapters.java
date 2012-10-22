@@ -4,7 +4,9 @@ import java.util.ArrayList;
 
 import se.goagubbar.twee.Models.Episode;
 import se.goagubbar.twee.Models.Series;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -363,8 +365,9 @@ public class Adapters {
 		private final ArrayList<Episode> episodes;
 		private DateHelper dateHelper;
 		private ImageService imageService;
-		private ArrayList<Boolean> itemChecked = new ArrayList<Boolean>();
-		private ArrayList<Boolean> visibleItems = new ArrayList<Boolean>();
+		private ArrayList<Boolean> displayDateWrapper = new ArrayList<Boolean>();
+		//private ArrayList<Boolean> itemChecked = new ArrayList<Boolean>();
+		//private ArrayList<Boolean> visibleItems = new ArrayList<Boolean>();
 
 		public CalendarAdapter(Context context, int resource, ListView lv, ArrayList<Episode> objects)
 		{
@@ -374,22 +377,29 @@ public class Adapters {
 			this.dateHelper = new DateHelper();
 			this.imageService = new ImageService();
 
+			String lastDate = "";
 			for (int i = 0; i < objects.size(); i++) {
-				itemChecked.add(i, objects.get(i).getWatched().equals("1"));
+				displayDateWrapper.add(objects.get(i).getAired().equals(lastDate));
+				lastDate = objects.get(i).getAired();
+				//itemChecked.add(i, objects.get(i).getWatched().equals("1"));
 			}
-
-			for (int i = 0; i < objects.size(); i++) {
-				visibleItems.add(i, dateHelper.CompareDates(episodes.get(i).getAired(), dateHelper.GetTodaysDate()) > 0);
-			}
+//
+//			for (int i = 0; i < objects.size(); i++) {
+//				visibleItems.add(i, dateHelper.CompareDates(episodes.get(i).getAired(), dateHelper.GetTodaysDate()) > 0);
+//			}
 
 		}
 
 		static class ViewHolder {
-			protected TextView title;
-			protected TextView information;
-			protected CheckBox watched;
-			protected TextView extra;
+			protected TextView date;
+			//protected TextView information;
+			//protected CheckBox watched;
+			//protected TextView extra;
 			protected ImageView image;
+			protected TextView dateSeparator;
+			protected TextView episodeInformation;
+			protected RelativeLayout dateSeparatorWrapper;
+			protected RelativeLayout layoutEpisode;
 		}
 
 		@Override
@@ -401,29 +411,34 @@ public class Adapters {
 				convertView = inflator.inflate(R.layout.listitem_calendar, null);
 			}
 
-			final CheckBox checkBox = (CheckBox) convertView.findViewById(R.id.chkWatched);
-			final TextView title = (TextView) convertView.findViewById(R.id.txtTitle);
+			//final CheckBox checkBox = (CheckBox) convertView.findViewById(R.id.chkWatched);
+			//final TextView title = (TextView) convertView.findViewById(R.id.txtTitle);
 			final ImageView image = (ImageView) convertView.findViewById(R.id.imgSeriesImage);
-			final TextView information = (TextView) convertView.findViewById(R.id.txtEpisodeNumber);
-			final TextView extra = (TextView)convertView.findViewById(R.id.txtExtra);
-			checkBox.setOnClickListener(new OnClickListener() {
+			//final TextView information = (TextView) convertView.findViewById(R.id.txtEpisodeNumber);
+			final TextView episodeInformation = (TextView)convertView.findViewById(R.id.txtEpisodeInformation);
+			//final TextView test = (TextView)convertView.findViewById(R.id.txtTest);
+			final TextView dateSeparator = (TextView)convertView.findViewById(R.id.txtDate);
+			final RelativeLayout dateSeparatorWrapper = (RelativeLayout)convertView.findViewById(R.id.daySeparator);
+			final RelativeLayout episodeImage = (RelativeLayout)convertView.findViewById(R.id.layoutEpisode);
+			//checkBox.setOnClickListener(new OnClickListener() {
 
-				public void onClick(View v) {
-					CheckBox cb = (CheckBox) v.findViewById(R.id.chkWatched);
-					new DatabaseHandler(context).ToggleEpisodeWatched("" + episodes.get(pos).getID(), cb.isChecked());
+//				public void onClick(View v) {
+//					CheckBox cb = (CheckBox) v.findViewById(R.id.chkWatched);
+//					new DatabaseHandler(context).ToggleEpisodeWatched("" + episodes.get(pos).getID(), cb.isChecked());
+//
+//					if (cb.isChecked()) {
+//						itemChecked.set(pos, true);
+//						// do some operations here
+//					} else if (!cb.isChecked()) {
+//						itemChecked.set(pos, false);
+//						// do some operations here
+//					}
+//
+//				}
+//			});
+			
 
-					if (cb.isChecked()) {
-						itemChecked.set(pos, true);
-						// do some operations here
-					} else if (!cb.isChecked()) {
-						itemChecked.set(pos, false);
-						// do some operations here
-					}
-
-				}
-			});
-
-			convertView.setOnClickListener(new OnClickListener() {
+			episodeImage.setOnClickListener(new OnClickListener() {
 
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
@@ -431,16 +446,16 @@ public class Adapters {
 				}
 			});
 
-			checkBox.setChecked(itemChecked.get(pos));
-			if(visibleItems.get(pos))
-			{
-				checkBox.setVisibility(8);
-			}
-			else
-			{
-				checkBox.setVisibility(View.VISIBLE);
-			}
-			extra.setText(episodes.get(pos).getSeriesId());
+			//checkBox.setChecked(itemChecked.get(pos));
+//			if(visibleItems.get(pos))
+//			{
+//				checkBox.setVisibility(8);
+//			}
+//			else
+//			{
+//				checkBox.setVisibility(View.VISIBLE);
+//			}
+			//date.setText(episodes.get(pos).getSeriesId());
 			
 			Bitmap bm = imageService.GetImage(episodes.get(pos).getSeriesId(), getContext());
 			if(bm != null){
@@ -451,10 +466,19 @@ public class Adapters {
 				image.setVisibility(View.INVISIBLE);
 			}
 			
+			dateSeparator.setText(dateHelper.DaysTilNextEpisode(episodes.get(pos).getAired()) + " (" + dateHelper.DisplayDate(episodes.get(pos).getAired()).substring(4) + ")");
+			episodeInformation.setText( dateHelper.Episodenumber(episodes.get(pos)) + " | " + episodes.get(pos).getTitle());
 			
-			extra.setVisibility(View.VISIBLE);
-			title.setText(episodes.get(pos).getTitle());
-			information.setText(dateHelper.Episodenumber(episodes.get(pos)) + " | " +dateHelper.DisplayDate(episodes.get(pos).getAired()));
+			if(displayDateWrapper.get(pos))
+			{
+				dateSeparatorWrapper.setVisibility(View.GONE);
+			}
+					//test.setText(test.getText() + dateHelper.Episodenumber(episodes.get(i)) + " | " + episodes.get(i).getTitle() + " | " +dateHelper.DisplayDate(episodes.get(i).getAired()) + "\n");
+			
+			
+			//extra.setVisibility(View.VISIBLE);
+			//title.setText(episodes.get(pos).getTitle());
+			//information.setText(dateHelper.Episodenumber(episodes.get(pos)) + " | " +dateHelper.DisplayDate(episodes.get(pos).getAired()));
 
 			return convertView;
 
@@ -487,12 +511,31 @@ public class Adapters {
 
 			TextView name = (TextView)rowView.findViewById(R.id.txtName);
 			TextView year = (TextView)rowView.findViewById(R.id.txtYear);
+			final TextView btnPlot = (TextView)rowView.findViewById(R.id.txtSeriesPlot);
 
 			rowView.setTag(series.get(position).getID());
-
+			btnPlot.setTag(series.get(position).getSummary());
 			name.setText(series.get(position).getName());
-			year.setText(series.get(position).getAirs());
+			year.setText("First aired: " + series.get(position).getAirs());
 
+			btnPlot.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					
+					AlertDialog.Builder builder = new AlertDialog.Builder(context);
+					builder.setMessage(btnPlot.getTag().toString())
+					       .setCancelable(false)
+					       .setTitle(R.string.series_summary)
+					       .setPositiveButton(R.string.about_close, new DialogInterface.OnClickListener() {
+					           public void onClick(DialogInterface dialog, int id) {
+					                dialog.cancel();
+					           }
+					       }).create().show();
+					
+				}
+			});
+			
 			return rowView;
 		}
 

@@ -141,6 +141,7 @@ public class HomeActivity extends BaseActivity {
 			switch (item.getItemId()) {
 			case R.id.menu_delete:
 				deleteSeries(selectedItem);
+				new GetMySeries().execute();
 				mode.finish();		
 				return true;
 				

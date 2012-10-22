@@ -19,6 +19,8 @@
     <string name="homeactivity_tag_seriesid">seriesId</string>
     <string name="homeactivity_tag_id">Id</string>
     <string name="season_markaswatched">Mark season as watched</string>
+    <string name="series_plot">Plot</string>
+    <string name="series_summary">Summary</string>
     <!-- /General -->
 
 
@@ -63,6 +65,13 @@
     <string name="message_series_double">This series is already in your collection</string>
     <string name="message_episodes_updates">Updating episodes data</string>
     <string name="message_episodes_updates_done">Episodes have been updated</string>
+    
+    <string name="message_download_information">Downloading information...</string>
+    <string name="message_download_banner">Downloading banner image...</string>
+    <string name="message_download_header">Downloading header image...</string>
+    <string name="message_download_save_series">Saving series...</string>
+    <string name="message_download_save_episodes">Saving episodes...</string>
+    <string name="message_download_pleasewait">Please wait</string>
     <!-- /Messages -->
 
 

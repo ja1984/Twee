@@ -8,9 +8,12 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 import android.app.ActionBar;
+import android.app.Activity;
 import android.app.ListActivity;
+import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
@@ -65,6 +68,7 @@ public class SearchableActivity extends ListActivity {
 	ImageService imageService;
 	ListView searchResult;
 	Boolean downloadHeader;
+	ProgressDialog saveDialog;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -111,7 +115,6 @@ public class SearchableActivity extends ListActivity {
 				{
 					setProgressBarIndeterminateVisibility(true);
 
-					Toast.makeText(getBaseContext(), R.string.message_series_fetching, Toast.LENGTH_SHORT).show();
 					FetchAndSaveSeries fas = new FetchAndSaveSeries();
 					fas.execute(seriesId);
 				}
@@ -173,7 +176,7 @@ public class SearchableActivity extends ListActivity {
 		protected ArrayList<Series> doInBackground(String... q) {
 			setProgressBarIndeterminateVisibility(true);
 			String completeAddress = KEY_URL + q[0];
-			
+
 			XMLParser parser = new XMLParser();
 			String xml = parser.getXmlFromUrl(completeAddress);
 
@@ -193,6 +196,7 @@ public class SearchableActivity extends ListActivity {
 					Log.d("Namn",parser.getValue(e, KEY_NAME));
 					s.setID(Integer.parseInt(parser.getValue(e, KEY_ID)));
 					s.setAirs(parser.getValue(e, KEY_AIRED));
+					s.setSummary(parser.getValue(e, KEY_SUMMARY));
 
 					series.add(s);
 				}
@@ -207,7 +211,7 @@ public class SearchableActivity extends ListActivity {
 
 			emptyView.setText(R.string.message_noresult);
 
-			SearchAdapter sa = new SearchAdapter(getBaseContext(),R.layout.listitem_searchresult,series);
+			SearchAdapter sa = new SearchAdapter(SearchableActivity.this,R.layout.listitem_searchresult,series);
 
 			setListAdapter(sa);
 
@@ -215,12 +219,12 @@ public class SearchableActivity extends ListActivity {
 
 	}
 
-	public class FetchAndSaveSeries extends AsyncTask<String, Void, Boolean>
+	public class FetchAndSaveSeries extends AsyncTask<String, String, Boolean>
 	{
 
 		@Override
 		protected Boolean doInBackground(String... q) {
-
+			saveDialog.setMessage(getString(R.string.message_download_information));
 			String completeAddress = String.format(KEY_FULLURL, q[0]);
 			//String completeAddress = "http://www.thetvdb.com/data/series/" + q[0] +"/all/";
 			XMLParser parser = new XMLParser();
@@ -251,27 +255,26 @@ public class SearchableActivity extends ListActivity {
 
 			s.setSeriesId(q[0]);
 
-			Log.d("Event","Laddar ner bild 1");
+			
+			publishProgress(getString(R.string.message_download_banner));
 			String image = parser.getValue(e, KEY_IMAGE);
-			Log.d("Test",image.toString());
 
-			if(image != null){
+			if(!image.equals("")){
 				s.setImage(imageService.getBitmapFromURL(image, SearchableActivity.this));
 			}
 
 			if(downloadHeader){
 
-				Log.d("Event","Laddar ner bild 2");
+				publishProgress(getString(R.string.message_download_header));
 				String header = parser.getValue(e, KEY_HEADER);
-				Log.d("Test",header.toString());
 
-				if(header != null){
+				if(!header.equals("")){
 					s.setHeader(imageService.getBitmapFromURL(header, SearchableActivity.this));
 				}
 			}
 
-			Log.d("Event","Laddar ner bild 2 - klar!");
-
+			publishProgress(getString(R.string.message_download_save_series));
+			
 			s.setImdbId(parser.getValue(e, KEY_IMDBID));
 			s.setName(parser.getValue(e, KEY_NAME));			
 			s.setRating(parser.getValue(e, KEY_RATING));
@@ -281,7 +284,7 @@ public class SearchableActivity extends ListActivity {
 
 			db.addSeries(s);
 
-
+			publishProgress(getString(R.string.message_download_save_episodes));
 
 			for(int i = 0;i < episodes.getLength();i++)
 			{
@@ -294,7 +297,7 @@ public class SearchableActivity extends ListActivity {
 				ep.setSeriesId(q[0].toString());
 				ep.setSummary(parser.getValue(e, KEY_EP_SUMMARY));
 				ep.setTitle(parser.getValue(e, KEY_EP_TITLE));
-			
+
 				ep.setLastUpdated(parser.getValue(e, KEY_LASTUPDATED));
 				ep.setEpisodeId(parser.getValue(e,KEY_EPISODEID));
 				ep.setWatched("0");
@@ -311,19 +314,35 @@ public class SearchableActivity extends ListActivity {
 		}
 
 		@Override
+		protected void onPreExecute(){
+		saveDialog = ProgressDialog.show(SearchableActivity.this, getString(R.string.message_download_pleasewait),getString(R.string.message_download_information),true,true, new DialogInterface.OnCancelListener(){
+				@Override
+				public void onCancel(DialogInterface dialog) {
+					FetchAndSaveSeries.this.cancel(true);
+				}
+			}
+					);
+		
+		}
+
+		protected void onProgressUpdate(String... value) {
+			super.onProgressUpdate(value);
+			saveDialog.setMessage(value[0]);
+		}
+
+		@Override
 		protected void onPostExecute(Boolean result) {
 			if(result)
 			{
 				//new GetMySeries().execute();
-				setProgressBarIndeterminateVisibility(false);
-
-				Toast.makeText(getBaseContext(), R.string.message_series_fetching_done, Toast.LENGTH_SHORT).show();
+				saveDialog.cancel();
+				SearchableActivity.this.finish();
 			}
 			super.onPostExecute(result);
 		}
 
 	}
 
-	
-	
+
+
 }

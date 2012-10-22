@@ -1,16 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/seasonTest"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
-
+    android:layout_height="wrap_content"
+    android:clickable="false"
+    android:orientation="vertical"
+    android:visibility="visible"
+     >
+
     <TextView
         android:id="@+id/txtName"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:text="Large Text"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:layout_toLeftOf="@+id/txtSeriesPlot"
+        android:paddingLeft="5dip"
+        android:scrollHorizontally="true"
+        android:scrollbars="none"
+        android:text="Namn"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textStyle="normal|bold"
+        android:typeface="normal" />
 
     <TextView
         android:id="@+id/txtYear"
@@ -18,16 +27,31 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/txtName"
-        android:text="Small Text"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
-
-    <ProgressBar
-        android:id="@+id/progressBar1"
+        android:paddingLeft="5dip"
+        android:textAllCaps="true"
+        android:textSize="11sp"
+        android:textStyle="normal|bold"
+        android:typeface="normal"
+        android:text="Säningsdatum"
+         />
+
+    <TextView
+        android:id="@+id/txtSeriesPlot"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignBottom="@+id/txtYear"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:visibility="invisible"
-         />
+        android:background="@drawable/button_plot"
+        android:clickable="true"
+        android:padding="10dip"
+        android:scrollHorizontally="true"
+        android:scrollbars="none"
+        android:text="@string/series_plot"
+        android:textAllCaps="true"
+        android:textColor="@android:color/black"
+        android:textSize="11sp"
+        android:textStyle="normal|bold"
+        android:typeface="normal" />
 
 </RelativeLayout>

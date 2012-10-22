@@ -466,7 +466,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	private ArrayList<Episode> GetEpisodes(String seriesId)
 	{
 		ArrayList<Episode> episodes = new ArrayList<Episode>();
-		String sql = "SELECT * FROM " + TABLE_EPISODES + " WHERE " + KEY_SEASON + " != 0 AND " + KEY_AIRED + " != '' AND " +  KEY_SERIESID + " = " + seriesId + " ORDER BY "+KEY_AIRED+" DESC";
+		String sql = "SELECT * FROM " + TABLE_EPISODES + " WHERE " + KEY_SEASON + " != 0 AND " + KEY_AIRED + " != '' AND " +  KEY_SERIESID + " = " + seriesId + " ORDER BY CAST("+ KEY_SEASON +" AS INTEGER) DESC, CAST(" + KEY_EPISODE + " AS INTEGER) DESC";
 		SQLiteDatabase db = this.getReadableDatabase();
 		Cursor cursor = db.rawQuery(sql, null);
 
