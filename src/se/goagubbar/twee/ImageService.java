@@ -1,5 +1,6 @@
 package se.goagubbar.twee;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -11,15 +12,16 @@ import java.net.URL;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Environment;
 import android.util.Log;
 
 public class ImageService {
 
-	public String getBitmapFromURL(String q, Context ctx) {
+	public String getBitmapFromURL(String q, String name, Context ctx) {
 		try {
 			String uri = String.format("http://www.thetvdb.com/banners/%s",q);
 
-			String name = java.util.UUID.randomUUID().toString();
+			//String name = java.util.UUID.randomUUID().toString();
 
 			URL url = new URL(uri);
 			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -45,10 +47,19 @@ public class ImageService {
 	private String SaveImage(Bitmap bitmap, String name, Context context) throws IOException
 	{
 		String filename = name + ".png";
-
+		
+		String externalStoragePath = Environment.getExternalStorageDirectory().getPath();
+		File newFolder = new File(externalStoragePath,"/Twee");
+		
+		if(!newFolder.exists())
+			newFolder.mkdir();
+		
+		
+		
 		FileOutputStream fos = null;
 		try {
-			fos = context.openFileOutput(filename, Context.MODE_PRIVATE);
+			//fos = context.openFileOutput(filename, Context.MODE_PRIVATE);
+			fos = new FileOutputStream(newFolder + "/" + filename);
 			bitmap.compress(Bitmap.CompressFormat.PNG , 90, fos);
 
 		} catch (FileNotFoundException e) {
@@ -68,9 +79,17 @@ public class ImageService {
 		Bitmap bm = null;
 		
 		try {
-			FileInputStream fos = ctx.openFileInput(name);
-			bm = BitmapFactory.decodeStream(fos);
-			fos.close();
+			
+			String externalStoragePath = Environment.getExternalStorageDirectory().getPath();
+			File newFolder = new File(externalStoragePath,"/Twee");
+			
+			if(!newFolder.exists())
+				newFolder.mkdir();
+			
+			//FileInputStream fos = ctx.openFileInput(name);
+			FileInputStream fis = new FileInputStream(newFolder + "/" + name);
+			bm = BitmapFactory.decodeStream(fis);
+			fis.close();
 			
 			return bm;	
 		} catch (Exception e) {

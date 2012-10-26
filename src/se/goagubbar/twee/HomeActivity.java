@@ -64,7 +64,7 @@ public class HomeActivity extends BaseActivity {
 	static final String KEY_EP_ID = "id";
 
 	static List<Series> series;
-	private ListView mySeries;
+	private static ListView mySeries;
 	protected Object mActionMode;
 	public String selectedItem = null;
 
@@ -115,6 +115,13 @@ public class HomeActivity extends BaseActivity {
 
 	}
 
+	@Override
+	protected void onRestart() {
+		// TODO Auto-generated method stub
+		super.onRestart();
+		new GetMySeries().execute();
+	}
+	
 	private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
 
 		@Override
@@ -226,6 +233,7 @@ public class HomeActivity extends BaseActivity {
 
 	}
 
+	
 	public class GetMySeries extends AsyncTask<String, Void, ArrayList<Series>>{
 
 		@Override

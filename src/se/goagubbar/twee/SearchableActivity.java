@@ -260,7 +260,7 @@ public class SearchableActivity extends ListActivity {
 			String image = parser.getValue(e, KEY_IMAGE);
 
 			if(!image.equals("")){
-				s.setImage(imageService.getBitmapFromURL(image, SearchableActivity.this));
+				s.setImage(imageService.getBitmapFromURL(image, s.getSeriesId(), SearchableActivity.this));
 			}
 
 			if(downloadHeader){
@@ -269,7 +269,7 @@ public class SearchableActivity extends ListActivity {
 				String header = parser.getValue(e, KEY_HEADER);
 
 				if(!header.equals("")){
-					s.setHeader(imageService.getBitmapFromURL(header, SearchableActivity.this));
+					s.setHeader(imageService.getBitmapFromURL(header,s.getSeriesId() + "_big", SearchableActivity.this));
 				}
 			}
 
