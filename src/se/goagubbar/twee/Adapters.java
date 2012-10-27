@@ -1,6 +1,7 @@
 package se.goagubbar.twee;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import se.goagubbar.twee.Models.Episode;
 import se.goagubbar.twee.Models.Series;
@@ -18,6 +19,7 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,6 +32,7 @@ public class Adapters {
 		TextView information;
 		String seriesId;
 		String season;
+		ProgressBar progress;
 	}
 
 	public static class SeriesAdapter extends ArrayAdapter<Series> {
@@ -38,6 +41,7 @@ public class Adapters {
 		private final ArrayList<Series> series;
 		private DateHelper dateHelper;
 		private ImageService imageService;
+		private final DatabaseHandler db;
 		Object mActionMode;
 		
 		public SeriesAdapter(Context context, int resource, ListView lv, ArrayList<Series> objects)
@@ -45,6 +49,7 @@ public class Adapters {
 			super(context, R.layout.listitem_series, objects);
 			this.context = context;
 			this.series = objects;
+			db = new DatabaseHandler(context);
 			imageService = new ImageService();
 			dateHelper = new DateHelper();			
 		}
@@ -67,62 +72,10 @@ public class Adapters {
 
 				holder.image = (ImageView)convertView.findViewById(R.id.imgSeriesImage);
 				holder.information = (TextView)convertView.findViewById(R.id.txtSeriesName);
-				
-//				convertView.setOnLongClickListener(new View.OnLongClickListener() {
-//
-//					public boolean onLongClick(View v) {
-//						if(mActionMode != null){
-//							return false;
-//						}
-//
-//						mActionMode = getActivity().startActionMode(mActionModeCallback);
-//						v.setSelected(true);
-//						return true;
-//					}
-//				});
-				
-//				ActionMode.Callback mActionModeCallback = new ActionMode.Callback(){
-//			    	//Called when the acion mode is creates, startActionMode() was called
-//			    	public boolean onCreateActionMode(ActionMode mode, Menu menu)
-//			    	{
-//			    		MenuInflater inflater = mode.getMenuInflater();
-//			    		inflater.inflate(R.menu.menu_home, menu);
-//			    		return true;
-//			    	}
-//			    	
-//			    	
-//			    	//Called each time the action mode is shown. Always called after onCreateActionmode
-//			    	//may be called multiple times if the mode is invalidated.    
-//			    	public boolean onPrepareActionMode(ActionMode mode, Menu menu)
-//			    	{
-//			    		return false;
-//			    	}
-//			    	
-//			    	//Called when the user selects a contextual menu item
-//			    	public boolean onActionItemClicked(ActionMode mode, MenuItem item)
-//			    	{
-//			    		switch (item.getItemId()) {
-//						case R.id.menu_add:
-//							//Do stuff
-//							mode.finish(); //Action picked so close tha CAB
-//							return true;
-//						default:
-//							return false;
-//						}
-//			    		
-//			    	}
-//			    	
-//			    	
-//			    	//Called when user closes the action mode
-//					public void onDestroyActionMode(ActionMode mode) {
-//						// TODO Auto-generated method stub
-//						mActionMode = null;
-//					}
-//			    	
-//			    };
+				holder.progress = (ProgressBar)convertView.findViewById(R.id.pgrWatched);
 				
 				
-				//holder.seriesId = (String)convertView.getTag(R.string.homeactivity_tag_seriesid);
+				
 				convertView.setTag(holder);
 			}
 			else
@@ -130,8 +83,6 @@ public class Adapters {
 				holder = (viewHolder)convertView.getTag();
 			}
 
-
-			
 			
 			if(s != null)
 			{
@@ -151,9 +102,24 @@ public class Adapters {
 				{
 					holder.information.setText("No information");
 				}
+				
 
+		    	ArrayList<Episode> episodes = db.GetAiredEpisodes(s.getSeriesId());
+		    	int watched = 0;
+		    	int totalEpisodes = episodes.size();
+		    	
+		    	for (Episode episode : episodes) {
+					if(episode.getWatched().equals("1"))
+					{
+						watched ++;
+					}
+				}
+
+				holder.progress.setMax(totalEpisodes);
+				holder.progress.setProgress(watched);
+				
 			}
-
+			
 			return convertView;
 		}
 	}

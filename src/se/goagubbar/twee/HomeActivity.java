@@ -120,6 +120,7 @@ public class HomeActivity extends BaseActivity {
 		// TODO Auto-generated method stub
 		super.onRestart();
 		new GetMySeries().execute();
+		//mySeries.notify();
 	}
 	
 	private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
