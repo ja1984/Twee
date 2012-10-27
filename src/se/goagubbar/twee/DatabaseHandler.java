@@ -1,6 +1,7 @@
 package se.goagubbar.twee;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import se.goagubbar.twee.Models.Episode;
 import se.goagubbar.twee.Models.Series;
@@ -13,12 +14,13 @@ import android.util.Log;
 
 public class DatabaseHandler extends SQLiteOpenHelper {
 
-	private static final int DATABASE_VERSION = 12;
+	private static final int DATABASE_VERSION = 17;
 	private static final String DATABASE_NAME = "Teewee";
 
 	private static final String TABLE_SERIES = "Series";
 	private static final String TABLE_EPISODES = "Episodes";
-	
+	private static final String TABLE_PROFILE = "Profile";
+
 	private static final String ENCODING_SETTING = "PRAGMA encoding = 'UTF-8'";
 
 	//BaseEntity
@@ -48,6 +50,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	private static final String KEY_AIRED = "Aired";
 	private static final String	KEY_WATCHED = "Watched";
 
+	private static final String KEY_PROFILENAME = "Name";
+	private static final String KEY_PROFILEID = "ProfileId";
+
 
 	public DatabaseHandler(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -56,27 +61,39 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	@Override
 	public void onCreate(SQLiteDatabase db) {
 		db.execSQL(ENCODING_SETTING);
-		
+
 		String CREATE_SERIES_TABLE = String.format("CREATE TABLE %s(%s INTEGER PRIMARY KEY autoincrement, %s TEXT,%s TEXT,%s TEXT,%s TEXT,%s TEXT,%s TEXT,%s TEXT,%s TEXT,%s TEXT, %s TEXT, %s TEXT, %s TEXT, %s TEXT)", TABLE_SERIES, KEY_ID, KEY_SUMMARY, KEY_NAME,KEY_ACTORS,KEY_DAYTIME,KEY_GENRE,KEY_IMDBID,KEY_RATING,KEY_STATUS,KEY_IMAGE, KEY_FIRSTAIRED, KEY_HEADER, KEY_SERIESID, KEY_LASTUPDATED);
 		db.execSQL(CREATE_SERIES_TABLE);
 
 		String CREATE_EPISODE_TABLE = String.format("CREATE TABLE %s(%s INTEGER PRIMARY KEY autoincrement,%s TEXT,%s TEXT,%s TEXT,%s TEXT,%s TEXT,%s TEXT, %s TEXT, %s TEXT, %s TEXT)", TABLE_EPISODES, KEY_ID, KEY_SEASON, KEY_EPISODE, KEY_TITLE, KEY_AIRED, KEY_WATCHED, KEY_SUMMARY, KEY_SERIESID, KEY_LASTUPDATED, KEY_EPISODEID);
 		db.execSQL(CREATE_EPISODE_TABLE);
+
+		String CREATE_PROFILE_TABLE = String.format("CREATE TABLE %s(%s INTEGER PRIMARY KEY autoincrement,%s TEXT)", TABLE_PROFILE, KEY_ID, KEY_PROFILENAME);
+		db.execSQL(CREATE_PROFILE_TABLE);
+
+		//Add default profile
+		ContentValues values = new ContentValues();
+		values.put(KEY_PROFILENAME, "Default");
+		db.insert(TABLE_PROFILE, null, values);
+
+		db.close();
 	}
 
 	@Override
 	public void onOpen(SQLiteDatabase db) {
-	   if (!db.isReadOnly()) {
-	      db.execSQL(ENCODING_SETTING);
-	   }
+		if (!db.isReadOnly()) {
+			db.execSQL(ENCODING_SETTING);
+		}
 	} 
-	
+
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 		Log.d("Rebuild db", "Start");
 		db.execSQL("DROP TABLE IF EXISTS " + TABLE_EPISODES);
 		db.execSQL("DROP TABLE IF EXISTS " + TABLE_SERIES);
+		db.execSQL("DROP TABLE IF EXISTS " + TABLE_PROFILE);
 		onCreate(db);
+
 		Log.d("Rebuild db", "Done");
 	}
 
@@ -139,7 +156,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		ContentValues values = null;
 
 		db.beginTransaction();
-	
+
 		for (Episode ep : episodes) {
 			if(oldEpisodes.contains(ep.getEpisodeId())){
 				values = new ContentValues();
@@ -173,13 +190,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		db.close();
 
 	}
-	
-	
-	
+
 	//DU HÖLL PÅ MED KOLLEN AV EPISODEERNA!!!!!	
 	private ArrayList<String> GetEpisodesForSearies(String seriesId)
 	{
-		
+
 		ArrayList<String> episodes = new ArrayList<String>();
 		String sql = "SELECT "+ KEY_EPISODEID +" FROM " + TABLE_EPISODES + " WHERE " + KEY_SERIESID + " = " + seriesId;
 		SQLiteDatabase db = this.getReadableDatabase();
@@ -194,7 +209,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		cursor.close();
 		db.close();
 		return episodes;
-		
+
 	}
 
 	public ArrayList<Series> getAllSeries()
@@ -276,7 +291,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
 	}
 
-
 	public Episode GetNextEpisodeForSeries(String seriesId)
 	{
 		Episode e = new Episode();
@@ -311,7 +325,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		return e;
 
 	}
-
 
 	public Episode GetEpisodeById(String episodeId)
 	{
@@ -532,8 +545,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		return episodes;
 	}
 
-
-
 	public ArrayList<Episode> GetAllEpisodesForGivenTimePeriod(int timeperiod)
 	{
 		ArrayList<Episode> episodes = new ArrayList<Episode>();
@@ -563,7 +574,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		while(!cursor.isAfterLast())
 		{
 			Episode e = new Episode();
-		
+
 			e.setTitle(cursor.getString(3));
 			e.setAired(cursor.getString(4));
 			e.setSummary(cursor.getString(6));
@@ -572,9 +583,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 			e.setSeriesId(cursor.getString(19));
 
 			e.setWatched("0");
-			
 
-			
+
+
 			episodes.add(e);
 
 			cursor.moveToNext();
@@ -594,6 +605,46 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		db.delete(TABLE_SERIES, KEY_SERIESID + " = ?", new String[] { String.valueOf(seriesId) });
 		db.close();
 	}
+
+
+	//Profiles
+	public HashMap<Integer, String> GetAllprofiles()
+	{
+
+		HashMap<Integer, String> profiles = new HashMap<Integer, String>();
+
+		String sql = "SELECT * FROM " + TABLE_PROFILE;
+		SQLiteDatabase db = this.getReadableDatabase();
+		Cursor cursor = db.rawQuery(sql, null);
+
+
+		cursor.moveToFirst();
+		while (!cursor.isAfterLast()) {
+			profiles.put(Integer.parseInt(cursor.getString(0)), cursor.getString(1));
+			cursor.moveToNext();
+		}
+		
+		cursor.close();
+		db.close();
+		return profiles;
+
+	}
+
+
+	public void AddNewProfile(String profileName)
+	{
+		SQLiteDatabase db = this.getWritableDatabase();
+		ContentValues values = new ContentValues();
+
+		values.put(KEY_PROFILENAME, profileName);
+		Long test = db.insert(TABLE_PROFILE, null, values);
+
+		Log.d("Test", "" + test);
+
+		db.close();
+	}
+
+
 }
 
 

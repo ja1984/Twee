@@ -80,6 +80,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="se.goagubbar.twee.HomeActivity" />
         </activity>
+        <activity
+            android:name=".ProfileChoose"
+            android:label="@string/title_activity_profile_choose"
+            android:theme="@android:style/Theme.Holo.Light.Dialog" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="se.goagubbar.twee.HomeActivity" />
+        </activity>
     </application>
 
 </manifest>

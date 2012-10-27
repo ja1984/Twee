@@ -31,6 +31,7 @@
     <string name="title_activity_searchable">Search</string>
     <string name="title_activity_calendar">Calendar</string>
     <string name="title_activity_about">About Twee</string>
+    <string name="title_activity_profile_choose">Choose profile</string>
     <!-- /Titles -->
 
 
@@ -52,6 +53,7 @@
     <string name="menu_calendar">Calendar</string>
     <string name="menu_markseries">Mark series as watched</string>
     <string name="menu_delete">Delete</string>
+    <string name="menu_chooseprofile">Profiles</string>
     <!-- /Menu -->
 
 
@@ -65,7 +67,6 @@
     <string name="message_series_double">This series is already in your collection</string>
     <string name="message_episodes_updates">Updating episodes data</string>
     <string name="message_episodes_updates_done">Episodes have been updated</string>
-    
     <string name="message_download_information">Downloading information...</string>
     <string name="message_download_banner">Downloading banner image...</string>
     <string name="message_download_header">Downloading header image...</string>
@@ -88,7 +89,7 @@
     <string name="about_text">Twee is getting all it´s information from http://thetvdb.com, you should probably support them in any way possible!</string>
     <string name="thanks_header">Thanks to</string>
     <string name="thanks_text">klizzer, vastis, M203, Reconnnn, mates, Arias, toffe, grief, zero, happyoccasion, helevorn, milky81 and Oxygen </string>
-    
+
     <!-- /About -->
 
 
@@ -105,6 +106,6 @@
     <!-- /ContentDescriptions -->
 
     <string name="hello_world">Hello world!</string>
-    
+
 
 </resources>

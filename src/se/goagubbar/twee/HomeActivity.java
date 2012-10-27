@@ -11,6 +11,7 @@ import org.w3c.dom.NodeList;
 import se.goagubbar.twee.Adapters.SeriesAdapter;
 import se.goagubbar.twee.Models.Episode;
 import se.goagubbar.twee.Models.Series;
+import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.SearchManager;
 import android.content.Context;
@@ -25,10 +26,12 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.app.ActionBar.OnNavigationListener;
 import android.view.View.OnLongClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Toast;
@@ -73,13 +76,16 @@ public class HomeActivity extends BaseActivity {
 		super.onCreate(savedInstanceState);
 
 		db = new DatabaseHandler(this);
+		
+		
 		setContentView(R.layout.layout_home);
-
+		
 		mySeries = (ListView)findViewById(R.id.lstMySeries);
 		mySeries.setDividerHeight(1);
 		mySeries.setLongClickable(true);
 
 		registerForContextMenu(mySeries);
+
 
 
 		mySeries.setOnItemLongClickListener(new OnItemLongClickListener() {
@@ -122,7 +128,7 @@ public class HomeActivity extends BaseActivity {
 		new GetMySeries().execute();
 		//mySeries.notify();
 	}
-	
+
 	private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
 
 		@Override
@@ -152,13 +158,13 @@ public class HomeActivity extends BaseActivity {
 				new GetMySeries().execute();
 				mode.finish();		
 				return true;
-				
+
 			case R.id.menu_refresh:
 				Toast.makeText(HomeActivity.this, R.string.message_episodes_updates, Toast.LENGTH_SHORT).show();
 				new GetNewEpisodes().execute(selectedItem);
 				mode.finish();
 				return true;
-				
+
 			default:
 				return false;
 			}
@@ -209,6 +215,10 @@ public class HomeActivity extends BaseActivity {
 		case R.id.menu_about:
 			startActivity(new Intent(this,AboutActivity.class));
 			return true;
+			
+		case R.id.menu_chooseprofile:
+			startActivity(new Intent(this,ProfileChoose.class));
+			return true;
 
 		default:
 			return super.onOptionsItemSelected(item);
@@ -234,7 +244,7 @@ public class HomeActivity extends BaseActivity {
 
 	}
 
-	
+
 	public class GetMySeries extends AsyncTask<String, Void, ArrayList<Series>>{
 
 		@Override
@@ -278,33 +288,33 @@ public class HomeActivity extends BaseActivity {
 			{
 				Episode ep = new Episode();
 				e = (Element) episodes.item(i);
-					ep.setAired(parser.getValue(e, KEY_EP_AIRED));
-					ep.setEpisode(parser.getValue(e, KEY_EP_EPISODE));
-					ep.setSeason(parser.getValue(e, KEY_EP_SEASON));
-					ep.setSeriesId(q[0].toString());
-					ep.setSummary(parser.getValue(e, KEY_EP_SUMMARY));
-					ep.setTitle(parser.getValue(e, KEY_EP_TITLE));
-					ep.setLastUpdated(parser.getValue(e, KEY_LASTUPDATED));
-					ep.setEpisodeId(parser.getValue(e, KEY_EP_ID));
-					ep.setWatched("0");
-					Episodes.add(ep);
+				ep.setAired(parser.getValue(e, KEY_EP_AIRED));
+				ep.setEpisode(parser.getValue(e, KEY_EP_EPISODE));
+				ep.setSeason(parser.getValue(e, KEY_EP_SEASON));
+				ep.setSeriesId(q[0].toString());
+				ep.setSummary(parser.getValue(e, KEY_EP_SUMMARY));
+				ep.setTitle(parser.getValue(e, KEY_EP_TITLE));
+				ep.setLastUpdated(parser.getValue(e, KEY_LASTUPDATED));
+				ep.setEpisodeId(parser.getValue(e, KEY_EP_ID));
+				ep.setWatched("0");
+				Episodes.add(ep);
 			}
-			
+
 			Log.d("Parsat episoderna","Klart");
-			
+
 			db.updateAndAddEpisodes(Episodes, q[0]);
-				
-			
-			
+
+
+
 			return true;
 		}
-		
+
 		@Override
 		protected void onPostExecute(Boolean result) {
 			// TODO Auto-generated method stub
 			super.onPostExecute(result);
 			Toast.makeText(HomeActivity.this, R.string.message_episodes_updates_done, Toast.LENGTH_SHORT).show();
-			
+
 		}
 
 	}
