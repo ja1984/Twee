@@ -33,6 +33,9 @@ public class Adapters {
 		String seriesId;
 		String season;
 		ProgressBar progress;
+		RelativeLayout relProgressView;
+		TextView txtSmallView;
+		int witchView;
 	}
 
 	public static class SeriesAdapter extends ArrayAdapter<Series> {
@@ -51,7 +54,7 @@ public class Adapters {
 			this.series = objects;
 			db = new DatabaseHandler(context);
 			imageService = new ImageService();
-			dateHelper = new DateHelper();			
+			dateHelper = new DateHelper();	
 		}
 
 		
@@ -70,9 +73,13 @@ public class Adapters {
 				convertView = View.inflate(context, R.layout.listitem_series, null);
 				holder = new viewHolder();
 
+				holder.witchView = context.getSharedPreferences("Twee", 0).getInt("Display", 0);
+				Log.d("Disply","" + holder.witchView);
 				holder.image = (ImageView)convertView.findViewById(R.id.imgSeriesImage);
 				holder.information = (TextView)convertView.findViewById(R.id.txtSeriesName);
 				holder.progress = (ProgressBar)convertView.findViewById(R.id.pgrWatched);
+				holder.relProgressView = (RelativeLayout)convertView.findViewById(R.id.relProgressView);
+				holder.txtSmallView = (TextView)convertView.findViewById(R.id.txtSmallView);
 				
 				
 				
@@ -94,29 +101,50 @@ public class Adapters {
 				if(bm != null){
 					holder.image.setImageBitmap(bm);
 				}
+				
+				String textToDisplay = "";
 				if(e.getAired() != null)
 				{
-					holder.information.setText(dateHelper.Episodenumber(e) + " " + e.getTitle() + " - " + dateHelper.DaysTilNextEpisode(e.getAired()));
+					textToDisplay = dateHelper.Episodenumber(e) + " " + e.getTitle() + " - " + dateHelper.DaysTilNextEpisode(e.getAired());
+					//holder.information.setText();
+					//holder.txtSmallView.setText(dateHelper.Episodenumber(e) + " " + e.getTitle() + " - " + dateHelper.DaysTilNextEpisode(e.getAired()));
 				}
 				else
 				{
-					holder.information.setText("No information");
+					textToDisplay = "No information";
 				}
 				
 
-		    	ArrayList<Episode> episodes = db.GetAiredEpisodes(s.getSeriesId());
-		    	int watched = 0;
-		    	int totalEpisodes = episodes.size();
-		    	
-		    	for (Episode episode : episodes) {
-					if(episode.getWatched().equals("1"))
-					{
-						watched ++;
+				switch (holder.witchView) {
+				case 0:
+			    	ArrayList<Episode> episodes = db.GetAiredEpisodes(s.getSeriesId());
+			    	int watched = 0;
+			    	int totalEpisodes = episodes.size();
+			    	
+			    	for (Episode episode : episodes) {
+						if(episode.getWatched().equals("1"))
+						{
+							watched ++;
+						}
 					}
-				}
 
-				holder.progress.setMax(totalEpisodes);
-				holder.progress.setProgress(watched);
+					holder.progress.setMax(totalEpisodes);
+					holder.progress.setProgress(watched);
+					holder.information.setText(textToDisplay);
+					holder.txtSmallView.setVisibility(View.GONE);
+					break;
+
+				case 1:
+					holder.txtSmallView.setText(textToDisplay);
+					holder.information.setVisibility(View.GONE);
+					holder.progress.setVisibility(View.GONE);
+					break;
+				default:
+					break;
+				}
+				
+				
+
 				
 			}
 			

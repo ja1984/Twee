@@ -21,40 +21,40 @@ public class ProfileChoose extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		
-		SharedPreferences settings = getSharedPreferences("Twee", 0);
-	    selectedProfile = settings.getInt("Profile", 1);
-		
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.layout_profilechoose);
-		RadioGroup radioGroup = (RadioGroup)findViewById(R.id.rdgProfiles);
-
-		HashMap<Integer,String> profiles = new DatabaseHandler(this).GetAllprofiles(); 
-		
-		Log.d("sa", "" + profiles.size());
-		
-		for (Entry<Integer, String> entry : profiles.entrySet()) {
-			RadioButton radioButton = new RadioButton(this);
-			radioButton.setText(entry.getValue());
-			radioButton.setId(entry.getKey());		
-			radioGroup.addView(radioButton);
-		}
-		
-		radioGroup.check(selectedProfile);
-		
-
-		Button btnAddNewProfile = (Button)findViewById(R.id.btnAddProfile);
-		
-		btnAddNewProfile.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				new DatabaseHandler(ProfileChoose.this).AddNewProfile("Jonathan");
-			}
-		});
-		
-		
-		
+//		SharedPreferences settings = getSharedPreferences("Twee", 0);
+//	    selectedProfile = settings.getInt("Profile", 1);
+//		
+//		super.onCreate(savedInstanceState);
+//		setContentView(R.layout.layout_profilechoose);
+//		RadioGroup radioGroup = (RadioGroup)findViewById(R.id.rdgProfiles);
+//
+//		HashMap<Integer,String> profiles = new DatabaseHandler(this).GetAllprofiles(); 
+//		
+//		Log.d("sa", "" + profiles.size());
+//		
+//		for (Entry<Integer, String> entry : profiles.entrySet()) {
+//			RadioButton radioButton = new RadioButton(this);
+//			radioButton.setText(entry.getValue());
+//			radioButton.setId(entry.getKey());		
+//			radioGroup.addView(radioButton);
+//		}
+//		
+//		radioGroup.check(selectedProfile);
+//		
+//
+//		Button btnAddNewProfile = (Button)findViewById(R.id.btnAddProfile);
+//		
+//		btnAddNewProfile.setOnClickListener(new OnClickListener() {
+//			
+//			@Override
+//			public void onClick(View v) {
+//				// TODO Auto-generated method stub
+//				new DatabaseHandler(ProfileChoose.this).AddNewProfile("Jonathan");
+//			}
+//		});
+//		
+//		
+//		
 	}
 
 	@Override

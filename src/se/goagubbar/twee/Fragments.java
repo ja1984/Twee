@@ -124,6 +124,13 @@ public class Fragments {
     		this.imageService = new ImageService();
     	}
     	
+    	
+    	@Override
+    	public void onDestroyView() {
+    		// TODO Auto-generated method stub
+    		super.onDestroyView();
+    	}
+    	
     	@Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         	View v = inflater.inflate(R.layout.view_overview, container, false);

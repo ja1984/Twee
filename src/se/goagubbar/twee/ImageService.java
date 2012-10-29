@@ -54,7 +54,10 @@ public class ImageService {
 		if(!newFolder.exists())
 			newFolder.mkdir();
 		
+		File image = new File(newFolder + "/",filename);
 		
+		if(image.exists())
+			return filename;
 		
 		FileOutputStream fos = null;
 		try {
@@ -88,7 +91,11 @@ public class ImageService {
 			
 			//FileInputStream fos = ctx.openFileInput(name);
 			FileInputStream fis = new FileInputStream(newFolder + "/" + name);
-			bm = BitmapFactory.decodeStream(fis);
+			
+			BitmapFactory.Options options = new BitmapFactory.Options();
+			options.inSampleSize = 2;
+			
+			bm = BitmapFactory.decodeStream(fis,null,options);
 			fis.close();
 			
 			return bm;	

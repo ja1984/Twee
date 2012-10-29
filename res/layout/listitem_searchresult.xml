@@ -16,7 +16,6 @@
         android:paddingLeft="5dip"
         android:scrollHorizontally="true"
         android:scrollbars="none"
-        android:text="Namn"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textStyle="normal|bold"
         android:typeface="normal" />
@@ -32,7 +31,6 @@
         android:textSize="11sp"
         android:textStyle="normal|bold"
         android:typeface="normal"
-        android:text="Säningsdatum"
          />
 
     <TextView
@@ -49,7 +47,6 @@
         android:scrollbars="none"
         android:text="@string/series_plot"
         android:textAllCaps="true"
-        android:textColor="@android:color/black"
         android:textSize="11sp"
         android:textStyle="normal|bold"
         android:typeface="normal" />

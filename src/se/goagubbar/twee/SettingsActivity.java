@@ -36,14 +36,23 @@ public class SettingsActivity extends BaseActivity {
 
 		settings = getSharedPreferences("Twee", 0);
 		int theme = settings.getInt("Theme", R.style.Light);
+		int display = settings.getInt("Display", 0);
 		boolean downloadHeader = settings.getBoolean("downloadHeaderImage", true);
 
 		Button btnBackup = (Button)findViewById(R.id.btnBackup);
 		Button btnRestore = (Button)findViewById(R.id.btnRestore);
+		Button btnAddProfile = (Button)findViewById(R.id.btnAddProfile);
+
+
+		if(display == 1)
+		{
+			RadioButton _display = (RadioButton)findViewById(R.id.rdoDisplay2);
+			_display.setChecked(true);
+
+		}
+
 
 		RadioButton oldCheckedButton = null;
-
-
 
 		if((int) theme == R.style.Light)
 		{
@@ -69,6 +78,15 @@ public class SettingsActivity extends BaseActivity {
 			}
 		});
 
+		btnAddProfile.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				new DatabaseHandler(SettingsActivity.this).AddNewProfile("Jonathan");
+
+			}
+		});
+
 		btnRestore.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -80,6 +98,7 @@ public class SettingsActivity extends BaseActivity {
 
 
 		RadioGroup radioGroup = (RadioGroup)findViewById(R.id.grpTheme);
+		RadioGroup radioDisplay = (RadioGroup)findViewById(R.id.grpDisplay);
 		final Switch switchHeader	 = (Switch)findViewById(R.id.switchHeader);
 
 		switchHeader.setChecked(downloadHeader);
@@ -106,6 +125,22 @@ public class SettingsActivity extends BaseActivity {
 				if (isChecked)
 				{
 					saveTheme(checkedRadioButton.getText().toString());
+				}
+			}
+		});
+
+
+		radioDisplay.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
+		{
+			public void onCheckedChanged(RadioGroup rGroup, int checkedId)
+			{
+
+				RadioButton checkedRadioButton = (RadioButton)rGroup.findViewById(checkedId);
+				boolean isChecked = checkedRadioButton.isChecked();
+				if (isChecked)
+				{
+					Log.d("Test","" + checkedId);
+					saveDisplayMode(checkedId);
 				}
 			}
 		});
@@ -151,6 +186,21 @@ public class SettingsActivity extends BaseActivity {
 		editor.putInt("Theme", option);
 		editor.commit();
 	}
+
+	private void saveDisplayMode(Integer selectId)
+	{
+		Log.d("SelectId","" + selectId);
+		int option = 0;
+
+		if(selectId == 2131296275)
+			option = 1;
+
+		Log.d("Option","" + option);
+		SharedPreferences.Editor editor = settings.edit();
+		editor.putInt("Display", option);
+		editor.commit();
+	}
+
 
 	private void createBackup()
 	{

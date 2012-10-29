@@ -113,7 +113,7 @@ public class SearchableActivity extends ListActivity {
 
 				if(!db.SeriesExist(seriesId))
 				{
-					setProgressBarIndeterminateVisibility(true);
+					//setProgressBarIndeterminateVisibility(true);
 
 					FetchAndSaveSeries fas = new FetchAndSaveSeries();
 					fas.execute(seriesId);

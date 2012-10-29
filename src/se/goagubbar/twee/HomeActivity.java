@@ -2,7 +2,9 @@ package se.goagubbar.twee;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map.Entry;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -10,13 +12,17 @@ import org.w3c.dom.NodeList;
 
 import se.goagubbar.twee.Adapters.SeriesAdapter;
 import se.goagubbar.twee.Models.Episode;
+import se.goagubbar.twee.Models.Profile;
 import se.goagubbar.twee.Models.Series;
+import se.goagubbar.twee.R.string;
 import android.app.ActionBar;
 import android.app.AlertDialog;
+import android.app.DialogFragment;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.InputFilter.LengthFilter;
@@ -32,11 +38,14 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.SearchView;
 import android.widget.Toast;
 
-public class HomeActivity extends BaseActivity {
+public class HomeActivity extends BaseActivity implements ChangeProfileInterface.NoticeDialogListener{
 
 
 	private DatabaseHandler db;
@@ -70,22 +79,28 @@ public class HomeActivity extends BaseActivity {
 	private static ListView mySeries;
 	protected Object mActionMode;
 	public String selectedItem = null;
+	public int selectedProfile;
+	public int newSelectedProfile;
+	Menu menu;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
 		db = new DatabaseHandler(this);
-		
-		
+
+
 		setContentView(R.layout.layout_home);
-		
+
 		mySeries = (ListView)findViewById(R.id.lstMySeries);
 		mySeries.setDividerHeight(1);
 		mySeries.setLongClickable(true);
 
 		registerForContextMenu(mySeries);
 
+		
+		
+		//findViewById(R.id.menu_chooseprofile).
 
 
 		mySeries.setOnItemLongClickListener(new OnItemLongClickListener() {
@@ -177,7 +192,8 @@ public class HomeActivity extends BaseActivity {
 		getMenuInflater().inflate(R.menu.menu_home, menu);
 
 		setupSearchView(menu);
-
+		this.menu = menu;
+		SetProfileMenuTitle();
 		return true;
 	}
 
@@ -215,14 +231,70 @@ public class HomeActivity extends BaseActivity {
 		case R.id.menu_about:
 			startActivity(new Intent(this,AboutActivity.class));
 			return true;
-			
+
 		case R.id.menu_chooseprofile:
-			startActivity(new Intent(this,ProfileChoose.class));
+			//startActivity(new Intent(this,ProfileChoose.class));
+			displayProfileChooser();
 			return true;
 
 		default:
 			return super.onOptionsItemSelected(item);
 		}
+	}
+
+	private void displayProfileChooser(){
+
+		final SharedPreferences settings = getSharedPreferences("Twee", 0);
+		selectedProfile = settings.getInt("Profile", 1);
+
+		newSelectedProfile = selectedProfile;
+
+		final ArrayList<Profile> profiles = db.GetAllprofiles();
+		ArrayList<String> availableProfiles = new ArrayList<String>();
+
+		for (int i = 0; i < profiles.size(); i++) {
+			availableProfiles.add(profiles.get(i).getName());
+			if(profiles.get(i).getId() == selectedProfile)
+			{
+				selectedProfile = i;
+			}
+		}
+
+
+		String[] allProfiles = availableProfiles.toArray(new String[availableProfiles.size()]);
+
+		AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this);
+		builder.setTitle(R.string.dialog_selectprofile_header)
+		.setSingleChoiceItems(allProfiles, selectedProfile, new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+				newSelectedProfile = profiles.get(which).getId();
+			}
+		})
+
+		.setPositiveButton(R.string.dialog_ok, new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int id) {
+				// User clicked OK, so save the mSelectedItems results somewhere
+				// or return them to the component that opened the dialog
+				//...
+
+				SharedPreferences.Editor editor = settings.edit();
+				editor.putInt("Profile", newSelectedProfile);
+			Boolean test = 	editor.commit();
+				Log.d("test","" + test);
+				SetProfileMenuTitle();
+				SetProfileMenuTitle(newSelectedProfile);
+				new GetSeriesAfterProfileChange().execute(newSelectedProfile);
+
+			}
+		})
+		.setNegativeButton(R.string.delete_cancel, new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int id) {
+				// Just clsoe
+			}
+		}).show();	
+
 	}
 
 	private void deleteSeries(final String seriesId)
@@ -244,6 +316,20 @@ public class HomeActivity extends BaseActivity {
 
 	}
 
+	private void SetProfileMenuTitle()
+	{
+		String selectedProfileName = db.GetSelectedProfile();
+		
+		menu.findItem(R.id.menu_chooseprofile).setTitle(selectedProfileName);
+	}
+	
+	private void SetProfileMenuTitle(Integer profileId)
+	{
+		String selectedProfileName = db.GetSelectedProfile(profileId);
+		
+		menu.findItem(R.id.menu_chooseprofile).setTitle(selectedProfileName);
+	}
+	
 
 	public class GetMySeries extends AsyncTask<String, Void, ArrayList<Series>>{
 
@@ -261,6 +347,24 @@ public class HomeActivity extends BaseActivity {
 		}
 
 	}
+	
+	
+	public class GetSeriesAfterProfileChange extends AsyncTask<Integer, Void, ArrayList<Series>>{
+
+		@Override
+		protected ArrayList<Series> doInBackground(Integer... params) {
+			ArrayList<Series> series = db.getAllSeries(params[0]);
+			return series;
+		}
+
+		@Override
+		protected void onPostExecute(ArrayList<Series> result) {
+			SeriesAdapter sa = new SeriesAdapter(getApplicationContext(), R.layout.listitem_series, mySeries, result);
+			mySeries.setAdapter(sa);
+		}
+
+	}
+	
 
 	public class GetNewEpisodes extends AsyncTask<String, Void, Boolean>
 	{
@@ -319,4 +423,11 @@ public class HomeActivity extends BaseActivity {
 
 	}
 
+	@Override
+	public void onDialogPositiveClick(DialogFragment dialog) {
+		new GetMySeries().execute();
+		mySeries.invalidateViews();
+	}
+
+	
 }

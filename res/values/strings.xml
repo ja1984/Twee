@@ -16,6 +16,9 @@
     <string name="settings_header_header">Download header</string>
     <string name="settings_header_switch">Download header image</string>
     <string name="settings_header_description">Choose weither to download the large image header or not (aprox. 1.5MB)</string>
+    <string name="settings_header_display">Home layout</string>
+    <string name="settings_header_profile">Profiles</string>
+    <string name="settings_description_profile">Diffrent profiles allow you to have diffrent users with their own series and progress. Note that the app settings are global</string>
     <string name="homeactivity_tag_seriesid">seriesId</string>
     <string name="homeactivity_tag_id">Id</string>
     <string name="season_markaswatched">Mark season as watched</string>
@@ -105,7 +108,8 @@
     <string name="cd_series_header">Header image</string>
     <!-- /ContentDescriptions -->
 
+    <string name="dialog_ok">OK</string>
+    <string name="dialog_selectprofile_header">Select profile</string>
     <string name="hello_world">Hello world!</string>
-
 
 </resources>
