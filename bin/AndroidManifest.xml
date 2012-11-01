@@ -18,7 +18,6 @@
         <activity
             android:name=".HomeActivity"
             android:label="@string/title_activity_home"
-            android:screenOrientation="portrait"
             android:value=".SearchableActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

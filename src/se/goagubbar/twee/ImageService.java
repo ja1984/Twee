@@ -35,8 +35,8 @@ public class ImageService {
 			{
 				myBitmap = Bitmap.createScaledBitmap(myBitmap,(int)(myBitmap.getWidth()*0.8), (int)(myBitmap.getHeight()*0.8), true);
 			}
-			
-			
+
+
 			return SaveImage(myBitmap, name, ctx);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -47,18 +47,18 @@ public class ImageService {
 	private String SaveImage(Bitmap bitmap, String name, Context context) throws IOException
 	{
 		String filename = name + ".png";
-		
+
 		String externalStoragePath = Environment.getExternalStorageDirectory().getPath();
 		File newFolder = new File(externalStoragePath,"/Twee");
-		
+
 		if(!newFolder.exists())
 			newFolder.mkdir();
-		
+
 		File image = new File(newFolder + "/",filename);
-		
+
 		if(image.exists())
 			return filename;
-		
+
 		FileOutputStream fos = null;
 		try {
 			//fos = context.openFileOutput(filename, Context.MODE_PRIVATE);
@@ -76,35 +76,38 @@ public class ImageService {
 		return filename;
 	}
 
-	
+
 	public Bitmap GetImage(String name, Context ctx)
 	{
 		Bitmap bm = null;
-		
+
 		try {
-			
+
 			String externalStoragePath = Environment.getExternalStorageDirectory().getPath();
 			File newFolder = new File(externalStoragePath,"/Twee");
-			
+
 			if(!newFolder.exists())
 				newFolder.mkdir();
-			
+
 			//FileInputStream fos = ctx.openFileInput(name);
 			FileInputStream fis = new FileInputStream(newFolder + "/" + name);
-			
+
 			BitmapFactory.Options options = new BitmapFactory.Options();
-			options.inSampleSize = 2;
-			
+
+			if(name.contains("_big")){
+				options.inSampleSize = 2;
+			}
+
 			bm = BitmapFactory.decodeStream(fis,null,options);
 			fis.close();
-			
+
 			return bm;	
 		} catch (Exception e) {
 			return bm;
 		}
-		
+
 	}
 
 
-	
+
 }

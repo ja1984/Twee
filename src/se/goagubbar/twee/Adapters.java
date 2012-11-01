@@ -33,6 +33,7 @@ public class Adapters {
 		String seriesId;
 		String season;
 		ProgressBar progress;
+		ProgressBar progress_small;
 		RelativeLayout relProgressView;
 		TextView txtSmallView;
 		int witchView;
@@ -80,7 +81,7 @@ public class Adapters {
 				holder.progress = (ProgressBar)convertView.findViewById(R.id.pgrWatched);
 				holder.relProgressView = (RelativeLayout)convertView.findViewById(R.id.relProgressView);
 				holder.txtSmallView = (TextView)convertView.findViewById(R.id.txtSmallView);
-				
+				holder.progress_small = (ProgressBar)convertView.findViewById(R.id.pgrWatched_transparent);
 				
 				
 				convertView.setTag(holder);
@@ -113,28 +114,32 @@ public class Adapters {
 				{
 					textToDisplay = "No information";
 				}
+
+				ArrayList<Episode> episodes = db.GetAiredEpisodes(s.getSeriesId());
+		    	int watched = 0;
+		    	int totalEpisodes = episodes.size();
+		    	
+		    	for (Episode episode : episodes) {
+					if(episode.getWatched().equals("1"))
+					{
+						watched ++;
+					}
+				}
 				
 
 				switch (holder.witchView) {
 				case 0:
-			    	ArrayList<Episode> episodes = db.GetAiredEpisodes(s.getSeriesId());
-			    	int watched = 0;
-			    	int totalEpisodes = episodes.size();
-			    	
-			    	for (Episode episode : episodes) {
-						if(episode.getWatched().equals("1"))
-						{
-							watched ++;
-						}
-					}
 
 					holder.progress.setMax(totalEpisodes);
 					holder.progress.setProgress(watched);
 					holder.information.setText(textToDisplay);
 					holder.txtSmallView.setVisibility(View.GONE);
+					holder.progress_small.setVisibility(View.GONE);
 					break;
 
 				case 1:
+					holder.progress_small.setMax(totalEpisodes);
+					holder.progress_small.setProgress(watched);
 					holder.txtSmallView.setText(textToDisplay);
 					holder.information.setVisibility(View.GONE);
 					holder.progress.setVisibility(View.GONE);
