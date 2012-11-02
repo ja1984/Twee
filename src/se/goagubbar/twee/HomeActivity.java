@@ -341,7 +341,23 @@ public class HomeActivity extends BaseActivity implements ChangeProfileInterface
 
 		@Override
 		protected void onPostExecute(ArrayList<Series> result) {
-			SeriesAdapter sa = new SeriesAdapter(getApplicationContext(), R.layout.listitem_series, mySeries, result);
+			
+			int selectedView = getSharedPreferences("Twee", 0).getInt("Display", 0);
+			Log.d("Test", "" + selectedView);
+			int viewToDisplay = 0;
+			switch (selectedView) {
+			case 0:
+				viewToDisplay = R.layout.listitem_series;
+				break;
+			case 1:
+				viewToDisplay = R.layout.listitem_series_alt;
+				break;
+			default:
+				break;
+			}
+			
+			Log.d("Test", "" + viewToDisplay);
+			SeriesAdapter sa = new SeriesAdapter(getApplicationContext(), viewToDisplay, mySeries, result);
 			mySeries.setAdapter(sa);
 
 		}
@@ -359,8 +375,25 @@ public class HomeActivity extends BaseActivity implements ChangeProfileInterface
 
 		@Override
 		protected void onPostExecute(ArrayList<Series> result) {
-			SeriesAdapter sa = new SeriesAdapter(getApplicationContext(), R.layout.listitem_series, mySeries, result);
+			
+			int selectedView = getSharedPreferences("Twee", 0).getInt("Display", 0);
+			Log.d("Test", "" + selectedView);
+			int viewToDisplay = 0;
+			switch (selectedView) {
+			case 0:
+				viewToDisplay = R.layout.listitem_series;
+				break;
+			case 1:
+				viewToDisplay = R.layout.listitem_series_alt;
+				break;
+			default:
+				break;
+			}
+			
+			Log.d("Test", "" + viewToDisplay);
+			SeriesAdapter sa = new SeriesAdapter(getApplicationContext(), viewToDisplay, mySeries, result);
 			mySeries.setAdapter(sa);
+
 		}
 
 	}

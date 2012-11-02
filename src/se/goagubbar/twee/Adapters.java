@@ -33,10 +33,7 @@ public class Adapters {
 		String seriesId;
 		String season;
 		ProgressBar progress;
-		ProgressBar progress_small;
-		RelativeLayout relProgressView;
 		TextView txtSmallView;
-		int witchView;
 	}
 
 	public static class SeriesAdapter extends ArrayAdapter<Series> {
@@ -47,12 +44,14 @@ public class Adapters {
 		private ImageService imageService;
 		private final DatabaseHandler db;
 		Object mActionMode;
+		int resource;
 		
 		public SeriesAdapter(Context context, int resource, ListView lv, ArrayList<Series> objects)
 		{
-			super(context, R.layout.listitem_series, objects);
+			super(context, resource, objects);
 			this.context = context;
 			this.series = objects;
+			this.resource = resource;
 			db = new DatabaseHandler(context);
 			imageService = new ImageService();
 			dateHelper = new DateHelper();	
@@ -71,18 +70,12 @@ public class Adapters {
 			
 			if(convertView == null)
 			{
-				convertView = View.inflate(context, R.layout.listitem_series, null);
+				convertView = View.inflate(context, resource, null);
 				holder = new viewHolder();
 
-				holder.witchView = context.getSharedPreferences("Twee", 0).getInt("Display", 0);
-				Log.d("Disply","" + holder.witchView);
 				holder.image = (ImageView)convertView.findViewById(R.id.imgSeriesImage);
-				holder.information = (TextView)convertView.findViewById(R.id.txtSeriesName);
-				holder.progress = (ProgressBar)convertView.findViewById(R.id.pgrWatched);
-				holder.relProgressView = (RelativeLayout)convertView.findViewById(R.id.relProgressView);
-				holder.txtSmallView = (TextView)convertView.findViewById(R.id.txtSmallView);
-				holder.progress_small = (ProgressBar)convertView.findViewById(R.id.pgrWatched_transparent);
-				
+				holder.information = (TextView)convertView.findViewById(R.id.txtUpcomingEpisode);
+				holder.progress = (ProgressBar)convertView.findViewById(R.id.pgrWatched);			
 				
 				convertView.setTag(holder);
 			}
@@ -103,18 +96,10 @@ public class Adapters {
 					holder.image.setImageBitmap(bm);
 				}
 				
-				String textToDisplay = "";
-				if(e.getAired() != null)
-				{
-					textToDisplay = dateHelper.Episodenumber(e) + " " + e.getTitle() + " - " + dateHelper.DaysTilNextEpisode(e.getAired());
-					//holder.information.setText();
-					//holder.txtSmallView.setText(dateHelper.Episodenumber(e) + " " + e.getTitle() + " - " + dateHelper.DaysTilNextEpisode(e.getAired()));
-				}
-				else
-				{
-					textToDisplay = "No information";
-				}
-
+				
+				
+				String nextEpisodeInformation = e.getAired() != null ? dateHelper.Episodenumber(e) + " " + e.getTitle() + " - " + dateHelper.DaysTilNextEpisode(e.getAired()) : "No information";
+				
 				ArrayList<Episode> episodes = db.GetAiredEpisodes(s.getSeriesId());
 		    	int watched = 0;
 		    	int totalEpisodes = episodes.size();
@@ -127,29 +112,9 @@ public class Adapters {
 				}
 				
 
-				switch (holder.witchView) {
-				case 0:
-
 					holder.progress.setMax(totalEpisodes);
 					holder.progress.setProgress(watched);
-					holder.information.setText(textToDisplay);
-					holder.txtSmallView.setVisibility(View.GONE);
-					holder.progress_small.setVisibility(View.GONE);
-					break;
-
-				case 1:
-					holder.progress_small.setMax(totalEpisodes);
-					holder.progress_small.setProgress(watched);
-					holder.txtSmallView.setText(textToDisplay);
-					holder.information.setVisibility(View.GONE);
-					holder.progress.setVisibility(View.GONE);
-					break;
-				default:
-					break;
-				}
-				
-				
-
+					holder.information.setText(nextEpisodeInformation);		
 				
 			}
 			
