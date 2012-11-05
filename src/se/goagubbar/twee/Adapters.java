@@ -3,12 +3,14 @@ package se.goagubbar.twee;
 import java.util.ArrayList;
 import java.util.Random;
 
+import se.goagubbar.twee.Adapters.SeriesAdapter.viewHolder;
 import se.goagubbar.twee.Models.Episode;
 import se.goagubbar.twee.Models.Series;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,17 +28,19 @@ import android.widget.Toast;
 
 public class Adapters {
 
-	static class viewHolder
-	{
-		ImageView image;
-		TextView information;
-		String seriesId;
-		String season;
-		ProgressBar progress;
-		TextView txtSmallView;
-	}
+
 
 	public static class SeriesAdapter extends ArrayAdapter<Series> {
+
+		static class viewHolder
+		{
+			ImageView image;
+			TextView information;
+			String seriesId;
+			String season;
+			ProgressBar progress;
+			TextView txtSmallView;
+		}
 
 		private final Context context;
 		private final ArrayList<Series> series;
@@ -45,7 +49,7 @@ public class Adapters {
 		private final DatabaseHandler db;
 		Object mActionMode;
 		int resource;
-		
+
 		public SeriesAdapter(Context context, int resource, ListView lv, ArrayList<Series> objects)
 		{
 			super(context, resource, objects);
@@ -57,17 +61,15 @@ public class Adapters {
 			dateHelper = new DateHelper();	
 		}
 
-		
-		
+
+
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent)
 		{
-			
+
 			viewHolder holder;
 			Series s = series.get(position);
 
-		
-			
 			if(convertView == null)
 			{
 				convertView = View.inflate(context, resource, null);
@@ -75,8 +77,8 @@ public class Adapters {
 
 				holder.image = (ImageView)convertView.findViewById(R.id.imgSeriesImage);
 				holder.information = (TextView)convertView.findViewById(R.id.txtUpcomingEpisode);
-				holder.progress = (ProgressBar)convertView.findViewById(R.id.pgrWatched);			
-				
+				holder.progress = (ProgressBar)convertView.findViewById(R.id.pgrWatched);						
+
 				convertView.setTag(holder);
 			}
 			else
@@ -84,40 +86,39 @@ public class Adapters {
 				holder = (viewHolder)convertView.getTag();
 			}
 
-			
+
 			if(s != null)
 			{
+				holder.seriesId = series.get(position).getImage();
+
+				new LoadImageAsync(getContext()).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, holder);
+
 				Episode e = series.get(position).Episodes.get(0);
 
-				Bitmap bm = imageService.GetImage(series.get(position).getImage(), getContext());
 				convertView.setTag(R.string.homeactivity_tag_id,s.getID());
 				convertView.setTag(R.string.homeactivity_tag_seriesid,s.getSeriesId());
-				if(bm != null){
-					holder.image.setImageBitmap(bm);
-				}
-				
-				
-				
+
 				String nextEpisodeInformation = e.getAired() != null ? dateHelper.Episodenumber(e) + " " + e.getTitle() + " - " + dateHelper.DaysTilNextEpisode(e.getAired()) : "No information";
-				
+
 				ArrayList<Episode> episodes = db.GetAiredEpisodes(s.getSeriesId());
-		    	int watched = 0;
-		    	int totalEpisodes = episodes.size();
-		    	
-		    	for (Episode episode : episodes) {
+				int watched = 0;
+				int totalEpisodes = episodes.size();
+
+				for (Episode episode : episodes) {
 					if(episode.getWatched().equals("1"))
 					{
 						watched ++;
 					}
 				}
-				
 
-					holder.progress.setMax(totalEpisodes);
-					holder.progress.setProgress(watched);
-					holder.information.setText(nextEpisodeInformation);		
-				
+
+				holder.progress.setMax(totalEpisodes);
+				holder.progress.setProgress(watched);
+				holder.information.setText(nextEpisodeInformation);		
+
 			}
-			
+
+
 			return convertView;
 		}
 	}
@@ -144,10 +145,10 @@ public class Adapters {
 				itemChecked.add(i, objects.get(i).getWatched().equals("1"));
 				visibleItems.add(i, dateHelper.CompareDates(episodes.get(i).getAired(), dateHelper.GetTodaysDate()) >= 0);
 				showSeasonBanner.add(i,objects.get(i).getSeason().equals(this.season));
-				
+
 				this.season = objects.get(i).getSeason();		
 			}	
-			
+
 
 		}
 
@@ -174,15 +175,15 @@ public class Adapters {
 			final TextView information = (TextView) convertView.findViewById(R.id.txtEpisodeNumber);
 			final TextView seasonNumber = (TextView) convertView.findViewById(R.id.txtSeasonNumber);
 			final RelativeLayout seasonWrapper = (RelativeLayout) convertView.findViewById(R.id.seasonTest);
-			
+
 			checkBox.setOnClickListener(new OnClickListener() {
 
 				public void onClick(View v) {
 					CheckBox cb = (CheckBox) v.findViewById(R.id.chkWatched);
 					new DatabaseHandler(context).ToggleEpisodeWatched("" + episodes.get(pos).getID(), cb.isChecked());
-						
+
 					RefreshOverView();			
-					
+
 					if (cb.isChecked()) {
 						itemChecked.set(pos, true);
 						// do some operations here
@@ -194,15 +195,15 @@ public class Adapters {
 				}
 			});
 
-			
+
 			seasonCheckBox.setOnClickListener(new OnClickListener() {
 
 				public void onClick(View v) {
 					MarkSeasonAsWatched(episodes.get(pos).getSeriesId(), episodes.get(pos).getSeason());
-					
+
 				}
 			});
-			
+
 			convertView.setOnClickListener(new OnClickListener() {
 
 				public void onClick(View v) {
@@ -212,7 +213,7 @@ public class Adapters {
 			});
 
 			checkBox.setChecked(itemChecked.get(pos));
-			
+
 			if(visibleItems.get(pos))
 			{
 				checkBox.setVisibility(8);
@@ -221,20 +222,20 @@ public class Adapters {
 			{
 				checkBox.setVisibility(View.VISIBLE);
 			}
-			
-			
+
+
 			if(!showSeasonBanner.get(pos))
-		{
+			{
 				seasonWrapper.setVisibility(View.VISIBLE);
 			}
 			else
 			{
 				seasonWrapper.setVisibility(View.GONE);
 			}
-			
-			
+
+
 			seasonNumber.setText("Season " + episodes.get(pos).getSeason());
-			
+
 			String _title = episodes.get(pos).getTitle();
 			title.setText(_title.equals("") ? "TBA" : _title);
 			information.setText(dateHelper.Episodenumber(episodes.get(pos)) + " | " + dateHelper.DisplayDate(episodes.get(pos).getAired()));
@@ -243,20 +244,20 @@ public class Adapters {
 
 
 		}
-		
+
 		private void RefreshOverView()
 		{
 			OverviewActivity overViewFragment = (OverviewActivity)context;
 			overViewFragment.Refresh();
 		}
-		
+
 		private void MarkSeasonAsWatched(String seriesId, String season)
 		{
 			new DatabaseHandler(context).ToggleSeasonWatched("" + seriesId, season, true);
 			Toast.makeText(context, R.string.message_season_watched, Toast.LENGTH_SHORT).show();
-			
+
 			for (int i = 0; i < episodes.size(); i++) {
-				
+
 				if(episodes.get(i).getSeason().equals(season))
 				{
 					itemChecked.set(i, true);
@@ -264,9 +265,9 @@ public class Adapters {
 			}
 			notifyDataSetChanged();
 			RefreshOverView();
-			
+
 		}
-		
+
 	}
 
 	public static class UpcomingEpisodesAdapter extends ArrayAdapter<Episode> {
@@ -310,8 +311,8 @@ public class Adapters {
 					new SeriesHelper().displayPlot(episodes.get(pos), getContext());
 				}
 			});
-		
-			
+
+
 			String _title = episodes.get(pos).getTitle(); 
 			title.setText(_title.equals("") ? "TBA" : _title);
 			information.setText(dateHelper.Episodenumber(episodes.get(pos)) + " | " + dateHelper.DisplayDate(episodes.get(pos).getAired()));
@@ -322,7 +323,6 @@ public class Adapters {
 		}
 	}
 
-	
 	public static class CalendarAdapter extends ArrayAdapter<Episode> {
 
 		private final Context context;
@@ -347,10 +347,10 @@ public class Adapters {
 				lastDate = objects.get(i).getAired();
 				//itemChecked.add(i, objects.get(i).getWatched().equals("1"));
 			}
-//
-//			for (int i = 0; i < objects.size(); i++) {
-//				visibleItems.add(i, dateHelper.CompareDates(episodes.get(i).getAired(), dateHelper.GetTodaysDate()) > 0);
-//			}
+			//
+			//			for (int i = 0; i < objects.size(); i++) {
+			//				visibleItems.add(i, dateHelper.CompareDates(episodes.get(i).getAired(), dateHelper.GetTodaysDate()) > 0);
+			//			}
 
 		}
 
@@ -386,21 +386,21 @@ public class Adapters {
 			final RelativeLayout episodeImage = (RelativeLayout)convertView.findViewById(R.id.layoutEpisode);
 			//checkBox.setOnClickListener(new OnClickListener() {
 
-//				public void onClick(View v) {
-//					CheckBox cb = (CheckBox) v.findViewById(R.id.chkWatched);
-//					new DatabaseHandler(context).ToggleEpisodeWatched("" + episodes.get(pos).getID(), cb.isChecked());
-//
-//					if (cb.isChecked()) {
-//						itemChecked.set(pos, true);
-//						// do some operations here
-//					} else if (!cb.isChecked()) {
-//						itemChecked.set(pos, false);
-//						// do some operations here
-//					}
-//
-//				}
-//			});
-			
+			//				public void onClick(View v) {
+			//					CheckBox cb = (CheckBox) v.findViewById(R.id.chkWatched);
+			//					new DatabaseHandler(context).ToggleEpisodeWatched("" + episodes.get(pos).getID(), cb.isChecked());
+			//
+			//					if (cb.isChecked()) {
+			//						itemChecked.set(pos, true);
+			//						// do some operations here
+			//					} else if (!cb.isChecked()) {
+			//						itemChecked.set(pos, false);
+			//						// do some operations here
+			//					}
+			//
+			//				}
+			//			});
+
 
 			episodeImage.setOnClickListener(new OnClickListener() {
 
@@ -411,16 +411,16 @@ public class Adapters {
 			});
 
 			//checkBox.setChecked(itemChecked.get(pos));
-//			if(visibleItems.get(pos))
-//			{
-//				checkBox.setVisibility(8);
-//			}
-//			else
-//			{
-//				checkBox.setVisibility(View.VISIBLE);
-//			}
+			//			if(visibleItems.get(pos))
+			//			{
+			//				checkBox.setVisibility(8);
+			//			}
+			//			else
+			//			{
+			//				checkBox.setVisibility(View.VISIBLE);
+			//			}
 			//date.setText(episodes.get(pos).getSeriesId());
-			
+
 			Bitmap bm = imageService.GetImage(episodes.get(pos).getSeriesId(), getContext());
 			if(bm != null){
 				image.setImageBitmap(bm);
@@ -429,17 +429,17 @@ public class Adapters {
 			{
 				image.setVisibility(View.INVISIBLE);
 			}
-			
+
 			dateSeparator.setText(dateHelper.DaysTilNextEpisode(episodes.get(pos).getAired()) + " (" + dateHelper.DisplayDate(episodes.get(pos).getAired()).substring(4) + ")");
 			episodeInformation.setText( dateHelper.Episodenumber(episodes.get(pos)) + " | " + episodes.get(pos).getTitle());
-			
+
 			if(displayDateWrapper.get(pos))
 			{
 				dateSeparatorWrapper.setVisibility(View.GONE);
 			}
-					//test.setText(test.getText() + dateHelper.Episodenumber(episodes.get(i)) + " | " + episodes.get(i).getTitle() + " | " +dateHelper.DisplayDate(episodes.get(i).getAired()) + "\n");
-			
-			
+			//test.setText(test.getText() + dateHelper.Episodenumber(episodes.get(i)) + " | " + episodes.get(i).getTitle() + " | " +dateHelper.DisplayDate(episodes.get(i).getAired()) + "\n");
+
+
 			//extra.setVisibility(View.VISIBLE);
 			//title.setText(episodes.get(pos).getTitle());
 			//information.setText(dateHelper.Episodenumber(episodes.get(pos)) + " | " +dateHelper.DisplayDate(episodes.get(pos).getAired()));
@@ -450,7 +450,6 @@ public class Adapters {
 		}
 	}
 
-	
 	public static class SearchAdapter extends ArrayAdapter<Series>
 	{
 
@@ -483,25 +482,56 @@ public class Adapters {
 			year.setText("First aired: " + series.get(position).getAirs());
 
 			btnPlot.setOnClickListener(new OnClickListener() {
-				
+
 				@Override
 				public void onClick(View v) {
-					
+
 					AlertDialog.Builder builder = new AlertDialog.Builder(context);
 					builder.setMessage(btnPlot.getTag().toString())
-					       .setCancelable(false)
-					       .setTitle(R.string.series_summary)
-					       .setPositiveButton(R.string.about_close, new DialogInterface.OnClickListener() {
-					           public void onClick(DialogInterface dialog, int id) {
-					                dialog.cancel();
-					           }
-					       }).create().show();
-					
+					.setCancelable(false)
+					.setTitle(R.string.series_summary)
+					.setPositiveButton(R.string.about_close, new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int id) {
+							dialog.cancel();
+						}
+					}).create().show();
+
 				}
 			});
-			
+
 			return rowView;
 		}
 
 	}
+
+
+	private static class LoadImageAsync extends AsyncTask<viewHolder, Void, Bitmap>
+	{
+		private viewHolder v;
+		private Context ctx;
+
+		public LoadImageAsync(Context context)
+		{
+			ctx = context;
+		}
+
+		@Override
+		protected Bitmap doInBackground(viewHolder... params) {
+			v = params[0];
+			// TODO Auto-generated method stub
+			Log.d("SeriesId","" + v.seriesId);
+			return new ImageService().GetImage(v.seriesId, ctx);
+
+		}
+
+		@Override
+		protected void onPostExecute(Bitmap result)
+		{
+			super.onPostExecute(result);
+			v.image.setImageBitmap(result);
+		}
+
+
+	}
+
 }

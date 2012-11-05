@@ -193,11 +193,12 @@ containing a value of this type.
         public static final int details_lastaired=0x7f060002;
         public static final int details_totalwatched=0x7f060004;
         public static final int details_upcoming=0x7f060003;
+        public static final int dialog_addprofile_header=0x7f06004b;
         /**  /ContentDescriptions 
          */
         public static final int dialog_ok=0x7f060048;
         public static final int dialog_selectprofile_header=0x7f060049;
-        public static final int hello_world=0x7f06004a;
+        public static final int hello_world=0x7f06004c;
         public static final int homeactivity_tag_id=0x7f060013;
         public static final int homeactivity_tag_seriesid=0x7f060012;
         public static final int imdb_header=0x7f060007;
@@ -245,6 +246,7 @@ containing a value of this type.
         public static final int series_plot=0x7f060015;
         public static final int series_summary=0x7f060016;
         public static final int settings_description_profile=0x7f060011;
+        public static final int settings_description_profile_popup=0x7f06004a;
         public static final int settings_header_description=0x7f06000e;
         public static final int settings_header_display=0x7f06000f;
         public static final int settings_header_header=0x7f06000c;

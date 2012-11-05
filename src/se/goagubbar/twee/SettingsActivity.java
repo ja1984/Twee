@@ -7,6 +7,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Environment;
@@ -16,12 +18,16 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class SettingsActivity extends BaseActivity {
@@ -82,7 +88,47 @@ public class SettingsActivity extends BaseActivity {
 
 			@Override
 			public void onClick(View v) {
-				new DatabaseHandler(SettingsActivity.this).AddNewProfile("Jonathan");
+				
+				LinearLayout layout = new LinearLayout(getApplicationContext());
+				layout.setOrientation(LinearLayout.VERTICAL);
+				
+				//layout.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+				final EditText txtProfileName = new EditText(getApplicationContext());
+				final TextView txtInformation = new TextView(getApplicationContext());
+				txtProfileName.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+				txtInformation.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+				txtInformation.setText(R.string.settings_description_profile_popup);
+				
+				layout.addView(txtInformation);
+				layout.addView(txtProfileName);
+								
+				AlertDialog.Builder addProfile = new AlertDialog.Builder(SettingsActivity.this);
+				addProfile.setTitle(R.string.dialog_addprofile_header);
+				addProfile.setView(layout);
+				
+				addProfile.setPositiveButton(R.string.dialog_ok, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						
+						if(!txtProfileName.getText().toString().equals(""))
+						{
+							new DatabaseHandler(SettingsActivity.this).AddNewProfile(txtProfileName.getText().toString());	
+						}
+						
+						
+					}
+				});
+				
+				addProfile.setNegativeButton(R.string.delete_cancel, new DialogInterface.OnClickListener() {
+					
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						//Do nothing	
+					}
+				});
+				
+				addProfile.create().show();
+				
 
 			}
 		});
@@ -139,7 +185,6 @@ public class SettingsActivity extends BaseActivity {
 				boolean isChecked = checkedRadioButton.isChecked();
 				if (isChecked)
 				{
-					Log.d("Test","" + checkedId);
 					saveDisplayMode(checkedId);
 				}
 			}
@@ -189,13 +234,11 @@ public class SettingsActivity extends BaseActivity {
 
 	private void saveDisplayMode(Integer selectId)
 	{
-		Log.d("SelectId","" + selectId);
 		int option = 0;
 
 		if(selectId == 2131296275)
 			option = 1;
 
-		Log.d("Option","" + option);
 		SharedPreferences.Editor editor = settings.edit();
 		editor.putInt("Display", option);
 		editor.commit();

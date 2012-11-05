@@ -7,6 +7,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 
 import android.content.Context;
@@ -15,10 +16,19 @@ import android.graphics.BitmapFactory;
 import android.os.Environment;
 import android.util.Log;
 
-public class ImageService {
 
-	public String getBitmapFromURL(String q, String name, Context ctx) {
+
+public class ImageService {
+	Boolean tryAgain = true;
+	
+	public String getBitmapFromURL(String q, String name, Context ctx) throws Exception {
 		try {
+
+			String filename = name + ".jpg";
+
+			if(ImageExists(name))
+				return filename;
+
 			String uri = String.format("http://www.thetvdb.com/banners/%s",q);
 
 			//String name = java.util.UUID.randomUUID().toString();
@@ -38,15 +48,22 @@ public class ImageService {
 
 
 			return SaveImage(myBitmap, name, ctx);
-		} catch (IOException e) {
+		} catch (OutOfMemoryError e) {
+			if(tryAgain)
+			{
+				tryAgain = false;
+				System.gc();
+				return getBitmapFromURL(q,name,ctx);
+			}
+			Log.d("Fel vid sparning",e.getMessage());
 			e.printStackTrace();
 			return null;
 		}
 	}
 
-	private String SaveImage(Bitmap bitmap, String name, Context context) throws IOException
+	private String SaveImage(Bitmap bitmap, String name, Context context) throws Exception
 	{
-		String filename = name + ".png";
+		String filename = name + ".jpg";
 
 		String externalStoragePath = Environment.getExternalStorageDirectory().getPath();
 		File newFolder = new File(externalStoragePath,"/Twee");
@@ -56,16 +73,13 @@ public class ImageService {
 
 		File image = new File(newFolder + "/",filename);
 
-		if(image.exists())
-			return filename;
-
 		FileOutputStream fos = null;
 		try {
 			//fos = context.openFileOutput(filename, Context.MODE_PRIVATE);
 			fos = new FileOutputStream(newFolder + "/" + filename);
-			bitmap.compress(Bitmap.CompressFormat.PNG , 90, fos);
+			bitmap.compress(Bitmap.CompressFormat.JPEG , 80, fos);
 
-		} catch (FileNotFoundException e) {
+		} catch (OutOfMemoryError e) {
 			// TODO Auto-generated catch block
 			Log.d("Fel vid sparning",e.getMessage());
 			return "error";
@@ -108,6 +122,22 @@ public class ImageService {
 
 	}
 
+
+	private Boolean ImageExists(String imageName)
+	{
+		String filename = imageName + "jpg";
+
+		String externalStoragePath = Environment.getExternalStorageDirectory().getPath();
+		File newFolder = new File(externalStoragePath,"/Twee");
+
+		if(!newFolder.exists())
+			newFolder.mkdir();
+
+		File image = new File(newFolder + "/",filename);
+
+		return image.exists();
+
+	}
 
 
 }

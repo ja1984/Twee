@@ -260,7 +260,12 @@ public class SearchableActivity extends ListActivity {
 			String image = parser.getValue(e, KEY_IMAGE);
 
 			if(!image.equals("")){
-				s.setImage(imageService.getBitmapFromURL(image, s.getSeriesId(), SearchableActivity.this));
+				try {
+					s.setImage(imageService.getBitmapFromURL(image, s.getSeriesId(), SearchableActivity.this));
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 
 			if(downloadHeader){
@@ -269,7 +274,12 @@ public class SearchableActivity extends ListActivity {
 				String header = parser.getValue(e, KEY_HEADER);
 
 				if(!header.equals("")){
-					s.setHeader(imageService.getBitmapFromURL(header,s.getSeriesId() + "_big", SearchableActivity.this));
+					try {
+						s.setHeader(imageService.getBitmapFromURL(header,s.getSeriesId() + "_big", SearchableActivity.this));
+					} catch (Exception e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 				}
 			}
 
@@ -332,11 +342,12 @@ public class SearchableActivity extends ListActivity {
 
 		@Override
 		protected void onPostExecute(Boolean result) {
+			Log.d("Resultat", "" + result);
 			if(result)
 			{
 				//new GetMySeries().execute();
 				saveDialog.cancel();
-				SearchableActivity.this.finish();
+				//SearchableActivity.this.finish();
 			}
 			super.onPostExecute(result);
 		}

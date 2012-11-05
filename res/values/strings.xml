@@ -110,6 +110,8 @@
 
     <string name="dialog_ok">OK</string>
     <string name="dialog_selectprofile_header">Select profile</string>
+    <string name="settings_description_profile_popup">Enter the name of the new profile</string>
+    <string name="dialog_addprofile_header">New profile</string>
     <string name="hello_world">Hello world!</string>
 
 </resources>
