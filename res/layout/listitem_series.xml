@@ -40,12 +40,13 @@
             android:shadowDx="1"
             android:shadowDy="1"
             android:shadowRadius="1"
-            android:text="asdasdasd"
             android:textAllCaps="true"
             android:textColor="#ffffffff"
             android:textSize="11sp"
             android:textStyle="normal|bold"
             android:typeface="normal" />
+
+       
     </RelativeLayout>
 
 </LinearLayout>

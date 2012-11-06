@@ -67,9 +67,12 @@ containing a value of this type.
         public static final int left_border=0x7f020010;
         public static final int noimage=0x7f020011;
         public static final int noimage_large=0x7f020012;
-        public static final int progressbar=0x7f020013;
-        public static final int progressbar_transparent=0x7f020014;
-        public static final int series_progress=0x7f020015;
+        public static final int overlay_pressed=0x7f020013;
+        public static final int overlay_selected=0x7f020014;
+        public static final int progressbar=0x7f020015;
+        public static final int progressbar_transparent=0x7f020016;
+        public static final int series_overlay=0x7f020017;
+        public static final int series_progress=0x7f020018;
     }
     public static final class id {
         public static final int btnAddProfile=0x7f090009;

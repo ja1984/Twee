@@ -12,6 +12,7 @@ import se.goagubbar.twee.Models.Series;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -222,9 +223,7 @@ public class Fragments {
     public static void SetProgress(View view, String seriesId)
     {
     	
-    	Log.d("test","" + seriesId);
     	ArrayList<Episode> episodes = new DatabaseHandler(activity).GetAiredEpisodes(seriesId);
-    	Log.d("test","" + episodes.size());
     	int watched = 0;
     	int totalEpisodes = episodes.size();
     	
@@ -242,5 +241,6 @@ public class Fragments {
         TextView textWatched = (TextView)view.findViewById(R.id.txtWatched);
         textWatched.setText( watched +  "/" + totalEpisodes);
     }
+
     
 }
