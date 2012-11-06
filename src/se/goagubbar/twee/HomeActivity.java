@@ -132,6 +132,8 @@ public class HomeActivity extends BaseActivity implements ChangeProfileInterface
 		});
 
 
+		
+		
 		new GetMySeries().execute();
 
 	}
