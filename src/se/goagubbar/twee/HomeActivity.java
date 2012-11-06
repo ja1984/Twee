@@ -280,8 +280,6 @@ public class HomeActivity extends BaseActivity implements ChangeProfileInterface
 
 				SharedPreferences.Editor editor = settings.edit();
 				editor.putInt("Profile", newSelectedProfile);
-			Boolean test = 	editor.commit();
-				Log.d("test","" + test);
 				SetProfileMenuTitle();
 				SetProfileMenuTitle(newSelectedProfile);
 				new GetSeriesAfterProfileChange().execute(newSelectedProfile);
@@ -343,7 +341,6 @@ public class HomeActivity extends BaseActivity implements ChangeProfileInterface
 		protected void onPostExecute(ArrayList<Series> result) {
 			
 			int selectedView = getSharedPreferences("Twee", 0).getInt("Display", 0);
-			Log.d("Test", "" + selectedView);
 			int viewToDisplay = 0;
 			switch (selectedView) {
 			case 0:
@@ -356,7 +353,6 @@ public class HomeActivity extends BaseActivity implements ChangeProfileInterface
 				break;
 			}
 			
-			Log.d("Test", "" + viewToDisplay);
 			SeriesAdapter sa = new SeriesAdapter(getApplicationContext(), viewToDisplay, mySeries, result);
 			mySeries.setAdapter(sa);
 
@@ -377,7 +373,6 @@ public class HomeActivity extends BaseActivity implements ChangeProfileInterface
 		protected void onPostExecute(ArrayList<Series> result) {
 			
 			int selectedView = getSharedPreferences("Twee", 0).getInt("Display", 0);
-			Log.d("Test", "" + selectedView);
 			int viewToDisplay = 0;
 			switch (selectedView) {
 			case 0:
@@ -390,7 +385,6 @@ public class HomeActivity extends BaseActivity implements ChangeProfileInterface
 				break;
 			}
 			
-			Log.d("Test", "" + viewToDisplay);
 			SeriesAdapter sa = new SeriesAdapter(getApplicationContext(), viewToDisplay, mySeries, result);
 			mySeries.setAdapter(sa);
 
