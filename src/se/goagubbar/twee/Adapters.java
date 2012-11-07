@@ -48,13 +48,10 @@ public class Adapters {
 		private final Context context;
 		private final ArrayList<Series> series;
 		private DateHelper dateHelper;
-		private ImageService imageService;
 		private final DatabaseHandler db;
 		Object mActionMode;
 		int resource;
 		
-		private ArrayList<Bitmap> testCache = new ArrayList<Bitmap>();
-
 		public SeriesAdapter(Context context, int resource, ListView lv, ArrayList<Series> objects)
 		{
 			super(context, resource, objects);
@@ -62,7 +59,6 @@ public class Adapters {
 			this.series = objects;
 			this.resource = resource;
 			db = new DatabaseHandler(context);
-			imageService = new ImageService();
 			dateHelper = new DateHelper();	
 
 			cache = new HashMap<String, SoftReference<Bitmap>>();
@@ -96,29 +92,9 @@ public class Adapters {
 
 			if(s != null)
 			{
-				holder.seriesId = series.get(position).getImage();
-
-				//Bitmap bm = getBitmapFromCache(holder.seriesId);
+				holder.seriesId = s.getImage();
 				
-//				Bitmap bm;
-//				try {
-//					 bm = testCache.get(position);
-//					 Log.d("Chache","In cache");
-//				} catch (Exception e) {
-//					bm = new ImageService().GetImage(holder.seriesId, context);
-//					testCache.add(position, bm);
-//					
-//				}
-//				holder.image.setImageBitmap(bm);
-					//cache.put(holder.seriesId, new SoftReference<Bitmap>(bm));
-					//new LoadImageAsync(getContext(), holder.seriesId).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, holder);
-
-//				else
-//				{
-//					holder.image.setImageBitmap(bm);
-//				}
-				
-				Episode e = series.get(position).Episodes.get(0);
+				Episode e = s.Episodes.get(0);
 
 				convertView.setTag(R.string.homeactivity_tag_id,s.getID());
 				convertView.setTag(R.string.homeactivity_tag_seriesid,s.getSeriesId());
@@ -139,6 +115,7 @@ public class Adapters {
 
 				holder.progress.setMax(totalEpisodes);
 				holder.progress.setProgress(watched);
+				holder.image.setImageBitmap(new ImageService().GetImage(s.getImage(), context));
 				holder.information.setText(nextEpisodeInformation);		
 
 			}
