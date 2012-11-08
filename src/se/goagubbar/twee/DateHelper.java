@@ -9,6 +9,8 @@ import se.goagubbar.twee.Models.Episode;
 
 public class DateHelper {
 
+	
+	
 	public String Episodenumber(Episode episode)
 	{
 		String s = episode.getSeason();
@@ -73,11 +75,9 @@ public class DateHelper {
 
 	public String DaysTilNextEpisode(String date)
 	{
-		String returndate = null;
 		Date today = setTimeToMidnight(new Date());
 		Date d1 = null;
 		SimpleDateFormat df = new SimpleDateFormat ("yyyy-MM-dd");
-		DateFormat format = DateFormat.getDateInstance();
 
 		try {
 			d1 = df.parse(date);

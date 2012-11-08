@@ -8,6 +8,7 @@ import java.util.Random;
 
 import se.goagubbar.twee.Adapters.SeriesAdapter.viewHolder;
 import se.goagubbar.twee.Models.Episode;
+import se.goagubbar.twee.Models.ExtendedSeries;
 import se.goagubbar.twee.Models.Series;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -31,9 +32,9 @@ import android.widget.Toast;
 
 public class Adapters {
 
-	public static Map<String, SoftReference<Bitmap>> cache;
+	public static Map<String, Bitmap> cache;
 
-	public static class SeriesAdapter extends ArrayAdapter<Series> {
+	public static class SeriesAdapter extends ArrayAdapter<ExtendedSeries> {
 
 		static class viewHolder
 		{
@@ -46,13 +47,13 @@ public class Adapters {
 		}
 
 		private final Context context;
-		private final ArrayList<Series> series;
+		private final ArrayList<ExtendedSeries> series;
 		private DateHelper dateHelper;
 		private final DatabaseHandler db;
 		Object mActionMode;
 		int resource;
-		
-		public SeriesAdapter(Context context, int resource, ListView lv, ArrayList<Series> objects)
+
+		public SeriesAdapter(Context context, int resource, ListView lv, ArrayList<ExtendedSeries> objects)
 		{
 			super(context, resource, objects);
 			this.context = context;
@@ -61,7 +62,7 @@ public class Adapters {
 			db = new DatabaseHandler(context);
 			dateHelper = new DateHelper();	
 
-			cache = new HashMap<String, SoftReference<Bitmap>>();
+			cache = new HashMap<String, Bitmap>();
 		}
 
 
@@ -71,7 +72,7 @@ public class Adapters {
 		{
 
 			viewHolder holder;
-			Series s = series.get(position);
+			ExtendedSeries s = series.get(position);
 
 			if(convertView == null)
 			{
@@ -93,58 +94,52 @@ public class Adapters {
 			if(s != null)
 			{
 				holder.seriesId = s.getImage();
-				
-				Episode e = s.Episodes.get(0);
+
+				//Episode e = s.Episodes.get(0);
 
 				convertView.setTag(R.string.homeactivity_tag_id,s.getID());
 				convertView.setTag(R.string.homeactivity_tag_seriesid,s.getSeriesId());
 
-				String nextEpisodeInformation = e.getAired() != null ? dateHelper.Episodenumber(e) + " " + e.getTitle() + " - " + dateHelper.DaysTilNextEpisode(e.getAired()) : "No information";
+				//				String nextEpisodeInformation = e.getAired() != null ? dateHelper.Episodenumber(e) + " " + e.getTitle() + " - " + dateHelper.DaysTilNextEpisode(e.getAired()) : "No information";
+				//
+				//				ArrayList<Episode> episodes = db.GetAiredEpisodes(s.getSeriesId());
+				//				int watched = 0;
+				//				int totalEpisodes = episodes.size();
+				//
+				//				for (Episode episode : episodes) {
+				//					if(episode.getWatched().equals("1"))
+				//					{
+				//						watched ++;
+				//					}
+				//				}
 
-				ArrayList<Episode> episodes = db.GetAiredEpisodes(s.getSeriesId());
-				int watched = 0;
-				int totalEpisodes = episodes.size();
 
-				for (Episode episode : episodes) {
-					if(episode.getWatched().equals("1"))
-					{
-						watched ++;
-					}
-				}
-
-
-				holder.progress.setMax(totalEpisodes);
-				holder.progress.setProgress(watched);
-				holder.image.setImageBitmap(new ImageService().GetImage(s.getImage(), context));
-				holder.information.setText(nextEpisodeInformation);		
+								holder.progress.setMax(s.getTotalEpisodes());
+								holder.progress.setProgress(s.getWatchedEpisodes());
+				//holder.image.setImageBitmap(bm)
+								holder.image.setImageBitmap(getBitmapFromCache(s.getImage()));
+								holder.information.setText(s.getNextEpisodeInformation().equals("") ? context.getText(R.string.message_show_ended) : s.getNextEpisodeInformation());		
 
 			}
 
 
 			return convertView;
+						
 		}
 
 
-		private Bitmap getBitmapFromCache(String url) {  
-			if (cache.containsKey(url)) {  
-				return cache.get(url).get();  
+		private Bitmap getBitmapFromCache(String imageName) {  
+			if (cache.containsKey(imageName)) {  
+				Log.d("Bilden finns", imageName);
+				return cache.get(imageName);  
 			}  
-
-			return null;
-			//			private void loadBitmap(final String url, final ImageView imageView,  
-			//					final int width, final int height) {  
-			//				imageViews.put(imageView, url);  
-			//				Bitmap bitmap = getBitmapFromCache(url);  
-			//
-			//				// check in UI thread, so no concurrency issues  
-			//				if (bitmap != null) {  
-			//					Log.d(null, "Item loaded from cache: " + url);  
-			//					imageView.setImageBitmap(bitmap);  
-			//				} else {  
-			//					imageView.setImageBitmap(placeholder);  
-			//					queueJob(url, imageView, width, height);  
-			//				}  
-			//			}  
+			else
+			{
+				Log.d("Bilden finns inte",imageName);
+				Bitmap bm = new ImageService().GetImage(imageName, context); 
+				cache.put(imageName, bm);
+				return bm;
+			}
 
 		}
 	}
@@ -556,7 +551,7 @@ public class Adapters {
 		{
 			super.onPostExecute(result);
 			if(v.seriesId.equals(series)){
-				cache.put(v.seriesId, new SoftReference<Bitmap>(result));
+				//cache.put(v.seriesId, new SoftReference<Bitmap>(result));
 				v.image.setImageBitmap(result);
 			}
 		}

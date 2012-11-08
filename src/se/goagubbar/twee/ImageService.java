@@ -78,7 +78,8 @@ public class ImageService {
 			//fos = context.openFileOutput(filename, Context.MODE_PRIVATE);
 			fos = new FileOutputStream(newFolder + "/" + filename);
 			bitmap.compress(Bitmap.CompressFormat.JPEG , 80, fos);
-
+			bitmap.recycle();
+				
 		} catch (OutOfMemoryError e) {
 			// TODO Auto-generated catch block
 			Log.d("Fel vid sparning",e.getMessage());

@@ -12,6 +12,7 @@ import org.w3c.dom.NodeList;
 
 import se.goagubbar.twee.Adapters.SeriesAdapter;
 import se.goagubbar.twee.Models.Episode;
+import se.goagubbar.twee.Models.ExtendedSeries;
 import se.goagubbar.twee.Models.Profile;
 import se.goagubbar.twee.Models.Series;
 import se.goagubbar.twee.R.string;
@@ -45,7 +46,7 @@ import android.widget.RadioGroup;
 import android.widget.SearchView;
 import android.widget.Toast;
 
-public class HomeActivity extends BaseActivity implements ChangeProfileInterface.NoticeDialogListener{
+public class HomeActivity extends BaseActivity{
 
 
 	private DatabaseHandler db;
@@ -81,15 +82,15 @@ public class HomeActivity extends BaseActivity implements ChangeProfileInterface
 	public String selectedItem = null;
 	public int selectedProfile;
 	public int newSelectedProfile;
+	SeriesAdapter seriesAdapter;
 	Menu menu;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
-		db = new DatabaseHandler(this);
-
-
+		final SharedPreferences settings = getSharedPreferences("Twee", 0);
+		Utils.selectedProfile = settings.getInt("Profile", 1);
+		
 		setContentView(R.layout.layout_home);
 
 		mySeries = (ListView)findViewById(R.id.lstMySeries);
@@ -98,8 +99,7 @@ public class HomeActivity extends BaseActivity implements ChangeProfileInterface
 
 		registerForContextMenu(mySeries);
 
-		
-		
+	
 		//findViewById(R.id.menu_chooseprofile).
 
 
@@ -137,12 +137,26 @@ public class HomeActivity extends BaseActivity implements ChangeProfileInterface
 		new GetMySeries().execute();
 
 	}
+	
+	
+	
+
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		db = new DatabaseHandler(this);
+	}
+
+
+
 
 	@Override
 	protected void onRestart() {
 		// TODO Auto-generated method stub
 		super.onRestart();
-		new GetMySeries().execute();
+		seriesAdapter.notifyDataSetChanged();
+		//new GetMySeries().execute();
 		//mySeries.notify();
 	}
 
@@ -219,7 +233,8 @@ public class HomeActivity extends BaseActivity implements ChangeProfileInterface
 			return true;
 
 		case R.id.menu_refresh:
-			new GetMySeries().execute();
+			seriesAdapter.notifyDataSetChanged();
+			//new GetMySeries().execute();
 			return true;
 
 		case R.id.menu_calendar:
@@ -246,9 +261,8 @@ public class HomeActivity extends BaseActivity implements ChangeProfileInterface
 
 	private void displayProfileChooser(){
 
-		final SharedPreferences settings = getSharedPreferences("Twee", 0);
-		selectedProfile = settings.getInt("Profile", 1);
-
+		
+		selectedProfile = Utils.selectedProfile;
 		newSelectedProfile = selectedProfile;
 
 		final ArrayList<Profile> profiles = db.GetAllprofiles();
@@ -276,22 +290,20 @@ public class HomeActivity extends BaseActivity implements ChangeProfileInterface
 		.setPositiveButton(R.string.dialog_ok, new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int id) {
-				// User clicked OK, so save the mSelectedItems results somewhere
-				// or return them to the component that opened the dialog
-				//...
-
+				final SharedPreferences settings = getSharedPreferences("Twee", 0);
 				SharedPreferences.Editor editor = settings.edit();
+				Utils.selectedProfile = newSelectedProfile;
 				editor.putInt("Profile", newSelectedProfile);
+				editor.apply();
 				SetProfileMenuTitle();
-				SetProfileMenuTitle(newSelectedProfile);
-				new GetSeriesAfterProfileChange().execute(newSelectedProfile);
+				//new GetSeriesAfterProfileChange().execute(newSelectedProfile);
 
 			}
 		})
 		.setNegativeButton(R.string.delete_cancel, new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int id) {
-				// Just clsoe
+				// Just close
 			}
 		}).show();	
 
@@ -318,29 +330,23 @@ public class HomeActivity extends BaseActivity implements ChangeProfileInterface
 
 	private void SetProfileMenuTitle()
 	{
-		String selectedProfileName = db.GetSelectedProfile();
-		
-		menu.findItem(R.id.menu_chooseprofile).setTitle(selectedProfileName);
-	}
-	
-	private void SetProfileMenuTitle(Integer profileId)
-	{
-		String selectedProfileName = db.GetSelectedProfile(profileId);
-		
+		String selectedProfileName = db.GetSelectedProfile();	
 		menu.findItem(R.id.menu_chooseprofile).setTitle(selectedProfileName);
 	}
 	
 
-	public class GetMySeries extends AsyncTask<String, Void, ArrayList<Series>>{
+	public class GetMySeries extends AsyncTask<String, Void, ArrayList<ExtendedSeries>>{
 
 		@Override
-		protected ArrayList<Series> doInBackground(String... params) {
-			ArrayList<Series> series = db.getAllSeries();
+		protected ArrayList<ExtendedSeries> doInBackground(String... params) {
+			ArrayList<ExtendedSeries> series = new ArrayList<Models.ExtendedSeries>();
+			 series = db.GetMySeries();
 			return series;
 		}
+		
 
 		@Override
-		protected void onPostExecute(ArrayList<Series> result) {
+		protected void onPostExecute(ArrayList<ExtendedSeries> result) {
 			
 			int selectedView = getSharedPreferences("Twee", 0).getInt("Display", 0);
 			int viewToDisplay = 0;
@@ -355,44 +361,13 @@ public class HomeActivity extends BaseActivity implements ChangeProfileInterface
 				break;
 			}
 			
-			SeriesAdapter sa = new SeriesAdapter(getApplicationContext(), viewToDisplay, mySeries, result);
-			mySeries.setAdapter(sa);
+			seriesAdapter = new SeriesAdapter(getApplicationContext(), viewToDisplay, mySeries, result);
+			mySeries.setAdapter(seriesAdapter);
 
 		}
 
 	}
 	
-	
-	public class GetSeriesAfterProfileChange extends AsyncTask<Integer, Void, ArrayList<Series>>{
-
-		@Override
-		protected ArrayList<Series> doInBackground(Integer... params) {
-			ArrayList<Series> series = db.getAllSeries(params[0]);
-			return series;
-		}
-
-		@Override
-		protected void onPostExecute(ArrayList<Series> result) {
-			
-			int selectedView = getSharedPreferences("Twee", 0).getInt("Display", 0);
-			int viewToDisplay = 0;
-			switch (selectedView) {
-			case 0:
-				viewToDisplay = R.layout.listitem_series;
-				break;
-			case 1:
-				viewToDisplay = R.layout.listitem_series_alt;
-				break;
-			default:
-				break;
-			}
-			
-			SeriesAdapter sa = new SeriesAdapter(getApplicationContext(), viewToDisplay, mySeries, result);
-			mySeries.setAdapter(sa);
-
-		}
-
-	}
 	
 
 	public class GetNewEpisodes extends AsyncTask<String, Void, Boolean>
@@ -452,11 +427,6 @@ public class HomeActivity extends BaseActivity implements ChangeProfileInterface
 
 	}
 
-	@Override
-	public void onDialogPositiveClick(DialogFragment dialog) {
-		new GetMySeries().execute();
-		mySeries.invalidateViews();
-	}
 
 	
 }

@@ -4,11 +4,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import se.goagubbar.twee.Models.Episode;
+import se.goagubbar.twee.Models.ExtendedSeries;
 import se.goagubbar.twee.Models.Profile;
 import se.goagubbar.twee.Models.Series;
+import android.R.integer;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -55,13 +58,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	private static final String KEY_PROFILENAME = "Name";
 	private static final String KEY_PROFILEID = "ProfileId";
 
-	private static Integer selectedProfile;
+	private static Context ctx;
 
 
 	public DatabaseHandler(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
-
-		selectedProfile = context.getSharedPreferences("Twee", 0).getInt("Profile", 1);
+		ctx = context;
 	}
 
 	@Override
@@ -89,7 +91,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 			db.execSQL(ENCODING_SETTING);
 		}
 	} 
-
+	
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 		Log.d("Rebuild db", "Start");
@@ -99,11 +101,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		onCreate(db);
 
 		Log.d("Rebuild db", "Done");
-	}
-
-	public void onDestroy()
-	{
-
 	}
 
 	//CRUD
@@ -127,12 +124,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 			values.put(KEY_FIRSTAIRED, series.getFirstAired());
 			values.put(KEY_SERIESID, series.getSeriesId());
 			values.put(KEY_LASTUPDATED, series.getLastUpdated());
-			values.put(KEY_PROFILEID, selectedProfile);
+			values.put(KEY_PROFILEID, Utils.selectedProfile);
 
 			db.insert(TABLE_SERIES, null, values);
 
 
 		} catch (Exception e) {
+			Log.d("Error","addSeries");
 			// TODO: handle exception
 		}
 		finally
@@ -160,13 +158,14 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 				values.put(KEY_WATCHED, ep.getWatched());
 				values.put(KEY_LASTUPDATED, ep.getLastUpdated());
 				values.put(KEY_EPISODEID, ep.getEpisodeId());
-				values.put(KEY_PROFILEID, selectedProfile);
+				values.put(KEY_PROFILEID, Utils.selectedProfile);
 				db.insert(TABLE_EPISODES, null, values);
 
 			}
 			db.setTransactionSuccessful();
 			db.endTransaction();
 		} catch (Exception e) {
+			Log.d("Error","addEpisodes");
 			// TODO: handle exception
 		}
 		finally{
@@ -178,65 +177,81 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
 	public void updateAndAddEpisodes(ArrayList<Episode> episodes, String seriesId)
 	{
+
 		ArrayList<String> oldEpisodes = GetEpisodesForSearies(seriesId);
 		SQLiteDatabase db = this.getWritableDatabase();
 		ContentValues values = null;
 
-		db.beginTransaction();
+		try {
+			db.beginTransaction();
 
-		for (Episode ep : episodes) {
-			if(oldEpisodes.contains(ep.getEpisodeId())){
-				values = new ContentValues();
-				values.put(KEY_AIRED, ep.getAired());
-				values.put(KEY_EPISODE, ep.getEpisode());
-				values.put(KEY_SEASON, ep.getSeason());
-				values.put(KEY_SERIESID, ep.getSeriesId());
-				values.put(KEY_SUMMARY, ep.getSummary());
-				values.put(KEY_TITLE, ep.getTitle());
-				values.put(KEY_LASTUPDATED, ep.getLastUpdated());
-				values.put(KEY_PROFILEID, selectedProfile);
+			for (Episode ep : episodes) {
+				if(oldEpisodes.contains(ep.getEpisodeId())){
+					values = new ContentValues();
+					values.put(KEY_AIRED, ep.getAired());
+					values.put(KEY_EPISODE, ep.getEpisode());
+					values.put(KEY_SEASON, ep.getSeason());
+					values.put(KEY_SERIESID, ep.getSeriesId());
+					values.put(KEY_SUMMARY, ep.getSummary());
+					values.put(KEY_TITLE, ep.getTitle());
+					values.put(KEY_LASTUPDATED, ep.getLastUpdated());
+					values.put(KEY_PROFILEID, Utils.selectedProfile);
 
-				db.update(TABLE_EPISODES, values, KEY_EPISODEID +"="+ ep.getEpisodeId(),null);
+					db.update(TABLE_EPISODES, values, KEY_EPISODEID +"="+ ep.getEpisodeId(),null);
+				}
+				else
+				{
+					values = new ContentValues();
+					values.put(KEY_AIRED, ep.getAired());
+					values.put(KEY_EPISODE, ep.getEpisode());
+					values.put(KEY_SEASON, ep.getSeason());
+					values.put(KEY_SERIESID, ep.getSeriesId());
+					values.put(KEY_SUMMARY, ep.getSummary());
+					values.put(KEY_TITLE, ep.getTitle());
+					values.put(KEY_WATCHED, ep.getWatched());
+					values.put(KEY_LASTUPDATED, ep.getLastUpdated());
+					values.put(KEY_EPISODEID, ep.getEpisodeId());
+					values.put(KEY_PROFILEID, Utils.selectedProfile);
+					db.insert(TABLE_EPISODES, null, values);
+				}
 			}
-			else
-			{
-				values = new ContentValues();
-				values.put(KEY_AIRED, ep.getAired());
-				values.put(KEY_EPISODE, ep.getEpisode());
-				values.put(KEY_SEASON, ep.getSeason());
-				values.put(KEY_SERIESID, ep.getSeriesId());
-				values.put(KEY_SUMMARY, ep.getSummary());
-				values.put(KEY_TITLE, ep.getTitle());
-				values.put(KEY_WATCHED, ep.getWatched());
-				values.put(KEY_LASTUPDATED, ep.getLastUpdated());
-				values.put(KEY_EPISODEID, ep.getEpisodeId());
-				values.put(KEY_PROFILEID, selectedProfile);
-				db.insert(TABLE_EPISODES, null, values);
-			}
+			db.setTransactionSuccessful();
+			db.endTransaction();
+		} catch (Exception e) {
+			Log.d("Error","updateAndAddEpisodes");
+			// TODO: handle exception
 		}
-		db.setTransactionSuccessful();
-		db.endTransaction();
-		db.close();
-
+		finally{
+			db.close();
+		}
 	}
 
 	//DU HÖLL PÅ MED KOLLEN AV EPISODEERNA!!!!!	
 	private ArrayList<String> GetEpisodesForSearies(String seriesId)
 	{
-
 		ArrayList<String> episodes = new ArrayList<String>();
-		String sql = "SELECT "+ KEY_EPISODEID +" FROM " + TABLE_EPISODES + " WHERE " + KEY_SERIESID + " = " + seriesId + " AND " + KEY_PROFILEID + " = " + selectedProfile;
+		String sql = "SELECT "+ KEY_EPISODEID +" FROM " + TABLE_EPISODES + " WHERE " + KEY_SERIESID + " = " + seriesId + " AND " + KEY_PROFILEID + " = " + Utils.selectedProfile;
 		SQLiteDatabase db = this.getReadableDatabase();
 		Cursor cursor = db.rawQuery(sql,null);
-
-		cursor.moveToFirst();
-		while (!cursor.isAfterLast()) {
-			episodes.add(cursor.getString(0));
-			cursor.moveToNext();
+		try {
+			cursor.moveToFirst();
+			while (!cursor.isAfterLast()) {
+				episodes.add(cursor.getString(0));
+				cursor.moveToNext();
+			}
+		} catch (Exception e) {
+			Log.d("Error","GetEpisodesForSearies");
+			// TODO: handle exception
+		}
+		finally
+		{
+			cursor.close();
+			db.close();
 		}
 
-		cursor.close();
-		db.close();
+
+
+
 		return episodes;
 
 	}
@@ -247,7 +262,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		ArrayList<Series> series = new ArrayList<Series>();
 		SQLiteDatabase db = this.getReadableDatabase();
 
-		String sql = "SELECT * FROM " + TABLE_SERIES + " WHERE ProfileId = "+ selectedProfile + " ORDER BY "+ KEY_NAME +" ASC";
+		String sql = "SELECT * FROM " + TABLE_SERIES + " WHERE ProfileId = "+ Utils.selectedProfile + " ORDER BY "+ KEY_NAME +" ASC";
 
 		Cursor cursor = db.rawQuery(sql,null);
 		try {
@@ -279,6 +294,72 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 			}
 
 		} catch (Exception e) {
+			Log.d("Error","getAllSeries");
+			// TODO: handle exception
+		}
+		finally{
+			cursor.close();
+			db.close();
+		}
+
+		return series;
+
+
+	}
+
+	public ArrayList<ExtendedSeries> GetMySeries()
+	{
+
+		ArrayList<ExtendedSeries> series = new ArrayList<ExtendedSeries>();
+		SQLiteDatabase db = this.getReadableDatabase();
+
+		String sql = "SELECT * FROM " + TABLE_SERIES + " WHERE ProfileId = "+ Utils.selectedProfile + " ORDER BY "+ KEY_NAME +" ASC";
+
+		Cursor cursor = db.rawQuery(sql,null);
+		try {
+			cursor.moveToFirst();
+			while (!cursor.isAfterLast()) {
+				ExtendedSeries s = new ExtendedSeries();
+
+				s.setActors(cursor.getString(3));
+				s.setAirs(cursor.getString(4));
+				s.setImage(cursor.getString(9));
+				s.setGenre(cursor.getString(5));
+				s.setID(Integer.parseInt(cursor.getString(0)));
+				s.setImdbId(cursor.getString(6));
+				s.setName(cursor.getString(2));			
+				s.setRating(cursor.getString(7));
+				s.setStatus(cursor.getString(8));
+				s.setSummary(cursor.getString(1));
+				s.setFirstAired(cursor.getString(10));
+				s.setHeader(cursor.getString(11));
+				s.setSeriesId(cursor.getString(12));
+
+				s.Episodes = new ArrayList<Episode>();
+
+				s.Episodes.add(GetNextEpisodeForSeries(s.getSeriesId()));
+
+				Episode e = s.Episodes.get(0);
+
+				if(s.getStatus().equals("Ended"))
+				{
+					s.setNextEpisodeInformation("");
+				}
+				else
+				{
+					s.setNextEpisodeInformation(e.getAired() != null ? new DateHelper().Episodenumber(e) + " " + e.getTitle() + " - " + new DateHelper().DaysTilNextEpisode(e.getAired()) : "No information");	
+				}
+
+
+				s.setTotalEpisodes(GetTotalEpisodes(s.getSeriesId()));
+				s.setwatchedEpisodes(GetWatchedEpisodes(s.getSeriesId()));
+				series.add(s);
+				cursor.moveToNext();
+
+			}
+
+		} catch (Exception e) {
+			Log.d("Error - GetMySeries",e.getMessage());
 			// TODO: handle exception
 		}
 		finally{
@@ -325,6 +406,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 				cursor.moveToNext();
 			}
 		} catch (Exception e) {
+			Log.d("Error","getAllSeries()");
 			// TODO: handle exception
 		}
 		finally{
@@ -341,7 +423,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		SQLiteDatabase db = this.getReadableDatabase();
 		String dateWithoutTime  = android.text.format.DateFormat.format("yyyy-MM-dd", new java.util.Date()).toString();
 
-		String sql = "SELECT * FROM "+ TABLE_EPISODES +" WHERE date("+ KEY_AIRED +") < date('"+ dateWithoutTime +"') AND "+KEY_SERIESID+" = "+ seriesId +" AND "+KEY_SEASON+" != 0 AND "+ KEY_PROFILEID + " = " + selectedProfile +" ORDER BY "+ KEY_AIRED +" DESC LIMIT 1";	
+		String sql = "SELECT * FROM "+ TABLE_EPISODES +" WHERE date("+ KEY_AIRED +") < date('"+ dateWithoutTime +"') AND "+KEY_SERIESID+" = "+ seriesId +" AND "+KEY_SEASON+" != 0 AND "+ KEY_PROFILEID + " = " + Utils.selectedProfile +" ORDER BY "+ KEY_AIRED +" DESC LIMIT 1";	
 
 
 		Cursor cursor = db.rawQuery(sql, null);
@@ -363,6 +445,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 			}
 
 		} catch (Exception e2) {
+			Log.d("Error","GetLastAiredEpisodeForSeries");
 			// TODO: handle exception
 		}
 		finally{
@@ -379,7 +462,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		SQLiteDatabase db = this.getReadableDatabase();
 		String dateWithoutTime  = android.text.format.DateFormat.format("yyyy-MM-dd", new java.util.Date()).toString();
 
-		String sql = "SELECT * FROM "+ TABLE_EPISODES +" WHERE date("+ KEY_AIRED +") >= date('"+ dateWithoutTime +"') AND "+KEY_SERIESID+" = "+ seriesId +" AND "+KEY_SEASON+" != 0 AND "+KEY_PROFILEID+" = "+selectedProfile+" ORDER BY "+ KEY_AIRED +" ASC LIMIT 1";	
+		String sql = "SELECT * FROM "+ TABLE_EPISODES +" WHERE date("+ KEY_AIRED +") >= date('"+ dateWithoutTime +"') AND "+KEY_SERIESID+" = "+ seriesId +" AND "+KEY_SEASON+" != 0 AND "+KEY_PROFILEID+" = "+Utils.selectedProfile+" ORDER BY "+ KEY_AIRED +" ASC LIMIT 1";	
 
 		Cursor cursor = db.rawQuery(sql, null);
 		try {
@@ -396,6 +479,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 			}
 
 		} catch (Exception e2) {
+			Log.d("Error","GetNextEpisodeForSeries");
 			// TODO: handle exception
 		}
 		finally{
@@ -411,7 +495,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	{
 		Episode e = new Episode();
 
-		String sql = "SELECT * FROM "+ TABLE_EPISODES +" WHERE "+KEY_ID+" = "+ episodeId + " AND " + KEY_PROFILEID + " = " + selectedProfile;	
+		String sql = "SELECT * FROM "+ TABLE_EPISODES +" WHERE "+KEY_ID+" = "+ episodeId + " AND " + KEY_PROFILEID + " = " + Utils.selectedProfile;	
 		SQLiteDatabase db = this.getReadableDatabase();
 
 		Cursor cursor = db.rawQuery(sql, null);
@@ -435,6 +519,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
 
 		} catch (Exception e2) {
+			Log.d("Error","GetEpisodeById");
 			// TODO: handle exception
 		}
 		finally{
@@ -448,7 +533,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	public Series getSeriesById(String id)
 	{
 		Series s = new Series();
-		String sql = "SELECT * FROM " + TABLE_SERIES + " WHERE " + KEY_ID + " = " + id + " AND " + KEY_PROFILEID + " = " + selectedProfile;
+		String sql = "SELECT * FROM " + TABLE_SERIES + " WHERE " + KEY_ID + " = " + id + " AND " + KEY_PROFILEID + " = " + Utils.selectedProfile;
 		SQLiteDatabase db = this.getReadableDatabase();
 		Cursor cursor = db.rawQuery(sql, null);
 
@@ -474,6 +559,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 			}
 			s.Episodes = GetEpisodes(s.getSeriesId());
 		} catch (Exception e) {
+			Log.d("Error","getSeriesById");
 			// TODO: handle exception
 		}
 		finally{
@@ -485,7 +571,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
 	public Boolean SeriesExist(String seriesId)
 	{
-		String sql = "SELECT * FROM " + TABLE_SERIES + " WHERE " + KEY_SERIESID + " = " + seriesId + " AND " + KEY_PROFILEID + " = " + selectedProfile;
+		String sql = "SELECT * FROM " + TABLE_SERIES + " WHERE " + KEY_SERIESID + " = " + seriesId + " AND " + KEY_PROFILEID + " = " + Utils.selectedProfile;
 		SQLiteDatabase db = this.getReadableDatabase();
 		Cursor cursor = db.rawQuery(sql, null);
 
@@ -499,6 +585,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 				}
 			}
 		} catch (Exception e) {
+			Log.d("Error","SeriesExist");
 			// TODO: handle exception
 		}
 		finally{
@@ -515,22 +602,29 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	{
 		SQLiteDatabase db = this.getWritableDatabase();
 
-		String value;
+		try {
+			String value;
 
-		if(watched)
-		{
-			value = "1";
+			if(watched)
+			{
+				value = "1";
+			}
+			else
+			{
+				value = "0";
+			}
+
+			ContentValues values = new ContentValues();
+			values.put(KEY_WATCHED, value);
+
+			db.update(TABLE_EPISODES, values, KEY_ID + " = ? AND " + KEY_PROFILEID + " = " + Utils.selectedProfile, new String[] { id });
+		} catch (Exception e) {
+			Log.d("Error","ToggleEpisodeWatch");
+			// TODO: handle exception
 		}
-		else
-		{
-			value = "0";
+		finally{
+			db.close();
 		}
-
-		ContentValues values = new ContentValues();
-		values.put(KEY_WATCHED, value);
-
-		db.update(TABLE_EPISODES, values, KEY_ID + " = ? AND " + KEY_PROFILEID + " = " + selectedProfile, new String[] { id });
-		db.close();
 
 	}
 
@@ -538,87 +632,63 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	{
 		SQLiteDatabase db = this.getWritableDatabase();
 
-		String value;
-		String dateWithoutTime  = android.text.format.DateFormat.format("yyyy-MM-dd", new java.util.Date()).toString();
+		try {
+			String value;
+			String dateWithoutTime  = android.text.format.DateFormat.format("yyyy-MM-dd", new java.util.Date()).toString();
 
-		if(watched)
-		{
-			value = "1";
+			if(watched)
+			{
+				value = "1";
+			}
+			else
+			{
+				value = "0";
+			}
+
+			ContentValues values = new ContentValues();
+			values.put(KEY_WATCHED, value);
+
+			db.update(TABLE_EPISODES, values, KEY_AIRED + " < date('"+ dateWithoutTime +"') AND "+KEY_SERIESID + " = ? AND " + KEY_SEASON + " = ? AND " + KEY_PROFILEID + " = " + Utils.selectedProfile, new String[] { id, season });
+
+		} catch (Exception e) {
+			Log.d("Error","ToggleSeasonWatched");
+			// TODO: handle exception
 		}
-		else
-		{
-			value = "0";
+		finally{
+			db.close();
 		}
-
-		ContentValues values = new ContentValues();
-		values.put(KEY_WATCHED, value);
-
-		db.update(TABLE_EPISODES, values, KEY_AIRED + " < date('"+ dateWithoutTime +"') AND "+KEY_SERIESID + " = ? AND " + KEY_SEASON + " = ? AND " + KEY_PROFILEID + " = " + selectedProfile, new String[] { id, season });
-		Log.d("Event","Updatering klar");
-		db.close();
-
 	}
 
 	public void MarkSeriesAsWatched(String id)
 	{
 		SQLiteDatabase db = this.getWritableDatabase();
 
-		String dateWithoutTime  = android.text.format.DateFormat.format("yyyy-MM-dd", new java.util.Date()).toString();
+		try {
+			String dateWithoutTime  = android.text.format.DateFormat.format("yyyy-MM-dd", new java.util.Date()).toString();
 
-		ContentValues values = new ContentValues();
-		values.put(KEY_WATCHED, "1");
-		db.update(TABLE_EPISODES, values, KEY_AIRED + " < date('"+ dateWithoutTime +"') AND "+ KEY_SERIESID +" = ? AND " + KEY_PROFILEID + " = " + selectedProfile, new String[] {id});
-		db.close();
+			ContentValues values = new ContentValues();
+			values.put(KEY_WATCHED, "1");
+			db.update(TABLE_EPISODES, values, KEY_AIRED + " < date('"+ dateWithoutTime +"') AND "+ KEY_SERIESID +" = ? AND " + KEY_PROFILEID + " = " + Utils.selectedProfile, new String[] {id});
+
+		} catch (Exception e) {
+			Log.d("Error","MarkSeriesAsWatched");
+			// TODO: handle exception
+		}
+		finally{
+			db.close();
+		}
 
 	}
 
 	private ArrayList<Episode> GetEpisodes(String seriesId)
 	{
 		ArrayList<Episode> episodes = new ArrayList<Episode>();
-		String sql = "SELECT * FROM " + TABLE_EPISODES + " WHERE " + KEY_SEASON + " != 0 AND " + KEY_AIRED + " != '' AND " +  KEY_SERIESID + " = " + seriesId + " AND " + KEY_PROFILEID + " = " + selectedProfile + " ORDER BY CAST("+ KEY_SEASON +" AS INTEGER) DESC, CAST(" + KEY_EPISODE + " AS INTEGER) DESC";
+		String sql = "SELECT * FROM " + TABLE_EPISODES + " WHERE " + KEY_SEASON + " != 0 AND " + KEY_AIRED + " != '' AND " +  KEY_SERIESID + " = " + seriesId + " AND " + KEY_PROFILEID + " = " + Utils.selectedProfile + " ORDER BY CAST("+ KEY_SEASON +" AS INTEGER) DESC, CAST(" + KEY_EPISODE + " AS INTEGER) DESC";
 		SQLiteDatabase db = this.getReadableDatabase();
 
 		Cursor cursor = db.rawQuery(sql, null);
 
-		cursor.moveToFirst();
-
-		while(!cursor.isAfterLast())
-		{
-			Episode e = new Episode();
-
-			e.setAired(cursor.getString(4));
-			e.setEpisode(cursor.getString(2));
-			e.setID(Integer.parseInt(cursor.getString(0)));
-			e.setSeason(cursor.getString(1));
-			e.setSeriesId(cursor.getString(7));
-			e.setSummary(cursor.getString(6));
-			e.setTitle(cursor.getString(3));
-			e.setWatched(cursor.getString(5));
-
-			episodes.add(e);
-
-			cursor.moveToNext();
-		}
-		cursor.close();
-		db.close();
-
-
-
-		return episodes;
-	}
-
-	public ArrayList<Episode> GetAiredEpisodes(String seriesId)
-	{
-
-		String dateWithoutTime  = android.text.format.DateFormat.format("yyyy-MM-dd", new java.util.Date()).toString();
-		ArrayList<Episode> episodes = new ArrayList<Episode>();
-		String sql = "SELECT * FROM " + TABLE_EPISODES + " WHERE " + KEY_SEASON + " != 0 AND " + KEY_AIRED + " != '' AND " + KEY_AIRED + " <= date('" + dateWithoutTime + "') AND " +  KEY_SERIESID + " = " + seriesId + " AND " + KEY_PROFILEID + " = " + selectedProfile + " ORDER BY "+KEY_AIRED+" DESC";
-		SQLiteDatabase db = this.getReadableDatabase();
-
 		try {
-
-			Cursor cursor = db.rawQuery(sql, null);
-
 			cursor.moveToFirst();
 
 			while(!cursor.isAfterLast())
@@ -638,11 +708,53 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
 				cursor.moveToNext();
 			}
-			cursor.close();
 		} catch (Exception e) {
+			Log.d("Error","GetEpisodes");
 			// TODO: handle exception
 		}
 		finally{
+			cursor.close();
+			db.close();
+		}
+
+		return episodes;
+	}
+
+	public ArrayList<Episode> GetAiredEpisodes(String seriesId)
+	{
+
+		String dateWithoutTime  = android.text.format.DateFormat.format("yyyy-MM-dd", new java.util.Date()).toString();
+		ArrayList<Episode> episodes = new ArrayList<Episode>();
+		String sql = "SELECT * FROM " + TABLE_EPISODES + " WHERE " + KEY_SEASON + " != 0 AND " + KEY_AIRED + " != '' AND " + KEY_AIRED + " <= date('" + dateWithoutTime + "') AND " +  KEY_SERIESID + " = " + seriesId + " AND " + KEY_PROFILEID + " = " + Utils.selectedProfile + " ORDER BY "+KEY_AIRED+" DESC";
+		SQLiteDatabase db = this.getReadableDatabase();
+		Cursor cursor = db.rawQuery(sql, null);
+		try {
+			cursor.moveToFirst();
+
+			while(!cursor.isAfterLast())
+			{
+				Episode e = new Episode();
+
+				e.setAired(cursor.getString(4));
+				e.setEpisode(cursor.getString(2));
+				e.setID(Integer.parseInt(cursor.getString(0)));
+				e.setSeason(cursor.getString(1));
+				e.setSeriesId(cursor.getString(7));
+				e.setSummary(cursor.getString(6));
+				e.setTitle(cursor.getString(3));
+				e.setWatched(cursor.getString(5));
+
+				episodes.add(e);
+
+				cursor.moveToNext();
+			}
+
+		} catch (Exception e) {
+			Log.d("Error","GetAiredEpisodes");
+			// TODO: handle exception
+		}
+		finally{
+			cursor.close();
 			db.close();
 		}
 
@@ -660,24 +772,23 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		String sql = "";
 		SQLiteDatabase db = this.getReadableDatabase();
 
+		switch (timeperiod) {
+		case 0: //Today
+			sql = "SELECT * FROM "+ TABLE_EPISODES + " e INNER JOIN "+TABLE_SERIES+" s ON e.seriesId = s.SeriesId WHERE "+KEY_AIRED+" >= date('"+dateWithoutTime+"') AND STRFTIME('%j', "+ KEY_AIRED +") = STRFTIME('%j', '"+ dateWithoutTime +"') AND STRFTIME('%Y', "+ KEY_AIRED +") = STRFTIME('%Y', '"+ dateWithoutTime +"') ORDER BY " + KEY_AIRED;		
+			break;
+		case 1: //This week
+			sql = "SELECT * FROM "+ TABLE_EPISODES +" e INNER JOIN "+TABLE_SERIES+" s ON e.seriesId = s.SeriesId WHERE "+KEY_AIRED+" >= date('"+dateWithoutTime+"') AND STRFTIME('%W', "+ KEY_AIRED +") = STRFTIME('%W', '"+ dateWithoutTime +"') AND STRFTIME('%Y', "+ KEY_AIRED +") = STRFTIME('%Y', '"+ dateWithoutTime +"') ORDER BY " + KEY_AIRED;
+			break;
+		case 2: //This month
+			sql = "SELECT * FROM "+ TABLE_EPISODES +" e INNER JOIN "+TABLE_SERIES+" s ON e.seriesId = s.SeriesId WHERE "+KEY_AIRED+" >= date('"+dateWithoutTime+"') AND STRFTIME('%m', "+ KEY_AIRED +") = STRFTIME('%m', '"+ dateWithoutTime +"') AND STRFTIME('%Y', "+ KEY_AIRED +") = STRFTIME('%Y', '"+ dateWithoutTime +"') ORDER BY " + KEY_AIRED;
+			break;
+		default:
+			break;
+		}
+
+		Cursor cursor = db.rawQuery(sql, null);
+
 		try {
-			//"SELECT * FROM table_a a INNER JOIN table_b b ON a.id=b.other_id WHERE b.property_id=?";
-			switch (timeperiod) {
-			case 0: //Today
-				sql = "SELECT * FROM "+ TABLE_EPISODES + " e INNER JOIN "+TABLE_SERIES+" s ON e.seriesId = s.SeriesId WHERE "+KEY_AIRED+" >= date('"+dateWithoutTime+"') AND STRFTIME('%j', "+ KEY_AIRED +") = STRFTIME('%j', '"+ dateWithoutTime +"') AND STRFTIME('%Y', "+ KEY_AIRED +") = STRFTIME('%Y', '"+ dateWithoutTime +"') ORDER BY " + KEY_AIRED;		
-				break;
-			case 1: //This week
-				sql = "SELECT * FROM "+ TABLE_EPISODES +" e INNER JOIN "+TABLE_SERIES+" s ON e.seriesId = s.SeriesId WHERE "+KEY_AIRED+" >= date('"+dateWithoutTime+"') AND STRFTIME('%W', "+ KEY_AIRED +") = STRFTIME('%W', '"+ dateWithoutTime +"') AND STRFTIME('%Y', "+ KEY_AIRED +") = STRFTIME('%Y', '"+ dateWithoutTime +"') ORDER BY " + KEY_AIRED;
-				break;
-			case 2: //This month
-				sql = "SELECT * FROM "+ TABLE_EPISODES +" e INNER JOIN "+TABLE_SERIES+" s ON e.seriesId = s.SeriesId WHERE "+KEY_AIRED+" >= date('"+dateWithoutTime+"') AND STRFTIME('%m', "+ KEY_AIRED +") = STRFTIME('%m', '"+ dateWithoutTime +"') AND STRFTIME('%Y', "+ KEY_AIRED +") = STRFTIME('%Y', '"+ dateWithoutTime +"') ORDER BY " + KEY_AIRED;
-				break;
-			default:
-				break;
-			}
-
-			Cursor cursor = db.rawQuery(sql, null);
-
 			cursor.moveToFirst();
 
 			while(!cursor.isAfterLast())
@@ -697,11 +808,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
 				cursor.moveToNext();
 			}
-			cursor.close();
+
 		} catch (Exception e) {
+			Log.d("Error","GetAllEpisodesForGivenTimePeriod");
 			// TODO: handle exception
 		}
 		finally{
+			cursor.close();
 			db.close();	
 		}
 		return episodes;
@@ -712,9 +825,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		SQLiteDatabase db = this.getWritableDatabase();
 
 		try {
-			db.delete(TABLE_EPISODES, KEY_SERIESID + " = ? AND " + KEY_PROFILEID + " = " + selectedProfile, new String[] { String.valueOf(seriesId) });
-			db.delete(TABLE_SERIES, KEY_SERIESID + " = ? AND " + KEY_PROFILEID + " = " + selectedProfile, new String[] { String.valueOf(seriesId) });	
+			db.delete(TABLE_EPISODES, KEY_SERIESID + " = ? AND " + KEY_PROFILEID + " = " + Utils.selectedProfile, new String[] { String.valueOf(seriesId) });
+			db.delete(TABLE_SERIES, KEY_SERIESID + " = ? AND " + KEY_PROFILEID + " = " + Utils.selectedProfile, new String[] { String.valueOf(seriesId) });	
 		} catch (Exception e) {
+			Log.d("Error","DeleteSeries");
 			// TODO: handle exception
 		}
 		finally{
@@ -730,12 +844,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
 		ArrayList<Profile> profiles = new ArrayList<Profile>();
 		SQLiteDatabase db = this.getReadableDatabase();
+		String sql = "SELECT * FROM " + TABLE_PROFILE;
 
+		Cursor cursor = db.rawQuery(sql, null);
 		try {
-			String sql = "SELECT * FROM " + TABLE_PROFILE;
-
-			Cursor cursor = db.rawQuery(sql, null);
-
 			cursor.moveToFirst();
 			while (!cursor.isAfterLast()) {
 				Profile p = new Profile();
@@ -748,11 +860,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 				cursor.moveToNext();
 			}
 
-			cursor.close();
+			
 		} catch (Exception e) {
+			Log.d("Error","GetAllProfiles");
 			// TODO: handle exception
 		}
 		finally{
+			cursor.close();
 			db.close();
 		}
 
@@ -769,6 +883,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 			values.put(KEY_PROFILENAME, profileName);
 			db.insert(TABLE_PROFILE, null, values);			
 		} catch (Exception e) {
+			Log.d("Error","AddNewProfile");
 			// TODO: handle exception
 		}
 		finally{
@@ -784,23 +899,25 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		String name = "";
 		SQLiteDatabase db = this.getReadableDatabase();
 
+		String sql = "SELECT * FROM " + TABLE_PROFILE + " WHERE Id = " + Utils.selectedProfile;
+
+		Cursor cursor = db.rawQuery(sql, null);
+		
 		try {
-			String sql = "SELECT * FROM " + TABLE_PROFILE + " WHERE Id = " + selectedProfile;
-
-			Cursor cursor = db.rawQuery(sql, null);
-
 			if(cursor != null)
 			{
 				if(cursor.moveToFirst())
 				{
 					name = cursor.getString(1);				
 				}
-				cursor.close();
 			}
+			
 		} catch (Exception e) {
+			Log.d("Error","GetSelectedProfile");
 			// TODO: handle exception
 		}
 		finally{
+			cursor.close();
 			db.close();
 		}
 		return name;
@@ -809,10 +926,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	public String GetSelectedProfile(Integer profileId){
 		SQLiteDatabase db = this.getReadableDatabase();
 		String name = "";
-		try {
-			String sql = "SELECT * FROM " + TABLE_PROFILE + " WHERE Id = " + profileId;
+		String sql = "SELECT * FROM " + TABLE_PROFILE + " WHERE Id = " + profileId;
 
-			Cursor cursor = db.rawQuery(sql, null);
+		Cursor cursor = db.rawQuery(sql, null);
+		try {
 
 			if(cursor != null)
 			{
@@ -820,15 +937,73 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 				{
 					name = cursor.getString(1);				
 				}
-				cursor.close();
 			}
 		} catch (Exception e) {
+			Log.d("Error","GetSelectedProfile()");
 			// TODO: handle exception
 		}
 		finally{
+			cursor.close();
 			db.close();
 		}
 		return name;
+	}
+
+	private int GetTotalEpisodes(String seriesId){
+		SQLiteDatabase db = this.getReadableDatabase();
+		int episodes = 0;
+		String sql = "SELECT COUNT(*) FROM " + TABLE_EPISODES + " WHERE " + KEY_SEASON + " != 0 AND " + KEY_AIRED + " != '' AND " +  KEY_SERIESID + " = " + seriesId + " AND " + KEY_PROFILEID + " = " + Utils.selectedProfile;
+
+		Cursor cursor = db.rawQuery(sql, null);
+		try {
+
+			if(cursor != null)
+			{
+				if(cursor.moveToFirst())
+				{
+					episodes = Integer.parseInt(cursor.getString(0));				
+				}
+
+			}
+			
+		} catch (Exception e) {
+			Log.d("Error","GetTotalEpisodes");
+			// TODO: handle exception
+		}
+		finally{
+			cursor.close();
+			db.close();
+		}
+		return episodes;
+	}
+
+	private int GetWatchedEpisodes(String seriesId){
+		SQLiteDatabase db = this.getReadableDatabase();
+		int episodes = 0;
+		
+		String sql = "SELECT COUNT(*) FROM " + TABLE_EPISODES + " WHERE " + KEY_SEASON + " != 0 AND " + KEY_AIRED + " != '' AND " +  KEY_SERIESID + " = " + seriesId + " AND " + KEY_PROFILEID + " = " + Utils.selectedProfile + " AND " + KEY_WATCHED + " = '1'";
+
+		Cursor cursor = db.rawQuery(sql, null);
+		try {
+
+			if(cursor != null)
+			{
+				if(cursor.moveToFirst())
+				{
+					episodes = Integer.parseInt(cursor.getString(0));				
+				}
+
+			}
+			
+		} catch (Exception e) {
+			Log.d("Error","GetWatchedEpisodes");
+			// TODO: handle exception
+		}
+		finally{
+			cursor.close();
+			db.close();
+		}
+		return episodes;
 	}
 
 }
