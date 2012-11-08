@@ -1,17 +1,12 @@
 package se.goagubbar.twee;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-
 import se.goagubbar.twee.Models.Episode;
 import se.goagubbar.twee.Models.ExtendedSeries;
 import se.goagubbar.twee.Models.Profile;
 import se.goagubbar.twee.Models.Series;
-import android.R.integer;
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;

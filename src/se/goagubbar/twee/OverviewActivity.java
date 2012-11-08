@@ -4,7 +4,6 @@ package se.goagubbar.twee;
 import java.util.ArrayList;
 
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -16,9 +15,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ListView;
 import android.widget.Toast;
-import se.goagubbar.twee.Adapters.EpisodeAdapter;
 import se.goagubbar.twee.Fragments.EpisodesFragment;
 import se.goagubbar.twee.Models.Series;
 
@@ -80,7 +77,6 @@ public class OverviewActivity extends FragmentActivity {
     
 	public void Reload()
 	{
-		Log.d("Test","Reload");
 		EpisodesFragment fragment = (EpisodesFragment) fragments.get(2);
 		fragment = new Fragments.EpisodesFragment(series, totalEpisodes, watchedEpisodes);
 	}

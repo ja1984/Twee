@@ -1,12 +1,8 @@
 package se.goagubbar.twee;
 
-import java.lang.ref.SoftReference;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
-
-import se.goagubbar.twee.Adapters.SeriesAdapter.viewHolder;
 import se.goagubbar.twee.Models.Episode;
 import se.goagubbar.twee.Models.ExtendedSeries;
 import se.goagubbar.twee.Models.Series;
@@ -14,8 +10,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
-import android.os.AsyncTask;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -504,40 +498,6 @@ public class Adapters {
 
 			return rowView;
 		}
-
-	}
-
-
-	private static class LoadImageAsync extends AsyncTask<viewHolder, Void, Bitmap>
-	{
-		private viewHolder v;
-		private Context ctx;
-		private String series;
-
-		public LoadImageAsync(Context context, String seriesId)
-		{
-			ctx = context;
-			series = seriesId;
-		}
-
-		@Override
-		protected Bitmap doInBackground(viewHolder... params) {
-			v = params[0];
-			// TODO Auto-generated method stub
-			Log.d("SeriesId","" + v.seriesId);
-			return new ImageService().GetImage(v.seriesId, ctx);
-		}
-
-		@Override
-		protected void onPostExecute(Bitmap result)
-		{
-			super.onPostExecute(result);
-			if(v.seriesId.equals(series)){
-				//cache.put(v.seriesId, new SoftReference<Bitmap>(result));
-				v.image.setImageBitmap(result);
-			}
-		}
-
 
 	}
 
