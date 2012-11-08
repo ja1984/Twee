@@ -27,6 +27,7 @@ import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import se.goagubbar.twee.Adapters.SearchAdapter;
@@ -61,7 +62,7 @@ public class SearchableActivity extends ListActivity {
 	static final String KEY_EP_SEASON = "SeasonNumber";
 	static final String KEY_EP_SUMMARY = "Overview";
 	static final String KEY_EP_TITLE = "EpisodeName";
-	TextView emptyView;
+	RelativeLayout emptyView;
 	String searchQuery;
 	ImageService imageService;
 	ListView searchResult;
@@ -86,7 +87,7 @@ public class SearchableActivity extends ListActivity {
 
 		imageService = new ImageService();
 		searchResult = (ListView)getListView();
-		emptyView = (TextView)findViewById(android.R.id.empty);
+		emptyView = (RelativeLayout)findViewById(android.R.id.empty);
 
 		Intent intent = getIntent();
 		if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
@@ -146,7 +147,7 @@ public class SearchableActivity extends ListActivity {
 		}
 		else
 		{
-			emptyView.setText(R.string.message_nointernet);
+			//emptyView.setText(R.string.message_nointernet);
 		}
 	}
 
@@ -207,10 +208,13 @@ public class SearchableActivity extends ListActivity {
 		protected void onPostExecute(ArrayList<Series> series) {
 			setProgressBarIndeterminateVisibility(false);
 
-			emptyView.setText(R.string.message_noresult);
+			//emptyView.setText(R.string.message_noresult);
 
+			TextView txtMessage = (TextView) emptyView.findViewById(R.id.txtMessage);
+			txtMessage.setText("No results found");
+			
+			
 			SearchAdapter sa = new SearchAdapter(SearchableActivity.this,R.layout.listitem_searchresult,series);
-
 			setListAdapter(sa);
 
 		}
@@ -253,7 +257,7 @@ public class SearchableActivity extends ListActivity {
 
 			s.setSeriesId(q[0]);
 
-			
+
 			publishProgress(getString(R.string.message_download_banner));
 			String image = parser.getValue(e, KEY_IMAGE);
 
@@ -282,7 +286,7 @@ public class SearchableActivity extends ListActivity {
 			}
 
 			publishProgress(getString(R.string.message_download_save_series));
-			
+
 			s.setImdbId(parser.getValue(e, KEY_IMDBID));
 			s.setName(parser.getValue(e, KEY_NAME));			
 			s.setRating(parser.getValue(e, KEY_RATING));
@@ -323,14 +327,14 @@ public class SearchableActivity extends ListActivity {
 
 		@Override
 		protected void onPreExecute(){
-		saveDialog = ProgressDialog.show(SearchableActivity.this, getString(R.string.message_download_pleasewait),getString(R.string.message_download_information),true,true, new DialogInterface.OnCancelListener(){
+			saveDialog = ProgressDialog.show(SearchableActivity.this, getString(R.string.message_download_pleasewait),getString(R.string.message_download_information),true,true, new DialogInterface.OnCancelListener(){
 				@Override
 				public void onCancel(DialogInterface dialog) {
 					FetchAndSaveSeries.this.cancel(true);
 				}
 			}
 					);
-		
+
 		}
 
 		protected void onProgressUpdate(String... value) {

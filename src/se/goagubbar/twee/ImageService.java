@@ -63,12 +63,10 @@ public class ImageService {
 		String filename = name + ".jpg";
 
 		String externalStoragePath = Environment.getExternalStorageDirectory().getPath();
-		File newFolder = new File(externalStoragePath,"/Twee");
+		File newFolder = new File(externalStoragePath,"/Tvist");
 
 		if(!newFolder.exists())
 			newFolder.mkdir();
-
-		File image = new File(newFolder + "/",filename);
 
 		FileOutputStream fos = null;
 		try {
@@ -96,7 +94,7 @@ public class ImageService {
 		try {
 
 			String externalStoragePath = Environment.getExternalStorageDirectory().getPath();
-			File newFolder = new File(externalStoragePath,"/Twee");
+			File newFolder = new File(externalStoragePath,"/Tvist");
 
 			if(!newFolder.exists())
 				newFolder.mkdir();
@@ -126,7 +124,7 @@ public class ImageService {
 		String filename = imageName + "jpg";
 
 		String externalStoragePath = Environment.getExternalStorageDirectory().getPath();
-		File newFolder = new File(externalStoragePath,"/Twee");
+		File newFolder = new File(externalStoragePath,"/Tvist");
 
 		if(!newFolder.exists())
 			newFolder.mkdir();

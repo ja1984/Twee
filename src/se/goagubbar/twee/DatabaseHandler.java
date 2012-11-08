@@ -942,7 +942,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	private int GetTotalEpisodes(String seriesId){
 		SQLiteDatabase db = this.getReadableDatabase();
 		int episodes = 0;
-		String sql = "SELECT COUNT(*) FROM " + TABLE_EPISODES + " WHERE " + KEY_SEASON + " != 0 AND " + KEY_AIRED + " != '' AND " +  KEY_SERIESID + " = " + seriesId + " AND " + KEY_PROFILEID + " = " + Utils.selectedProfile;
+		String dateWithoutTime  = android.text.format.DateFormat.format("yyyy-MM-dd", new java.util.Date()).toString();
+		String sql = "SELECT COUNT(*) FROM " + TABLE_EPISODES + " WHERE " + KEY_SEASON + " != 0 AND " + KEY_AIRED + " != '' AND " + KEY_AIRED + " <= ('" + dateWithoutTime + "') AND "  +  KEY_SERIESID + " = " + seriesId + " AND " + KEY_PROFILEID + " = " + Utils.selectedProfile;
 
 		Cursor cursor = db.rawQuery(sql, null);
 		try {
