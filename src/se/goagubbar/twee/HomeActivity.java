@@ -305,7 +305,8 @@ public class HomeActivity extends BaseActivity{
 		@Override
 		protected ArrayList<ExtendedSeries> doInBackground(String... params) {
 			ArrayList<ExtendedSeries> series = new ArrayList<Models.ExtendedSeries>();
-			 series = db.GetMyShows();
+			
+			series = new DatabaseHandler(HomeActivity.this).GetMyShows();
 			return series;
 		}
 		

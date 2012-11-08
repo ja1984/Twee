@@ -360,8 +360,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		}
 
 		return series;
-
-
 	}
 
 //	public ArrayList<Series> GetAllSeries(Integer profileId)

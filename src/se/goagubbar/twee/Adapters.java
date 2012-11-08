@@ -42,8 +42,6 @@ public class Adapters {
 
 		private final Context context;
 		private final ArrayList<ExtendedSeries> series;
-		private DateHelper dateHelper;
-		private final DatabaseHandler db;
 		Object mActionMode;
 		int resource;
 
@@ -53,8 +51,6 @@ public class Adapters {
 			this.context = context;
 			this.series = objects;
 			this.resource = resource;
-			db = new DatabaseHandler(context);
-			dateHelper = new DateHelper();	
 
 			cache = new HashMap<String, Bitmap>();
 		}
