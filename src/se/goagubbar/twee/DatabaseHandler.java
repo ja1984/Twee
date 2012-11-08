@@ -58,12 +58,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	private static final String KEY_PROFILENAME = "Name";
 	private static final String KEY_PROFILEID = "ProfileId";
 
-	private static Context ctx;
-
 
 	public DatabaseHandler(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
-		ctx = context;
 	}
 
 	@Override
@@ -105,7 +102,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
 	//CRUD
 
-	public void addSeries(Series series)
+	public void AddShow(Series series)
 	{
 		SQLiteDatabase db = this.getWritableDatabase();
 		try {
@@ -140,7 +137,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
 	}
 
-	public void addEpisodes(ArrayList<Episode> episodes)
+	public void AddEpisodes(ArrayList<Episode> episodes)
 	{
 		SQLiteDatabase db = this.getWritableDatabase();
 		try {
@@ -175,10 +172,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
 	}
 
-	public void updateAndAddEpisodes(ArrayList<Episode> episodes, String seriesId)
+	public void UpdateAndAddEpisodes(ArrayList<Episode> episodes, String seriesId)
 	{
 
-		ArrayList<String> oldEpisodes = GetEpisodesForSearies(seriesId);
+		ArrayList<String> oldEpisodes = GetEpisodesForShow(seriesId);
 		SQLiteDatabase db = this.getWritableDatabase();
 		ContentValues values = null;
 
@@ -227,7 +224,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	}
 
 	//DU HÖLL PÅ MED KOLLEN AV EPISODEERNA!!!!!	
-	private ArrayList<String> GetEpisodesForSearies(String seriesId)
+	private ArrayList<String> GetEpisodesForShow(String seriesId)
 	{
 		ArrayList<String> episodes = new ArrayList<String>();
 		String sql = "SELECT "+ KEY_EPISODEID +" FROM " + TABLE_EPISODES + " WHERE " + KEY_SERIESID + " = " + seriesId + " AND " + KEY_PROFILEID + " = " + Utils.selectedProfile;
@@ -256,7 +253,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
 	}
 
-	public ArrayList<Series> getAllSeries()
+	public ArrayList<Series> GetAllShows()
 	{
 
 		ArrayList<Series> series = new ArrayList<Series>();
@@ -286,7 +283,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
 				s.Episodes = new ArrayList<Episode>();
 
-				s.Episodes.add(GetNextEpisodeForSeries(s.getSeriesId()));
+				s.Episodes.add(GetNextEpisodeForShow(s.getSeriesId()));
 
 				series.add(s);
 				cursor.moveToNext();
@@ -307,7 +304,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
 	}
 
-	public ArrayList<ExtendedSeries> GetMySeries()
+	public ArrayList<ExtendedSeries> GetMyShows()
 	{
 
 		ArrayList<ExtendedSeries> series = new ArrayList<ExtendedSeries>();
@@ -337,7 +334,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
 				s.Episodes = new ArrayList<Episode>();
 
-				s.Episodes.add(GetNextEpisodeForSeries(s.getSeriesId()));
+				s.Episodes.add(GetNextEpisodeForShow(s.getSeriesId()));
 
 				Episode e = s.Episodes.get(0);
 
@@ -372,52 +369,52 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
 	}
 
-	public ArrayList<Series> getAllSeries(Integer profileId)
-	{
+//	public ArrayList<Series> GetAllSeries(Integer profileId)
+//	{
+//
+//		ArrayList<Series> series = new ArrayList<Series>();
+//		String sql = "SELECT * FROM " + TABLE_SERIES + " WHERE ProfileId = "+ profileId + " ORDER BY "+ KEY_NAME +" ASC";
+//		SQLiteDatabase db = this.getReadableDatabase();
+//		Cursor cursor = db.rawQuery(sql,null);
+//		try {
+//			cursor.moveToFirst();
+//			while (!cursor.isAfterLast()) {
+//				Series s = new Series();
+//
+//				s.setActors(cursor.getString(3));
+//				s.setAirs(cursor.getString(4));
+//				s.setImage(cursor.getString(9));
+//				s.setGenre(cursor.getString(5));
+//				s.setID(Integer.parseInt(cursor.getString(0)));
+//				s.setImdbId(cursor.getString(6));
+//				s.setName(cursor.getString(2));			
+//				s.setRating(cursor.getString(7));
+//				s.setStatus(cursor.getString(8));
+//				s.setSummary(cursor.getString(1));
+//				s.setFirstAired(cursor.getString(10));
+//				s.setHeader(cursor.getString(11));
+//				s.setSeriesId(cursor.getString(12));
+//
+//				s.Episodes = new ArrayList<Episode>();
+//
+//				s.Episodes.add(GetNextEpisodeForSeries(s.getSeriesId()));
+//
+//				series.add(s);
+//				cursor.moveToNext();
+//			}
+//		} catch (Exception e) {
+//			Log.d("Error","getAllSeries()");
+//			// TODO: handle exception
+//		}
+//		finally{
+//			cursor.close();
+//			db.close();
+//		}
+//
+//		return series;
+//	}
 
-		ArrayList<Series> series = new ArrayList<Series>();
-		String sql = "SELECT * FROM " + TABLE_SERIES + " WHERE ProfileId = "+ profileId + " ORDER BY "+ KEY_NAME +" ASC";
-		SQLiteDatabase db = this.getReadableDatabase();
-		Cursor cursor = db.rawQuery(sql,null);
-		try {
-			cursor.moveToFirst();
-			while (!cursor.isAfterLast()) {
-				Series s = new Series();
-
-				s.setActors(cursor.getString(3));
-				s.setAirs(cursor.getString(4));
-				s.setImage(cursor.getString(9));
-				s.setGenre(cursor.getString(5));
-				s.setID(Integer.parseInt(cursor.getString(0)));
-				s.setImdbId(cursor.getString(6));
-				s.setName(cursor.getString(2));			
-				s.setRating(cursor.getString(7));
-				s.setStatus(cursor.getString(8));
-				s.setSummary(cursor.getString(1));
-				s.setFirstAired(cursor.getString(10));
-				s.setHeader(cursor.getString(11));
-				s.setSeriesId(cursor.getString(12));
-
-				s.Episodes = new ArrayList<Episode>();
-
-				s.Episodes.add(GetNextEpisodeForSeries(s.getSeriesId()));
-
-				series.add(s);
-				cursor.moveToNext();
-			}
-		} catch (Exception e) {
-			Log.d("Error","getAllSeries()");
-			// TODO: handle exception
-		}
-		finally{
-			cursor.close();
-			db.close();
-		}
-
-		return series;
-	}
-
-	public Episode GetLastAiredEpisodeForSeries(String seriesId)
+	public Episode GetLastAiredEpisodeForShow(String seriesId)
 	{
 		Episode e = new Episode();
 		SQLiteDatabase db = this.getReadableDatabase();
@@ -456,7 +453,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
 	}
 
-	public Episode GetNextEpisodeForSeries(String seriesId)
+	public Episode GetNextEpisodeForShow(String seriesId)
 	{
 		Episode e = new Episode();
 		SQLiteDatabase db = this.getReadableDatabase();
@@ -530,7 +527,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		return e;
 	}
 
-	public Series getSeriesById(String id)
+	public Series GetShowById(String id)
 	{
 		Series s = new Series();
 		String sql = "SELECT * FROM " + TABLE_SERIES + " WHERE " + KEY_ID + " = " + id + " AND " + KEY_PROFILEID + " = " + Utils.selectedProfile;
@@ -569,7 +566,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		return s;
 	}
 
-	public Boolean SeriesExist(String seriesId)
+	public Boolean ShowExists(String seriesId)
 	{
 		String sql = "SELECT * FROM " + TABLE_SERIES + " WHERE " + KEY_SERIESID + " = " + seriesId + " AND " + KEY_PROFILEID + " = " + Utils.selectedProfile;
 		SQLiteDatabase db = this.getReadableDatabase();
@@ -659,7 +656,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		}
 	}
 
-	public void MarkSeriesAsWatched(String id)
+	public void MarkShowAsWatched(String id)
 	{
 		SQLiteDatabase db = this.getWritableDatabase();
 
@@ -820,7 +817,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		return episodes;
 	}
 
-	public void DeleteSeries(String seriesId)
+	public void DeleteShow(String seriesId)
 	{
 		SQLiteDatabase db = this.getWritableDatabase();
 

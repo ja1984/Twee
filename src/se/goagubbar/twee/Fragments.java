@@ -145,7 +145,7 @@ public class Fragments {
         	        	
         	activity = getActivity();
         	
-            final Episode lastAiredApisode = new DatabaseHandler(activity).GetLastAiredEpisodeForSeries(s.getSeriesId());
+            final Episode lastAiredApisode = new DatabaseHandler(activity).GetLastAiredEpisodeForShow(s.getSeriesId());
             TextView seriesName = (TextView)v.findViewById(R.id.txtSeriesName);
             TextView seriesRating = (TextView)v.findViewById(R.id.txtSeriesRating);
             TextView seriesStatus = (TextView)v.findViewById(R.id.txtSeriesStatus);

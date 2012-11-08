@@ -111,7 +111,7 @@ public class SearchableActivity extends ListActivity {
 			public void onItemClick(AdapterView<?> arg0, View rowView, int arg2, long arg3) {
 				String seriesId = rowView.getTag().toString();
 
-				if(!db.SeriesExist(seriesId))
+				if(!db.ShowExists(seriesId))
 				{
 					//setProgressBarIndeterminateVisibility(true);
 
@@ -292,7 +292,7 @@ public class SearchableActivity extends ListActivity {
 			s.setSummary(parser.getValue(e, KEY_SUMMARY));
 			s.setLastUpdated(parser.getValue(e, KEY_LASTUPDATED));
 
-			db.addSeries(s);
+			db.AddShow(s);
 
 			publishProgress(getString(R.string.message_download_save_episodes));
 
@@ -317,7 +317,7 @@ public class SearchableActivity extends ListActivity {
 
 			}
 
-			db.addEpisodes(Episodes);
+			db.AddEpisodes(Episodes);
 
 
 			return true;

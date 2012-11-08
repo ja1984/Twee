@@ -16,6 +16,7 @@ import se.goagubbar.twee.Models.ExtendedSeries;
 import se.goagubbar.twee.Models.Profile;
 import se.goagubbar.twee.Models.Series;
 import se.goagubbar.twee.R.string;
+import se.goagubbar.twee.XMLParser;
 import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.DialogFragment;
@@ -110,8 +111,6 @@ public class HomeActivity extends BaseActivity{
 				if(mActionMode != null){
 					return false;
 				}
-
-
 				mActionMode = mySeries.startActionMode(mActionModeCallback);
 				view.setSelected(true);
 				selectedItem = view.getTag(R.string.homeactivity_tag_seriesid).toString();
@@ -119,7 +118,6 @@ public class HomeActivity extends BaseActivity{
 			}
 
 		});
-
 
 		mySeries.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -131,25 +129,16 @@ public class HomeActivity extends BaseActivity{
 			}
 		});
 
-
-		
-		
 		new GetMySeries().execute();
 
 	}
 	
-	
-	
-
 	@Override
 	protected void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
 		db = new DatabaseHandler(this);
 	}
-
-
-
 
 	@Override
 	protected void onRestart() {
@@ -209,7 +198,6 @@ public class HomeActivity extends BaseActivity{
 
 		setupSearchView(menu);
 		this.menu = menu;
-		SetProfileMenuTitle();
 		return true;
 	}
 
@@ -250,7 +238,6 @@ public class HomeActivity extends BaseActivity{
 			return true;
 
 		case R.id.menu_chooseprofile:
-			//startActivity(new Intent(this,ProfileChoose.class));
 			displayProfileChooser();
 			return true;
 
@@ -295,9 +282,7 @@ public class HomeActivity extends BaseActivity{
 				Utils.selectedProfile = newSelectedProfile;
 				editor.putInt("Profile", newSelectedProfile);
 				editor.apply();
-				SetProfileMenuTitle();
-				//new GetSeriesAfterProfileChange().execute(newSelectedProfile);
-
+				new GetMySeries().execute();
 			}
 		})
 		.setNegativeButton(R.string.delete_cancel, new DialogInterface.OnClickListener() {
@@ -311,36 +296,28 @@ public class HomeActivity extends BaseActivity{
 
 	private void deleteSeries(final String seriesId)
 	{
-		Log.d("Del", "Borja deleta");
 		new AlertDialog.Builder(this)
 		.setMessage(R.string.delete_text)
 		.setTitle(R.string.delete_title)
 		.setCancelable(false)
-		.setPositiveButton(R.string.delete_proceed, new DialogInterface.OnClickListener() {
+		.setPositiveButton(R.string.dialog_ok, new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int id) {
-				db.DeleteSeries(seriesId);
+				db.DeleteShow(seriesId);
 				new GetMySeries().execute();
 			}
 		})
-		.setNegativeButton(R.string.delete_cancel, null)
+		.setNegativeButton(R.string.dialog_cancel, null)
 		.show();
 
 
 	}
-
-	private void SetProfileMenuTitle()
-	{
-		String selectedProfileName = db.GetSelectedProfile();	
-		menu.findItem(R.id.menu_chooseprofile).setTitle(selectedProfileName);
-	}
-	
 
 	public class GetMySeries extends AsyncTask<String, Void, ArrayList<ExtendedSeries>>{
 
 		@Override
 		protected ArrayList<ExtendedSeries> doInBackground(String... params) {
 			ArrayList<ExtendedSeries> series = new ArrayList<Models.ExtendedSeries>();
-			 series = db.GetMySeries();
+			 series = db.GetMyShows();
 			return series;
 		}
 		
@@ -367,8 +344,7 @@ public class HomeActivity extends BaseActivity{
 		}
 
 	}
-	
-	
+
 
 	public class GetNewEpisodes extends AsyncTask<String, Void, Boolean>
 	{
@@ -410,7 +386,7 @@ public class HomeActivity extends BaseActivity{
 
 			Log.d("Parsat episoderna","Klart");
 
-			db.updateAndAddEpisodes(Episodes, q[0]);
+			db.UpdateAndAddEpisodes(Episodes, q[0]);
 
 
 
@@ -426,7 +402,6 @@ public class HomeActivity extends BaseActivity{
 		}
 
 	}
-
 
 	
 }

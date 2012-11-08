@@ -57,7 +57,7 @@ public class OverviewActivity extends FragmentActivity {
         
         seriesId = extras.getString("SeriesId");
         
-        series = new DatabaseHandler(getBaseContext()).getSeriesById(seriesId);
+        series = new DatabaseHandler(getBaseContext()).GetShowById(seriesId);
         
         tvdbSeriesId = "" + series.getSeriesId();
         
@@ -107,7 +107,7 @@ public class OverviewActivity extends FragmentActivity {
                 return true;
                 
             case R.id.menu_markseries:
-            	new DatabaseHandler(getBaseContext()).MarkSeriesAsWatched(series.getSeriesId());
+            	new DatabaseHandler(getBaseContext()).MarkShowAsWatched(series.getSeriesId());
             	Toast.makeText(getBaseContext(), R.string.message_series_watched, Toast.LENGTH_SHORT).show();
             	Refresh();
         }

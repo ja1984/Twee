@@ -95,47 +95,29 @@ public class Adapters {
 			{
 				holder.seriesId = s.getImage();
 
-				//Episode e = s.Episodes.get(0);
 
 				convertView.setTag(R.string.homeactivity_tag_id,s.getID());
 				convertView.setTag(R.string.homeactivity_tag_seriesid,s.getSeriesId());
 
-				//				String nextEpisodeInformation = e.getAired() != null ? dateHelper.Episodenumber(e) + " " + e.getTitle() + " - " + dateHelper.DaysTilNextEpisode(e.getAired()) : "No information";
-				//
-				//				ArrayList<Episode> episodes = db.GetAiredEpisodes(s.getSeriesId());
-				//				int watched = 0;
-				//				int totalEpisodes = episodes.size();
-				//
-				//				for (Episode episode : episodes) {
-				//					if(episode.getWatched().equals("1"))
-				//					{
-				//						watched ++;
-				//					}
-				//				}
-
-
-								holder.progress.setMax(s.getTotalEpisodes());
-								holder.progress.setProgress(s.getWatchedEpisodes());
-				//holder.image.setImageBitmap(bm)
-								holder.image.setImageBitmap(getBitmapFromCache(s.getImage()));
-								holder.information.setText(s.getNextEpisodeInformation().equals("") ? context.getText(R.string.message_show_ended) : s.getNextEpisodeInformation());		
+				holder.progress.setMax(s.getTotalEpisodes());
+				holder.progress.setProgress(s.getWatchedEpisodes());
+				holder.image.setImageBitmap(getBitmapFromCache(s.getImage()));
+				holder.information.setText(s.getNextEpisodeInformation().equals("") ? context.getText(R.string.message_show_ended) : s.getNextEpisodeInformation());		
 
 			}
 
 
 			return convertView;
-						
+
 		}
 
 
 		private Bitmap getBitmapFromCache(String imageName) {  
 			if (cache.containsKey(imageName)) {  
-				Log.d("Bilden finns", imageName);
 				return cache.get(imageName);  
 			}  
 			else
 			{
-				Log.d("Bilden finns inte",imageName);
 				Bitmap bm = new ImageService().GetImage(imageName, context); 
 				cache.put(imageName, bm);
 				return bm;
