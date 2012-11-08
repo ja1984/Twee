@@ -71,6 +71,7 @@ public class HomeActivity extends BaseActivity{
 	public String selectedItem = null;
 	public int selectedProfile;
 	public int newSelectedProfile;
+	
 	SeriesAdapter seriesAdapter;
 	Menu menu;
 
@@ -86,6 +87,8 @@ public class HomeActivity extends BaseActivity{
 		mySeries.setDividerHeight(1);
 		mySeries.setLongClickable(true);
 
+		mySeries.setEmptyView(findViewById(R.id.emptyView));
+		
 		registerForContextMenu(mySeries);
 
 	
@@ -325,6 +328,12 @@ public class HomeActivity extends BaseActivity{
 				break;
 			default:
 				break;
+			}
+			
+			if(result.size() == 0)
+			{
+				findViewById(R.id.pgrSearch).setVisibility(View.INVISIBLE);
+				findViewById(R.id.txtMessage).setVisibility(View.VISIBLE);
 			}
 			
 			seriesAdapter = new SeriesAdapter(getApplicationContext(), viewToDisplay, mySeries, result);
