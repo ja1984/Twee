@@ -33,6 +33,7 @@
         android:layout_height="fill_parent"
         android:layout_weight="1"
         android:divider="#000000"
-        android:longClickable="true" />
+        android:longClickable="true"
+        style="@style/ShowOverlay" />
 
 </LinearLayout>

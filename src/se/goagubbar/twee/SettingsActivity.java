@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -34,6 +35,7 @@ public class SettingsActivity extends BaseActivity {
 		settings = getSharedPreferences("Twee", 0);
 		int theme = settings.getInt("Theme", R.style.Light);
 		int display = settings.getInt("Display", 0);
+		Log.d("Display","" + display);
 		boolean downloadHeader = settings.getBoolean("downloadHeaderImage", true);
 
 		Button btnBackup = (Button)findViewById(R.id.btnBackup);
@@ -171,6 +173,7 @@ public class SettingsActivity extends BaseActivity {
 			{
 
 				RadioButton checkedRadioButton = (RadioButton)rGroup.findViewById(checkedId);
+
 				boolean isChecked = checkedRadioButton.isChecked();
 				if (isChecked)
 				{
@@ -223,9 +226,10 @@ public class SettingsActivity extends BaseActivity {
 
 	private void saveDisplayMode(Integer selectId)
 	{
+		Log.d("Selected option","" + selectId);
 		int option = 0;
 
-		if(selectId == 2131296275)
+		if(selectId == R.id.rdoDisplay2)
 			option = 1;
 
 		SharedPreferences.Editor editor = settings.edit();

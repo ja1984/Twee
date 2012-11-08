@@ -71,6 +71,7 @@ public class HomeActivity extends BaseActivity{
 	public String selectedItem = null;
 	public int selectedProfile;
 	public int newSelectedProfile;
+	View selectedView;
 	
 	SeriesAdapter seriesAdapter;
 	Menu menu;
@@ -103,6 +104,8 @@ public class HomeActivity extends BaseActivity{
 					return false;
 				}
 				mActionMode = mySeries.startActionMode(mActionModeCallback);
+				view.setAlpha((float) .3);
+				selectedView = view;
 				view.setSelected(true);
 				selectedItem = view.getTag(R.string.homeactivity_tag_seriesid).toString();
 				return true;
@@ -149,6 +152,8 @@ public class HomeActivity extends BaseActivity{
 
 		@Override
 		public void onDestroyActionMode(ActionMode mode) {
+			selectedView.setAlpha(1);
+			selectedView = null;
 			selectedItem = null;
 			mActionMode = null;
 		}
