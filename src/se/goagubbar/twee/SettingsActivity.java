@@ -38,8 +38,6 @@ public class SettingsActivity extends BaseActivity {
 		Log.d("Display","" + display);
 		boolean downloadHeader = settings.getBoolean("downloadHeaderImage", true);
 
-		Button btnBackup = (Button)findViewById(R.id.btnBackup);
-		Button btnRestore = (Button)findViewById(R.id.btnRestore);
 		Button btnAddProfile = (Button)findViewById(R.id.btnAddProfile);
 
 
@@ -68,13 +66,6 @@ public class SettingsActivity extends BaseActivity {
 
 		oldCheckedButton.setChecked(true);
 
-		btnBackup.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-			}
-		});
 
 		btnAddProfile.setOnClickListener(new OnClickListener() {
 
@@ -122,14 +113,6 @@ public class SettingsActivity extends BaseActivity {
 				addProfile.create().show();
 
 
-			}
-		});
-
-		btnRestore.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
 			}
 		});
 
