@@ -123,7 +123,7 @@ public class HomeActivity extends BaseActivity{
 			}
 		});
 
-		new GetMySeries().execute();
+		new GetMySeries().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
 	}
 	
@@ -171,7 +171,7 @@ public class HomeActivity extends BaseActivity{
 			switch (item.getItemId()) {
 			case R.id.menu_delete:
 				deleteSeries(selectedItem);
-				new GetMySeries().execute();
+				new GetMySeries().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 				mode.finish();		
 				return true;
 
@@ -278,7 +278,7 @@ public class HomeActivity extends BaseActivity{
 				Utils.selectedProfile = newSelectedProfile;
 				editor.putInt("Profile", newSelectedProfile);
 				editor.apply();
-				new GetMySeries().execute();
+				new GetMySeries().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 			}
 		})
 		.setNegativeButton(R.string.delete_cancel, new DialogInterface.OnClickListener() {
@@ -299,7 +299,7 @@ public class HomeActivity extends BaseActivity{
 		.setPositiveButton(R.string.dialog_ok, new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int id) {
 				db.DeleteShow(seriesId);
-				new GetMySeries().execute();
+				new GetMySeries().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 			}
 		})
 		.setNegativeButton(R.string.dialog_cancel, null)
