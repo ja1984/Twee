@@ -217,8 +217,8 @@ public class HomeActivity extends BaseActivity{
 			return true;
 
 		case R.id.menu_refresh:
-			seriesAdapter.notifyDataSetChanged();
-			//new GetMySeries().execute();
+			//seriesAdapter.notifyDataSetChanged();
+			new GetMySeries().execute();
 			return true;
 
 		case R.id.menu_calendar:

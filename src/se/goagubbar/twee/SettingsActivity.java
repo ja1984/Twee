@@ -7,10 +7,12 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -77,6 +79,7 @@ public class SettingsActivity extends BaseActivity {
 
 				//layout.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
 				final EditText txtProfileName = new EditText(getApplicationContext());
+				
 				final TextView txtInformation = new TextView(getApplicationContext());
 				txtProfileName.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
 				txtInformation.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
@@ -85,17 +88,21 @@ public class SettingsActivity extends BaseActivity {
 				layout.addView(txtInformation);
 				layout.addView(txtProfileName);
 
+				LayoutInflater inflater = getLayoutInflater();
+				final View dialoglayout = inflater.inflate(R.layout.layout_addnewprofile, (ViewGroup) getCurrentFocus());
+				
 				AlertDialog.Builder addProfile = new AlertDialog.Builder(SettingsActivity.this);
 				addProfile.setTitle(R.string.dialog_addprofile_header);
-				addProfile.setView(layout);
+				
+				addProfile.setView(dialoglayout);
 
 				addProfile.setPositiveButton(R.string.dialog_ok, new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
-
-						if(!txtProfileName.getText().toString().equals(""))
+						EditText profileName = (EditText)dialoglayout.findViewById(R.id.txtProfileName);
+						if(!profileName.getText().toString().equals(""))
 						{
-							new DatabaseHandler(SettingsActivity.this).AddNewProfile(txtProfileName.getText().toString());	
+							new DatabaseHandler(SettingsActivity.this).AddNewProfile(profileName.getText().toString());	
 						}
 
 

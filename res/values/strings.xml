@@ -79,6 +79,8 @@
     <string name="message_download_save_episodes">Saving episodes&#x2026;</string>
     <string name="message_download_pleasewait">Please wait</string>
     <string name="message_downloading_images">Downloading images</string>
+    <string name="message_downloading_images_success">Done cownloading images</string>
+    <string name="message_downloading_images_error">Error while downloading images</string>
     <!-- /Messages -->
 
 

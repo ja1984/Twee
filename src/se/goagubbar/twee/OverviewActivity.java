@@ -194,10 +194,7 @@ public class OverviewActivity extends FragmentActivity {
 					success = false;
 				}
 			}
-			Log.d("Message","Downloading Image - Done");
 
-			
-			Log.d("Message","Downloading Header");
 			String header = parser.getValue(e, KEY_HEADER);
 			if(!header.equals("")){
 				try {
@@ -208,7 +205,6 @@ public class OverviewActivity extends FragmentActivity {
 					
 				}
 			}
-			Log.d("Message","Downloading Header - done");
 			
 			new DatabaseHandler(OverviewActivity.this).UpdateShowImage(s);
 
@@ -223,11 +219,11 @@ public class OverviewActivity extends FragmentActivity {
 			
 			if(result)
 			{
-				Toast.makeText(getBaseContext(), "Success", Toast.LENGTH_SHORT).show();
+				Toast.makeText(getBaseContext(), R.string.message_downloading_images_success, Toast.LENGTH_SHORT).show();
 			}
 			else
 			{
-				Toast.makeText(getBaseContext(), "Error", Toast.LENGTH_SHORT).show();
+				Toast.makeText(getBaseContext(), R.string.message_downloading_images_error, Toast.LENGTH_SHORT).show();
 			}
 			
 			
