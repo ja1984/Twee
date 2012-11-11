@@ -38,21 +38,22 @@ public class ImageService {
 			//Bitmap myBitmap = BitmapFactory.decodeStream(input,null,new Options().);
 			Bitmap myBitmap = BitmapFactory.decodeStream(input);
 
-			if((int)myBitmap.getWidth() > 800)
-			{
-				myBitmap = Bitmap.createScaledBitmap(myBitmap,(int)(myBitmap.getWidth()*0.8), (int)(myBitmap.getHeight()*0.8), true);
-			}
+//			if((int)myBitmap.getWidth() > 800)
+//			{
+//				myBitmap = Bitmap.createScaledBitmap(myBitmap,(int)(myBitmap.getWidth()*0.8), (int)(myBitmap.getHeight()*0.8), true);
+//			}
 
 
 			return SaveImage(myBitmap, name, ctx);
 		} catch (OutOfMemoryError e) {
+			Log.d("Fel vid sparning",e.getMessage());
 			if(tryAgain)
 			{
 				tryAgain = false;
 				System.gc();
 				return getBitmapFromURL(q,name,ctx);
 			}
-			Log.d("Fel vid sparning",e.getMessage());
+			
 			e.printStackTrace();
 			return null;
 		}

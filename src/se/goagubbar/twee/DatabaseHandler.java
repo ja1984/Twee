@@ -83,7 +83,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 			db.execSQL(ENCODING_SETTING);
 		}
 	} 
-	
+
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 		Log.d("Rebuild db", "Start");
@@ -122,7 +122,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
 
 		} catch (Exception e) {
-			Log.d("Error","addSeries");
+			Log.d("AddShow", e.getMessage());
 			// TODO: handle exception
 		}
 		finally
@@ -157,7 +157,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 			db.setTransactionSuccessful();
 			db.endTransaction();
 		} catch (Exception e) {
-			Log.d("Error","addEpisodes");
+			Log.d("AddEpisodes",e.getMessage());
 			// TODO: handle exception
 		}
 		finally{
@@ -210,7 +210,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 			db.setTransactionSuccessful();
 			db.endTransaction();
 		} catch (Exception e) {
-			Log.d("Error","updateAndAddEpisodes");
+			Log.d("UpdateAndAddEpisodes",e.getMessage());
 			// TODO: handle exception
 		}
 		finally{
@@ -218,6 +218,26 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		}
 	}
 
+	public void UpdateShowImage(Series series)
+	{
+		SQLiteDatabase db = this.getWritableDatabase();
+
+		try {
+			ContentValues values = new ContentValues();
+			values.put(KEY_IMAGE, series.getImage());
+			values.put(KEY_HEADER, series.getHeader());
+
+			db.update(TABLE_SERIES, values, KEY_SERIESID + " = ? AND " + KEY_PROFILEID + " = " + Utils.selectedProfile, new String[] { series.getSeriesId() });
+		} catch (Exception e) {
+			Log.d("UpdateShowImage",e.getMessage());
+			// TODO: handle exception
+		}
+		finally{
+			db.close();
+		}
+
+	}
+	
 	//DU HÖLL PÅ MED KOLLEN AV EPISODEERNA!!!!!	
 	private ArrayList<String> GetEpisodesForShow(String seriesId)
 	{
@@ -232,7 +252,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 				cursor.moveToNext();
 			}
 		} catch (Exception e) {
-			Log.d("Error","GetEpisodesForSearies");
+			Log.d("GetEpisodesForSearies",e.getMessage());
 			// TODO: handle exception
 		}
 		finally
@@ -286,7 +306,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 			}
 
 		} catch (Exception e) {
-			Log.d("Error","getAllSeries");
+			Log.d("GetAllSeries",e.getMessage());
 			// TODO: handle exception
 		}
 		finally{
@@ -351,7 +371,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 			}
 
 		} catch (Exception e) {
-			Log.d("Error - GetMySeries",e.getMessage());
+			Log.d("GetMyShows",e.getMessage());
 			// TODO: handle exception
 		}
 		finally{
@@ -389,8 +409,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 				}
 			}
 
-		} catch (Exception e2) {
-			Log.d("Error","GetLastAiredEpisodeForSeries");
+		} catch (Exception ex) {
+			Log.d("GetLastAiredEpisodeForSeries",ex.getMessage());
 			// TODO: handle exception
 		}
 		finally{
@@ -423,8 +443,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 				}
 			}
 
-		} catch (Exception e2) {
-			Log.d("Error","GetNextEpisodeForSeries");
+		} catch (Exception ex) {
+			Log.d("GetNextEpisodeForSeries", ex.getMessage());
 			// TODO: handle exception
 		}
 		finally{
@@ -463,8 +483,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
 
 
-		} catch (Exception e2) {
-			Log.d("Error","GetEpisodeById");
+		} catch (Exception ex) {
+			Log.d("GetEpisodeById",ex.getMessage());
 			// TODO: handle exception
 		}
 		finally{
@@ -504,7 +524,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 			}
 			//s.Episodes = GetEpisodes(s.getSeriesId());
 		} catch (Exception e) {
-			Log.d("Error","getSeriesById");
+			Log.d("GetSeriesById",e.getMessage());
 			// TODO: handle exception
 		}
 		finally{
@@ -530,7 +550,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 				}
 			}
 		} catch (Exception e) {
-			Log.d("Error","SeriesExist");
+			Log.d("SeriesExist",e.getMessage());
 			// TODO: handle exception
 		}
 		finally{
@@ -564,7 +584,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
 			db.update(TABLE_EPISODES, values, KEY_ID + " = ? AND " + KEY_PROFILEID + " = " + Utils.selectedProfile, new String[] { id });
 		} catch (Exception e) {
-			Log.d("Error","ToggleEpisodeWatch");
+			Log.d("ToggleEpisodeWatch",e.getMessage());
 			// TODO: handle exception
 		}
 		finally{
@@ -596,7 +616,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 			db.update(TABLE_EPISODES, values, KEY_AIRED + " < date('"+ dateWithoutTime +"') AND "+KEY_SERIESID + " = ? AND " + KEY_SEASON + " = ? AND " + KEY_PROFILEID + " = " + Utils.selectedProfile, new String[] { id, season });
 
 		} catch (Exception e) {
-			Log.d("Error","ToggleSeasonWatched");
+			Log.d("ToggleSeasonWatched",e.getMessage());
 			// TODO: handle exception
 		}
 		finally{
@@ -616,7 +636,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 			db.update(TABLE_EPISODES, values, KEY_AIRED + " < date('"+ dateWithoutTime +"') AND "+ KEY_SERIESID +" = ? AND " + KEY_PROFILEID + " = " + Utils.selectedProfile, new String[] {id});
 
 		} catch (Exception e) {
-			Log.d("Error","MarkSeriesAsWatched");
+			Log.d("MarkSeriesAsWatched",e.getMessage());
 			// TODO: handle exception
 		}
 		finally{
@@ -654,7 +674,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 				cursor.moveToNext();
 			}
 		} catch (Exception e) {
-			Log.d("Error","GetEpisodes");
+			Log.d("GetEpisodes",e.getMessage());
 			// TODO: handle exception
 		}
 		finally{
@@ -695,7 +715,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 			}
 
 		} catch (Exception e) {
-			Log.d("Error","GetAiredEpisodes");
+			Log.d("GetAiredEpisodes",e.getMessage());
 			// TODO: handle exception
 		}
 		finally{
@@ -755,7 +775,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 			}
 
 		} catch (Exception e) {
-			Log.d("Error","GetAllEpisodesForGivenTimePeriod");
+			Log.d("GetAllEpisodesForGivenTimePeriod",e.getMessage());
 			// TODO: handle exception
 		}
 		finally{
@@ -773,7 +793,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 			db.delete(TABLE_EPISODES, KEY_SERIESID + " = ? AND " + KEY_PROFILEID + " = " + Utils.selectedProfile, new String[] { String.valueOf(seriesId) });
 			db.delete(TABLE_SERIES, KEY_SERIESID + " = ? AND " + KEY_PROFILEID + " = " + Utils.selectedProfile, new String[] { String.valueOf(seriesId) });	
 		} catch (Exception e) {
-			Log.d("Error","DeleteSeries");
+			Log.d("DeleteSeries",e.getMessage());
 			// TODO: handle exception
 		}
 		finally{
@@ -805,9 +825,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 				cursor.moveToNext();
 			}
 
-			
+
 		} catch (Exception e) {
-			Log.d("Error","GetAllProfiles");
+			Log.d("GetAllProfiles",e.getMessage());
 			// TODO: handle exception
 		}
 		finally{
@@ -828,7 +848,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 			values.put(KEY_PROFILENAME, profileName);
 			db.insert(TABLE_PROFILE, null, values);			
 		} catch (Exception e) {
-			Log.d("Error","AddNewProfile");
+			Log.d("AddNewProfile",e.getMessage());
 			// TODO: handle exception
 		}
 		finally{
@@ -847,7 +867,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		String sql = "SELECT * FROM " + TABLE_PROFILE + " WHERE Id = " + Utils.selectedProfile;
 
 		Cursor cursor = db.rawQuery(sql, null);
-		
+
 		try {
 			if(cursor != null)
 			{
@@ -856,9 +876,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 					name = cursor.getString(1);				
 				}
 			}
-			
+
 		} catch (Exception e) {
-			Log.d("Error","GetSelectedProfile");
+			Log.d("GetSelectedProfile",e.getMessage());
 			// TODO: handle exception
 		}
 		finally{
@@ -868,31 +888,31 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		return name;
 	}
 
-	public String GetSelectedProfile(Integer profileId){
-		SQLiteDatabase db = this.getReadableDatabase();
-		String name = "";
-		String sql = "SELECT * FROM " + TABLE_PROFILE + " WHERE Id = " + profileId;
-
-		Cursor cursor = db.rawQuery(sql, null);
-		try {
-
-			if(cursor != null)
-			{
-				if(cursor.moveToFirst())
-				{
-					name = cursor.getString(1);				
-				}
-			}
-		} catch (Exception e) {
-			Log.d("Error","GetSelectedProfile()");
-			// TODO: handle exception
-		}
-		finally{
-			cursor.close();
-			db.close();
-		}
-		return name;
-	}
+//	public String GetSelectedProfile(Integer profileId){
+//		SQLiteDatabase db = this.getReadableDatabase();
+//		String name = "";
+//		String sql = "SELECT * FROM " + TABLE_PROFILE + " WHERE Id = " + profileId;
+//
+//		Cursor cursor = db.rawQuery(sql, null);
+//		try {
+//
+//			if(cursor != null)
+//			{
+//				if(cursor.moveToFirst())
+//				{
+//					name = cursor.getString(1);				
+//				}
+//			}
+//		} catch (Exception e) {
+//			Log.d("GetSelectedProfile",e.getMessage());
+//			// TODO: handle exception
+//		}
+//		finally{
+//			cursor.close();
+//			db.close();
+//		}
+//		return name;
+//	}
 
 	private int GetTotalEpisodes(String seriesId){
 		SQLiteDatabase db = this.getReadableDatabase();
@@ -911,9 +931,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 				}
 
 			}
-			
+
 		} catch (Exception e) {
-			Log.d("Error","GetTotalEpisodes");
+			Log.d("GetTotalEpisodes",e.getMessage());
 			// TODO: handle exception
 		}
 		finally{
@@ -926,7 +946,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	private int GetWatchedEpisodes(String seriesId){
 		SQLiteDatabase db = this.getReadableDatabase();
 		int episodes = 0;
-		
+
 		String sql = "SELECT COUNT(*) FROM " + TABLE_EPISODES + " WHERE " + KEY_SEASON + " != 0 AND " + KEY_AIRED + " != '' AND " +  KEY_SERIESID + " = " + seriesId + " AND " + KEY_PROFILEID + " = " + Utils.selectedProfile + " AND " + KEY_WATCHED + " = '1'";
 
 		Cursor cursor = db.rawQuery(sql, null);
@@ -940,9 +960,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 				}
 
 			}
-			
+
 		} catch (Exception e) {
-			Log.d("Error","GetWatchedEpisodes");
+			Log.d("GetWatchedEpisodes",e.getMessage());
 			// TODO: handle exception
 		}
 		finally{

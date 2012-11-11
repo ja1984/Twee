@@ -1,5 +1,6 @@
 package se.goagubbar.twee;
 
+import java.lang.ref.SoftReference;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -26,7 +27,7 @@ import android.widget.Toast;
 
 public class Adapters {
 
-	public static Map<String, Bitmap> cache;
+	public static Map<String, SoftReference<Bitmap>> cache;
 
 	public static class SeriesAdapter extends ArrayAdapter<ExtendedSeries> {
 
@@ -51,8 +52,8 @@ public class Adapters {
 			this.context = context;
 			this.series = objects;
 			this.resource = resource;
-
-			cache = new HashMap<String, Bitmap>();
+			
+			cache = new HashMap<String, SoftReference<Bitmap>>();
 		}
 
 
@@ -91,7 +92,7 @@ public class Adapters {
 
 				holder.progress.setMax(s.getTotalEpisodes());
 				holder.progress.setProgress(s.getWatchedEpisodes());
-				holder.image.setImageBitmap(getBitmapFromCache(s.getImage()));
+				holder.image.setImageBitmap(getBitmapFromCache(s.getImage()).get());
 				holder.information.setText(s.getNextEpisodeInformation().equals("") ? context.getText(R.string.message_show_ended) : s.getNextEpisodeInformation());		
 
 			}
@@ -102,15 +103,16 @@ public class Adapters {
 		}
 
 
-		private Bitmap getBitmapFromCache(String imageName) {  
+		private SoftReference<Bitmap> getBitmapFromCache(String imageName) {  
 			if (cache.containsKey(imageName)) {  
 				return cache.get(imageName);  
 			}  
 			else
 			{
-				Bitmap bm = new ImageService().GetImage(imageName, context); 
-				cache.put(imageName, bm);
-				return bm;
+				Bitmap bm = new ImageService().GetImage(imageName, context);
+				SoftReference<Bitmap> sr = new SoftReference<Bitmap>(bm);
+				cache.put(imageName, sr);
+				return sr;
 			}
 
 		}
