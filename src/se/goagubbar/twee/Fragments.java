@@ -9,8 +9,10 @@ import se.goagubbar.twee.Adapters.UpcomingEpisodesAdapter;
 import se.goagubbar.twee.Models.Episode;
 import se.goagubbar.twee.Models.Series;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -30,9 +32,10 @@ public class Fragments {
 	static Activity activity;
 	
 	public static class SummaryFragment extends Fragment{
-    	Series s;
-    	public SummaryFragment(Series s){
-    		this.s = s;
+    	Series show;
+    	
+    	public SummaryFragment(Series show){
+    		this.show = show;
     	}
     	
         @Override
@@ -45,9 +48,9 @@ public class Fragments {
         	Button btnImdb = (Button)v.findViewById(R.id.btnOpenImdb);
         	
         	
-        	summary.setText(s.getSummary());
+        	summary.setText(show.getSummary());
         	
-        	StringTokenizer separatedActors = new StringTokenizer(s.getActors(),"|");
+        	StringTokenizer separatedActors = new StringTokenizer(show.getActors(),"|");
         	
         	String _actors = "";
         	for (int i = 0; i <= separatedActors.countTokens(); i++) {
@@ -60,7 +63,7 @@ public class Fragments {
         	btnImdb.setOnClickListener(new OnClickListener() {
 				
 				public void onClick(View v) {
-					String uri = "imdb:///title/" + s.getImdbId();
+					String uri = "imdb:///title/" + show.getImdbId();
 					Intent test = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
 				    if(getActivity().getPackageManager().resolveActivity(test, 0) != null)
 				    {
@@ -68,7 +71,7 @@ public class Fragments {
 				    }
 				    else
 				    {
-				    	String uri2 = "http://m.imdb.com/title/" + s.getImdbId();
+				    	String uri2 = "http://m.imdb.com/title/" + show.getImdbId();
 				    	Intent imdbIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri2));               
 				    	startActivity(imdbIntent);
 
@@ -84,12 +87,15 @@ public class Fragments {
     }
     
     public static class EpisodesFragment extends Fragment{
-    	Series s;
+    	String showId;
     	DateHelper dateHelper;
-    	    
+    	TextView markSeasonAsWatched;
+    	ListView episodes;
     	
-    	public EpisodesFragment(Series s, int totalEpisodes, int watchedEpisodes){
-    		this.s = s;
+    	
+    	
+    	public EpisodesFragment(String showId, int totalEpisodes, int watchedEpisodes){
+    		this.showId = showId;
     		this.dateHelper = new DateHelper();
     	}
     	
@@ -97,14 +103,11 @@ public class Fragments {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                 Bundle savedInstanceState) {
         	View v = inflater.inflate(R.layout.view_episodes, container, false);
+        	 episodes = (ListView)v.findViewById(R.id.lstAllEpisodes);        		
         	
-        	ListView episodes = (ListView)v.findViewById(R.id.lstAllEpisodes);
-        		
-        	episodes.setAdapter(new EpisodeAdapter(getActivity(), R.layout.listitem_allepisodes, episodes, s.Episodes));
+        	new GetEpisodesTask().execute(getActivity());
         	
         	TextView t = (TextView) episodes.findViewById(R.id.txtMarkSeasonAsWatched);      	
-
-        	
             return v;
         }
 
@@ -115,26 +118,45 @@ public class Fragments {
 		}
         
         
-    	
+	    public class GetEpisodesTask extends AsyncTask<Context, Void, ArrayList<Episode>>{
+
+
+
+			@Override
+			protected void onPostExecute(ArrayList<Episode> result) {
+				super.onPostExecute(result);
+				episodes.setAdapter(new EpisodeAdapter(getActivity(), R.layout.listitem_allepisodes, episodes, result));
+			}
+
+			@Override
+			protected ArrayList<Episode> doInBackground(Context... params) {
+				// TODO Auto-generated method stub
+				ArrayList<Episode> episodes = new DatabaseHandler(getActivity()).GetEpisodes(showId);
+				return episodes;
+			}
+
+	    }
+		
+		
     }
+
+    
+    
+    
+    
     
     public static class OverviewFragment extends Fragment{
-    	Series s;
+    	Series show;
     	DateHelper dateHelper;
     	ImageService imageService;
     	
-    	public OverviewFragment(Series s){
-    		this.s = s;
+    	
+    	public OverviewFragment(Series show){
+    		this.show = show;
     		this.dateHelper = new DateHelper();
     		this.imageService = new ImageService();
     	}
     	
-    	
-    	@Override
-    	public void onDestroyView() {
-    		// TODO Auto-generated method stub
-    		super.onDestroyView();
-    	}
     	
     	@Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -142,7 +164,7 @@ public class Fragments {
         	        	
         	activity = getActivity();
         	
-            final Episode lastAiredApisode = new DatabaseHandler(activity).GetLastAiredEpisodeForShow(s.getSeriesId());
+            final Episode lastAiredApisode = new DatabaseHandler(activity).GetLastAiredEpisodeForShow(show.getSeriesId());
             TextView seriesName = (TextView)v.findViewById(R.id.txtSeriesName);
             TextView seriesRating = (TextView)v.findViewById(R.id.txtSeriesRating);
             TextView seriesStatus = (TextView)v.findViewById(R.id.txtSeriesStatus);
@@ -187,13 +209,13 @@ public class Fragments {
             
             
             
-            if(s.getHeader() != null){
-            	seriesHeader.setImageBitmap(imageService.GetImage(s.getHeader(), activity));
+            if(show.getHeader() != null){
+            	seriesHeader.setImageBitmap(imageService.GetImage(show.getHeader(), activity));
             }
             else
             {
-            	if(s.getImage() != null){
-                	seriesHeader.setImageBitmap(imageService.GetImage(s.getImage(), activity));
+            	if(show.getImage() != null){
+                	seriesHeader.setImageBitmap(imageService.GetImage(show.getImage(), activity));
                 }
             }
 
@@ -203,21 +225,21 @@ public class Fragments {
             String today = dateHelper.GetTodaysDate();
             
 
-            for (Episode episode : s.Episodes) {
-    			
-    			if(dateHelper.CompareDates(episode.getAired(), today) >= 0)
-    			{
-    				newEps.add(episode);
-    			}
-    		}
+//            for (Episode episode : show.Episodes) {
+//    			
+//    			if(dateHelper.CompareDates(episode.getAired(), today) >= 0)
+//    			{
+//    				newEps.add(episode);
+//    			}
+//    		}
             
-            SetProgress(v, s.getSeriesId());
+            SetProgress(v, show.getSeriesId());
             Collections.reverse(newEps);
             episodes.setAdapter(new UpcomingEpisodesAdapter(getActivity(), R.id.lstEpisodes, episodes,newEps));
             
-            seriesName.setText(s.getName());
-            seriesRating.setText(s.getRating());
-            seriesStatus.setText("status: " + s.getStatus());
+            seriesName.setText(show.getName());
+            seriesRating.setText(show.getRating());
+            seriesStatus.setText("status: " + show.getStatus());
 
             return v;
         }

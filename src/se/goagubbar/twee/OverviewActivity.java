@@ -2,8 +2,10 @@ package se.goagubbar.twee;
 
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -53,18 +55,15 @@ public class OverviewActivity extends FragmentActivity {
         Bundle extras = getIntent().getExtras();
         
         seriesId = extras.getString("SeriesId");
-        
+        Log.d("showId",seriesId + "");
         series = new DatabaseHandler(getBaseContext()).GetShowById(seriesId);
-        
-        tvdbSeriesId = "" + series.getSeriesId();
-        
-        getActionBar().setTitle(series.getName());
+        //getActionBar().setTitle(series.getName());
         
         fragments = new ArrayList<Fragment>();
         fragments.add(new Fragments.SummaryFragment(series));
         fragments.add(new Fragments.OverviewFragment(series));
-        
-        fragments.add(new Fragments.EpisodesFragment(series, totalEpisodes, watchedEpisodes));
+        fragments.add(new Fragments.EpisodesFragment(seriesId, totalEpisodes, watchedEpisodes));
+                
         // Create the adapter that will return a fragment for each of the three primary sections
         // of the app.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
@@ -78,7 +77,7 @@ public class OverviewActivity extends FragmentActivity {
 	public void Reload()
 	{
 		EpisodesFragment fragment = (EpisodesFragment) fragments.get(2);
-		fragment = new Fragments.EpisodesFragment(series, totalEpisodes, watchedEpisodes);
+		//fragment = new Fragments.EpisodesFragment(series, totalEpisodes, watchedEpisodes);
 	}
 
     public void Refresh()
@@ -146,4 +145,6 @@ public class OverviewActivity extends FragmentActivity {
             return null;
         }
     }
+
+   
 }

@@ -362,51 +362,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		return series;
 	}
 
-//	public ArrayList<Series> GetAllSeries(Integer profileId)
-//	{
-//
-//		ArrayList<Series> series = new ArrayList<Series>();
-//		String sql = "SELECT * FROM " + TABLE_SERIES + " WHERE ProfileId = "+ profileId + " ORDER BY "+ KEY_NAME +" ASC";
-//		SQLiteDatabase db = this.getReadableDatabase();
-//		Cursor cursor = db.rawQuery(sql,null);
-//		try {
-//			cursor.moveToFirst();
-//			while (!cursor.isAfterLast()) {
-//				Series s = new Series();
-//
-//				s.setActors(cursor.getString(3));
-//				s.setAirs(cursor.getString(4));
-//				s.setImage(cursor.getString(9));
-//				s.setGenre(cursor.getString(5));
-//				s.setID(Integer.parseInt(cursor.getString(0)));
-//				s.setImdbId(cursor.getString(6));
-//				s.setName(cursor.getString(2));			
-//				s.setRating(cursor.getString(7));
-//				s.setStatus(cursor.getString(8));
-//				s.setSummary(cursor.getString(1));
-//				s.setFirstAired(cursor.getString(10));
-//				s.setHeader(cursor.getString(11));
-//				s.setSeriesId(cursor.getString(12));
-//
-//				s.Episodes = new ArrayList<Episode>();
-//
-//				s.Episodes.add(GetNextEpisodeForSeries(s.getSeriesId()));
-//
-//				series.add(s);
-//				cursor.moveToNext();
-//			}
-//		} catch (Exception e) {
-//			Log.d("Error","getAllSeries()");
-//			// TODO: handle exception
-//		}
-//		finally{
-//			cursor.close();
-//			db.close();
-//		}
-//
-//		return series;
-//	}
-
 	public Episode GetLastAiredEpisodeForShow(String seriesId)
 	{
 		Episode e = new Episode();
@@ -523,7 +478,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	public Series GetShowById(String id)
 	{
 		Series s = new Series();
-		String sql = "SELECT * FROM " + TABLE_SERIES + " WHERE " + KEY_ID + " = " + id + " AND " + KEY_PROFILEID + " = " + Utils.selectedProfile;
+		String sql = "SELECT * FROM " + TABLE_SERIES + " WHERE " + KEY_SERIESID + " = " + id + " AND " + KEY_PROFILEID + " = " + Utils.selectedProfile;
 		SQLiteDatabase db = this.getReadableDatabase();
 		Cursor cursor = db.rawQuery(sql, null);
 
@@ -547,7 +502,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 					s.setSeriesId(cursor.getString(12));
 				}
 			}
-			s.Episodes = GetEpisodes(s.getSeriesId());
+			//s.Episodes = GetEpisodes(s.getSeriesId());
 		} catch (Exception e) {
 			Log.d("Error","getSeriesById");
 			// TODO: handle exception
@@ -670,7 +625,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
 	}
 
-	private ArrayList<Episode> GetEpisodes(String seriesId)
+	public ArrayList<Episode> GetEpisodes(String seriesId)
 	{
 		ArrayList<Episode> episodes = new ArrayList<Episode>();
 		String sql = "SELECT * FROM " + TABLE_EPISODES + " WHERE " + KEY_SEASON + " != 0 AND " + KEY_AIRED + " != '' AND " +  KEY_SERIESID + " = " + seriesId + " AND " + KEY_PROFILEID + " = " + Utils.selectedProfile + " ORDER BY CAST("+ KEY_SEASON +" AS INTEGER) DESC, CAST(" + KEY_EPISODE + " AS INTEGER) DESC";

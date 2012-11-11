@@ -117,7 +117,7 @@ public class HomeActivity extends BaseActivity{
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
 				Intent intent = new Intent(getBaseContext(), OverviewActivity.class);
-				intent.putExtra("SeriesId", view.getTag(R.string.homeactivity_tag_id).toString());
+				intent.putExtra("SeriesId", view.getTag(R.string.homeactivity_tag_seriesid).toString());
 				startActivity(intent);
 
 			}

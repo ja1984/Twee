@@ -1,8 +1,12 @@
 package se.goagubbar.twee;
 
+import android.app.Notification;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.support.v4.app.NavUtils;
 
 public class AboutActivity extends BaseActivity {
@@ -11,8 +15,9 @@ public class AboutActivity extends BaseActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_about);
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+        getActionBar().setDisplayHomeAsUpEnabled(true);        
     }
+    
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
