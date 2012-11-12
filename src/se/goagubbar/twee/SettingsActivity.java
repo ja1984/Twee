@@ -1,6 +1,12 @@
 package se.goagubbar.twee;
 
 
+import java.util.ArrayList;
+
+import org.json.JSONObject;
+
+import se.goagubbar.twee.Models.ExtendedSeries;
+
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
@@ -68,6 +74,17 @@ public class SettingsActivity extends BaseActivity {
 
 		oldCheckedButton.setChecked(true);
 
+		Button btnBackup = (Button)findViewById(R.id.btnBackup);
+		
+		btnBackup.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				CreateBackup();
+			}
+		});
+		
 
 		btnAddProfile.setOnClickListener(new OnClickListener() {
 
@@ -151,7 +168,7 @@ public class SettingsActivity extends BaseActivity {
 				boolean isChecked = checkedRadioButton.isChecked();
 				if (isChecked)
 				{
-					saveTheme(checkedRadioButton.getText().toString());
+					saveTheme(checkedId);
 				}
 			}
 		});
@@ -191,16 +208,16 @@ public class SettingsActivity extends BaseActivity {
 		return super.onOptionsItemSelected(item);
 	}
 
-	private void saveTheme(String selectedTheme)
+	private void saveTheme(Integer selectedTheme)
 	{
 
 		int option = 0;
 
-		if(selectedTheme.equals("Light theme"))
+		if(selectedTheme == R.id.radioTheme0)
 		{
 			option = R.style.Light;
 		}
-		else if(selectedTheme.equals("Light theme w. dark actionbar"))
+		else if(selectedTheme == R.id.radioTheme1)
 		{
 			option = R.style.LightDark;
 		}	
@@ -225,6 +242,22 @@ public class SettingsActivity extends BaseActivity {
 		SharedPreferences.Editor editor = settings.edit();
 		editor.putInt("Display", option);
 		editor.commit();
+	}
+	
+	private void CreateBackup()
+	{
+		JSONObject json = new JSONObject();
+		
+		ArrayList<ExtendedSeries> shows = new DatabaseHandler(SettingsActivity.this).GetMyShows();
+		
+		try {
+			json.put("Shows", shows);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
+		System.out.println(json);
+		
 	}
 
 }
