@@ -15,7 +15,7 @@
     <string name="settings_theme_header">Tvist theme</string>
     <string name="settings_header_header">Download header image</string>
     <string name="settings_header_switch">Download header image</string>
-    <string name="settings_header_description">Choose whether to download the header image or not (it's the large image in a show's overview - aprox. 1.5 MB).</string>
+    <string name="settings_header_description">Choose whether to download the header image or not (it\'s the large image in a show\'s overview - aprox. 1.5 MB).</string>
     <string name="settings_header_display">Home layout</string>
     <string name="settings_header_profile">Profiles</string>
     <string name="settings_description_profile">Different profiles allow you to have different users with their own shows and progresses. Note that the app settings are global.</string>

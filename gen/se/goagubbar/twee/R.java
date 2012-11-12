@@ -184,16 +184,21 @@ containing a value of this type.
     public static final class string {
         /**  /Settings 
  About 
+ /Settings 
+ About 
          */
         public static final int about_close=0x7f070043;
         public static final int about_header=0x7f070044;
         public static final int about_text=0x7f070045;
         public static final int actors_header=0x7f070006;
         /**  General 
+ General 
          */
         public static final int app_name=0x7f070000;
         public static final int button_imdb=0x7f070008;
         /**  /Delete 
+ ContentDescriptions 
+ /Delete 
  ContentDescriptions 
          */
         public static final int cd_series_header=0x7f07004c;
@@ -201,6 +206,8 @@ containing a value of this type.
         public static final int delete_proceed=0x7f070049;
         public static final int delete_text=0x7f07004b;
         /**  /About 
+ Delete 
+ /About 
  Delete 
          */
         public static final int delete_title=0x7f070048;
@@ -210,10 +217,10 @@ containing a value of this type.
         public static final int dialog_addprofile_header=0x7f070051;
         public static final int dialog_cancel=0x7f07004e;
         /**  /ContentDescriptions 
+ /ContentDescriptions 
          */
         public static final int dialog_ok=0x7f07004d;
         public static final int dialog_selectprofile_header=0x7f07004f;
-        public static final int hello_world=0x7f070052;
         public static final int homeactivity_tag_id=0x7f070013;
         public static final int homeactivity_tag_seriesid=0x7f070012;
         public static final int imdb_header=0x7f070007;
@@ -226,6 +233,8 @@ containing a value of this type.
         public static final int menu_markseries=0x7f07002a;
         public static final int menu_refresh=0x7f070028;
         /**  /Sections 
+ Menu 
+ /Sections 
  Menu 
          */
         public static final int menu_settings=0x7f070025;
@@ -248,6 +257,8 @@ containing a value of this type.
         public static final int message_series_fetching_done=0x7f070031;
         /**  /Menu 
  Messages 
+ /Menu 
+ Messages 
          */
         public static final int message_series_watched=0x7f07002e;
         public static final int message_show_ended=0x7f070017;
@@ -258,6 +269,8 @@ containing a value of this type.
         public static final int section_dropdown_tomorrow=0x7f070023;
         public static final int section_dropdown_week=0x7f070024;
         /**  /Titles 
+ Sections 
+ /Titles 
  Sections 
          */
         public static final int section_title_episodes=0x7f07001f;
@@ -277,6 +290,8 @@ containing a value of this type.
         public static final int settings_theme_option_darklight=0x7f070041;
         /**  /Messages 
  Settings 
+ /Messages 
+ Settings 
          */
         public static final int settings_theme_option_light=0x7f070040;
         public static final int summary_header=0x7f070005;
@@ -286,6 +301,8 @@ containing a value of this type.
         public static final int title_activity_about=0x7f07001d;
         public static final int title_activity_calendar=0x7f07001c;
         /**  /General 
+ Titles 
+ /General 
  Titles 
          */
         public static final int title_activity_home=0x7f070018;

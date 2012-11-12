@@ -22,11 +22,11 @@
 
         <TextView
             android:id="@+id/txtMessage"
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/pgrSearch"
             android:clickable="true"
-            android:gravity="center"
+            android:layout_centerInParent="true"
             android:text="Searching..." />
 		
     </RelativeLayout>
