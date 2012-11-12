@@ -2,7 +2,7 @@
 
     <!-- General -->
     <string name="app_name">Tvist</string>
-    <string name="search_hint">Search shpow</string>
+    <string name="search_hint">Search show</string>
     <string name="details_lastaired">Last aired</string>
     <string name="details_upcoming">Upcoming episodes</string>
     <string name="details_totalwatched">Episodes watched</string>
@@ -13,12 +13,12 @@
     <string name="text_seriesrating">Rating</string>
     <string name="search_header">Searching for</string>
     <string name="settings_theme_header">Tvist theme</string>
-    <string name="settings_header_header">Download header</string>
+    <string name="settings_header_header">Download header image</string>
     <string name="settings_header_switch">Download header image</string>
-    <string name="settings_header_description">Choose weither to download the large image header or not (aprox. 1.5MB)</string>
+    <string name="settings_header_description">Choose whether to download the header image or not (it\'s the large image in a show\'s overview - aprox. 1.5 MB).</string>
     <string name="settings_header_display">Home layout</string>
     <string name="settings_header_profile">Profiles</string>
-    <string name="settings_description_profile">Diffrent profiles allow you to have diffrent users with their own show and progress. Note that the app settings are global</string>
+    <string name="settings_description_profile">Different profiles allow you to have different users with their own shows and progresses. Note that the app settings are global.</string>
     <string name="homeactivity_tag_seriesid">seriesId</string>
     <string name="homeactivity_tag_id">Id</string>
     <string name="season_markaswatched">Mark season as watched</string>
@@ -64,10 +64,10 @@
 
     <!-- Messages -->
     <string name="message_series_watched">All episodes have been marked as watched</string>
-    <string name="message_season_watched">Season have been marked as watched</string>
-    <string name="message_series_fetching">Downloading series data</string>
+    <string name="message_season_watched">The season has been marked as watched</string>
+    <string name="message_series_fetching">Downloading show data</string>
     <string name="message_series_fetching_done">Done downloading show data</string>
-    <string name="message_nointernet">No connection!\nClick to try again</string>
+    <string name="message_nointernet">No connection!\nClick to try again.</string>
     <string name="message_noresult">No results found!</string>
     <string name="message_series_double">This show is already in your collection</string>
     <string name="message_episodes_updates">Updating episodes data</string>
@@ -79,14 +79,14 @@
     <string name="message_download_save_episodes">Saving episodes&#x2026;</string>
     <string name="message_download_pleasewait">Please wait</string>
     <string name="message_downloading_images">Downloading images</string>
-    <string name="message_downloading_images_success">Done cownloading images</string>
+    <string name="message_downloading_images_success">Done downloading images</string>
     <string name="message_downloading_images_error">Error while downloading images</string>
     <!-- /Messages -->
 
 
     <!-- Settings -->
     <string name="settings_theme_option_light">Light theme</string>
-    <string name="settings_theme_option_darklight">Light theme w. dark actionbar</string>
+    <string name="settings_theme_option_darklight">Light theme with dark actionbar</string>
     <string name="settings_theme_option_dark">Dark theme</string>
     <!-- /Settings -->
 
@@ -94,9 +94,9 @@
     <!-- About -->
     <string name="about_close">Close</string>
     <string name="about_header">About Tvist</string>
-    <string name="about_text">Tvist is getting all it´s information from http://thetvdb.com, you should probably support them in any way possible!</string>
+    <string name="about_text">Tvist is getting all its information from thetvdb.com, support them in any way possible!</string>
     <string name="thanks_header">Thanks to</string>
-    <string name="thanks_text">klizzer, vastis, M203, Reconnnn, mates, Arias, toffe, grief, zero, happyoccasion, helevorn, milky81, Oxygen and Cat</string>
+    <string name="thanks_text">klizzer, vastis, M203, Reconnnn, mates, Arias, toffe, grief, zero, happyoccasion, helevorn, milky81, Oxygen and Cat.</string>
 
     <!-- /About -->
 
@@ -118,6 +118,5 @@
     <string name="dialog_selectprofile_header">Select profile</string>
     <string name="settings_description_profile_popup">Enter the name of the new profile</string>
     <string name="dialog_addprofile_header">New profile</string>
-    <string name="hello_world">Hello world!</string>
 
 </resources>

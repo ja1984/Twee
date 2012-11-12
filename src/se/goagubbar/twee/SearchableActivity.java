@@ -27,6 +27,7 @@ import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -211,6 +212,8 @@ public class SearchableActivity extends ListActivity {
 			//emptyView.setText(R.string.message_noresult);
 
 			TextView txtMessage = (TextView) emptyView.findViewById(R.id.txtMessage);
+			ProgressBar searchProgress = (ProgressBar) emptyView.findViewById(R.id.pgrSearch);
+			searchProgress.setVisibility(View.GONE);
 			txtMessage.setText("No results found");
 			
 			
