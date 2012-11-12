@@ -1,10 +1,10 @@
-<resources>
+﻿<resources>
 
     <!-- General -->
     <string name="app_name">Tvist</string>
     <string name="search_hint">Search shpow</string>
     <string name="details_lastaired">Last aired</string>
-    <string name="details_upcoming">Upcoming episodes</string>
+    <string name="details_upcoming">Upcoing episodes</string>
     <string name="details_totalwatched">Episodes watched</string>
     <string name="summary_header">Summary</string>
     <string name="actors_header">Actors</string>
