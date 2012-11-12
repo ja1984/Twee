@@ -15,43 +15,43 @@
     <string name="settings_theme_header">Tvist tema</string>
     <string name="settings_header_header">Ladda ner huvudbild</string>
     <string name="settings_header_switch">Ladda ner huvudbild</string>
-    <string name="settings_header_description">Välj om huvudbilden ska laddas ner eller inte (det �r den stora bilden inne p� en series �verblick - ungef�r 1,5 MB).</string>
+    <string name="settings_header_description">Välj om huvudbilden ska laddas ner eller inte (det är den stora bilden inne på en series överblick - ungefär 1,5 MB).</string>
     <string name="settings_header_display">Startsidelayout</string>
     <string name="settings_header_profile">Profiler</string>
-    <string name="settings_description_profile">Olika profiler l�ter dig ha olika anv�ndare med egna serier och f�rlopp. Notera att inst�llningar p�verkar alla profiler.</string>
+    <string name="settings_description_profile">Olika profiler låter dig ha olika användare med egna serier och förlopp. Notera att inställningar påverkar alla profiler.</string>
     <string name="homeactivity_tag_seriesid">seriesId</string>
     <string name="homeactivity_tag_id">Id</string>
-    <string name="season_markaswatched">Markera s�song som sedd</string>
+    <string name="season_markaswatched">Markera säsong som sedd</string>
     <string name="series_plot">Handling</string>
     <string name="series_summary">Sammanfattning</string>
-    <string name="message_show_ended">Denna serie har slutat s�ndas</string>
+    <string name="message_show_ended">Denna serie har slutat sändas</string>
     <!-- /General -->
 
 
     <!-- Titles -->
     <string name="title_activity_home">Tvist</string>
-    <string name="title_activity_settings">Inst�llningar</string>
-    <string name="title_activity_overview">�verblick</string>
-    <string name="title_activity_searchable">S�k</string>
+    <string name="title_activity_settings">Inställningar</string>
+    <string name="title_activity_overview">Överblick</string>
+    <string name="title_activity_searchable">Sök</string>
     <string name="title_activity_calendar">Kalender</string>
     <string name="title_activity_about">Om Tvist</string>
-    <string name="title_activity_profile_choose">V�lj profil</string>
+    <string name="title_activity_profile_choose">Välj profil</string>
     <!-- /Titles -->
 
 
     <!-- Sections -->
     <string name="section_title_episodes">Avsnitt</string>
-    <string name="section_title_overview">�verblick</string>
+    <string name="section_title_overview">Överblick</string>
     <string name="section_title_summary">Sammanfattning</string>
     <string name="section_dropdown_today">Idag</string>
     <string name="section_dropdown_tomorrow">Denna vecka</string>
-    <string name="section_dropdown_week">Denna m�nad</string>
+    <string name="section_dropdown_week">Denna månad</string>
     <!-- /Sections -->
 
 
     <!-- Menu -->
-    <string name="menu_settings">Inst�llningar</string>
-    <string name="menu_add">L�gg till</string>
+    <string name="menu_settings">Inställningar</string>
+    <string name="menu_add">Lägg till</string>
     <string name="menu_about">Om</string>
     <string name="menu_refresh">Ladda om</string>
     <string name="menu_calendar">Kalender</string>
@@ -66,8 +66,8 @@
     <string name="message_series_watched">Alla avsnitt har markerats som sedda</string>
     <string name="message_season_watched">Hela s�songen har markerats som sedd</string>
     <string name="message_series_fetching">Laddar ner seriedata</string>
-    <string name="message_series_fetching_done">Nedladdning av seriedata �r klar</string>
-    <string name="message_nointernet">Ingen uppkoppling!\nKlicka f�r att f�rs�ka igen.</string>
+    <string name="message_series_fetching_done">Nedladdning av seriedata är klar</string>
+    <string name="message_nointernet">Ingen uppkoppling!\nKlicka för att försöka igen.</string>
     <string name="message_noresult">Hittade ingen matchande serie</string>
     <string name="message_series_double">Denna serie finns redan i din samling</string>
     <string name="message_episodes_updates">Uppdaterar avsnittsdata</string>
@@ -77,24 +77,24 @@
     <string name="message_download_header">Laddar ner huvudbild&#x2026;</string>
     <string name="message_download_save_series">Sparar serie&#x2026;</string>
     <string name="message_download_save_episodes">Sparar avsnitt&#x2026;</string>
-    <string name="message_download_pleasewait">V�nligen v�nta</string>
+    <string name="message_download_pleasewait">Vänligen vänta</string>
     <string name="message_downloading_images">Laddar ner bilder</string>
-    <string name="message_downloading_images_success">Nedladdning av bilder �r klar</string>
+    <string name="message_downloading_images_success">Nedladdning av bilder är klar</string>
     <string name="message_downloading_images_error">Nedladdningen av bilder misslyckades</string>
     <!-- /Messages -->
 
 
     <!-- Settings -->
     <string name="settings_theme_option_light">Ljust tema</string>
-    <string name="settings_theme_option_darklight">Ljust tema med m�rk meny</string>
-    <string name="settings_theme_option_dark">M�rkt tema</string>
+    <string name="settings_theme_option_darklight">Ljust tema med mörk meny</string>
+    <string name="settings_theme_option_dark">Mörkt tema</string>
     <!-- /Settings -->
 
 
     <!-- About -->
     <string name="about_close">St�ng</string>
     <string name="about_header">Om Tvist</string>
-    <string name="about_text">Tvist f�r all sin information fr�n thetvdb.com, st�d dem s� gott ni kan!</string>
+    <string name="about_text">Tvist får all sin information från thetvdb.com, stöd dem så gott ni kan!</string>
     <string name="thanks_header">Tack</string>
     <string name="thanks_text">klizzer, vastis, M203, Reconnnn, mates, Arias, toffe, grief, zero, happyoccasion, helevorn, milky81, Oxygen och Cat.</string>
 
@@ -103,9 +103,9 @@
 
     <!-- Delete -->
     <string name="delete_title">Radera serie</string>
-    <string name="delete_proceed">Forts�tt</string>
+    <string name="delete_proceed">Fortsätt</string>
     <string name="delete_cancel">Avbryt</string>
-    <string name="delete_text">Detta kan inte �ngras!</string>
+    <string name="delete_text">Detta kan inte ångras!</string>
     <!-- /Delete -->
 
 
@@ -115,8 +115,8 @@
 
     <string name="dialog_ok">OK</string>
     <string name="dialog_cancel">Avbryt</string>
-    <string name="dialog_selectprofile_header">V�lj profil</string>
-    <string name="settings_description_profile_popup">D�p den nya profilen</string>
+    <string name="dialog_selectprofile_header">Välj profil</string>
+    <string name="settings_description_profile_popup">Döp den nya profilen</string>
     <string name="dialog_addprofile_header">Ny profil</string>
 
 </resources>
