@@ -73,7 +73,7 @@ public class ImageService {
 		try {
 			//fos = context.openFileOutput(filename, Context.MODE_PRIVATE);
 			fos = new FileOutputStream(newFolder + "/" + filename);
-			bitmap.compress(Bitmap.CompressFormat.JPEG , 80, fos);
+			bitmap.compress(Bitmap.CompressFormat.JPEG , 85, fos);
 			bitmap.recycle();
 				
 		} catch (OutOfMemoryError e) {

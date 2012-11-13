@@ -382,10 +382,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		return series;
 	}
 	
-	public ArrayList<Series> BackupShows()
+	public ArrayList<se.goagubbar.twee.dto.Series> BackupShows()
 	{
-
-		ArrayList<Series> series = new ArrayList<Series>();
+		ArrayList<se.goagubbar.twee.dto.Series> series = new ArrayList<se.goagubbar.twee.dto.Series>();
 		SQLiteDatabase db = this.getReadableDatabase();
 
 		String sql = "SELECT * FROM " + TABLE_SERIES + " WHERE ProfileId = "+ Utils.selectedProfile + " ORDER BY "+ KEY_NAME +" ASC";
@@ -394,21 +393,26 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		try {
 			cursor.moveToFirst();
 			while (!cursor.isAfterLast()) {
-				ExtendedSeries s = new ExtendedSeries();
+				se.goagubbar.twee.dto.Series s = new se.goagubbar.twee.dto.Series();
 
-				s.setActors(cursor.getString(3));
-				s.setAirs(cursor.getString(4));
-				s.setImage(cursor.getString(9));
-				s.setGenre(cursor.getString(5));
-				s.setID(Integer.parseInt(cursor.getString(0)));
-				s.setImdbId(cursor.getString(6));
-				s.setName(cursor.getString(2));			
-				s.setRating(cursor.getString(7));
-				s.setStatus(cursor.getString(8));
-				s.setSummary(cursor.getString(1));
-				s.setFirstAired(cursor.getString(10));
-				s.setHeader(cursor.getString(11));
-				s.setSeriesId(cursor.getString(12));
+				s.Actors = cursor.getString(3);
+				s.Airs = cursor.getString(4);
+				s.Image = cursor.getString(9);
+				s.Genre = cursor.getString(5);
+				s.Id = Integer.parseInt(cursor.getString(0));
+				s.ImdbId = cursor.getString(6);
+				s.Name = cursor.getString(2);			
+				s.Rating = cursor.getString(7);
+				s.Status = cursor.getString(8);
+				s.Summary = cursor.getString(1);
+				s.FirstAired = cursor.getString(10);
+				s.Header = cursor.getString(11);
+				s.SeriesId = cursor.getString(12);
+				s.LastUpdated = cursor.getString(13);
+				s.ProfileId = cursor.getString(14);
+				
+				s.Episodes = BackupEpisodes(s.SeriesId);
+				
 				series.add(s);
 				cursor.moveToNext();
 
@@ -424,6 +428,47 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		}
 
 		return series;
+	}
+	
+	public ArrayList<se.goagubbar.twee.dto.Episode> BackupEpisodes(String showId)
+	{
+		ArrayList<se.goagubbar.twee.dto.Episode> episodes = new ArrayList<se.goagubbar.twee.dto.Episode>();
+		SQLiteDatabase db = this.getReadableDatabase();
+
+		String sql = "SELECT * FROM " + TABLE_EPISODES + " WHERE ProfileId = "+ Utils.selectedProfile + " AND " + KEY_SERIESID + " = " + showId;
+
+		Cursor cursor = db.rawQuery(sql,null);
+		try {
+			cursor.moveToFirst();
+			while (!cursor.isAfterLast()) {
+				se.goagubbar.twee.dto.Episode e = new se.goagubbar.twee.dto.Episode();
+				
+				e.Aired = cursor.getString(4);
+				e.Episode = cursor.getString(2);
+				e.Id =Integer.parseInt(cursor.getString(0));
+				e.Season =cursor.getString(1);
+				e.SeriesId =cursor.getString(7);
+				e.Summary =cursor.getString(6);
+				e.Title =cursor.getString(3);
+				e.Watched = cursor.getString(5);
+				e.LastUpdated = cursor.getString(8);
+				e.EpisodeId = cursor.getString(9);
+				e.ProfileId = cursor.getString(10);
+				episodes.add(e);
+				cursor.moveToNext();
+
+			}
+
+		} catch (Exception ex) {
+			Log.d("BackupEpisodes", "" +  ex.getMessage());
+			// TODO: handle exception
+		}
+		finally{
+			cursor.close();
+			db.close();
+		}
+
+		return episodes;
 	}
 
 	public Episode GetLastAiredEpisodeForShow(String seriesId)

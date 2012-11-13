@@ -188,9 +188,9 @@ containing a value of this type.
  /Settings 
  About 
          */
-        public static final int about_close=0x7f070043;
-        public static final int about_header=0x7f070044;
-        public static final int about_text=0x7f070045;
+        public static final int about_close=0x7f070045;
+        public static final int about_header=0x7f070046;
+        public static final int about_text=0x7f070047;
         public static final int actors_header=0x7f070006;
         /**  General 
  General 
@@ -202,26 +202,26 @@ containing a value of this type.
  /Delete 
  ContentDescriptions 
          */
-        public static final int cd_series_header=0x7f07004c;
-        public static final int delete_cancel=0x7f07004a;
-        public static final int delete_proceed=0x7f070049;
-        public static final int delete_text=0x7f07004b;
+        public static final int cd_series_header=0x7f07004e;
+        public static final int delete_cancel=0x7f07004c;
+        public static final int delete_proceed=0x7f07004b;
+        public static final int delete_text=0x7f07004d;
         /**  /About 
  Delete 
  /About 
  Delete 
          */
-        public static final int delete_title=0x7f070048;
+        public static final int delete_title=0x7f07004a;
         public static final int details_lastaired=0x7f070002;
         public static final int details_totalwatched=0x7f070004;
         public static final int details_upcoming=0x7f070003;
-        public static final int dialog_addprofile_header=0x7f070051;
-        public static final int dialog_cancel=0x7f07004e;
+        public static final int dialog_addprofile_header=0x7f070053;
+        public static final int dialog_cancel=0x7f070050;
         /**  /ContentDescriptions 
  /ContentDescriptions 
          */
-        public static final int dialog_ok=0x7f07004d;
-        public static final int dialog_selectprofile_header=0x7f07004f;
+        public static final int dialog_ok=0x7f07004f;
+        public static final int dialog_selectprofile_header=0x7f070051;
         public static final int homeactivity_tag_id=0x7f070013;
         public static final int homeactivity_tag_seriesid=0x7f070012;
         public static final int imdb_header=0x7f070007;
@@ -239,6 +239,8 @@ containing a value of this type.
  Menu 
          */
         public static final int menu_settings=0x7f070025;
+        public static final int message_backup_complete=0x7f070041;
+        public static final int message_backup_error=0x7f070040;
         public static final int message_download_banner=0x7f070038;
         public static final int message_download_header=0x7f070039;
         public static final int message_download_information=0x7f070037;
@@ -280,25 +282,25 @@ containing a value of this type.
         public static final int series_plot=0x7f070015;
         public static final int series_summary=0x7f070016;
         public static final int settings_description_profile=0x7f070011;
-        public static final int settings_description_profile_popup=0x7f070050;
+        public static final int settings_description_profile_popup=0x7f070052;
         public static final int settings_header_description=0x7f07000e;
         public static final int settings_header_display=0x7f07000f;
         public static final int settings_header_header=0x7f07000c;
         public static final int settings_header_profile=0x7f070010;
         public static final int settings_header_switch=0x7f07000d;
         public static final int settings_theme_header=0x7f07000b;
-        public static final int settings_theme_option_dark=0x7f070042;
-        public static final int settings_theme_option_darklight=0x7f070041;
+        public static final int settings_theme_option_dark=0x7f070044;
+        public static final int settings_theme_option_darklight=0x7f070043;
         /**  /Messages 
  Settings 
  /Messages 
  Settings 
          */
-        public static final int settings_theme_option_light=0x7f070040;
+        public static final int settings_theme_option_light=0x7f070042;
         public static final int summary_header=0x7f070005;
         public static final int text_seriesrating=0x7f070009;
-        public static final int thanks_header=0x7f070046;
-        public static final int thanks_text=0x7f070047;
+        public static final int thanks_header=0x7f070048;
+        public static final int thanks_text=0x7f070049;
         public static final int title_activity_about=0x7f07001d;
         public static final int title_activity_calendar=0x7f07001c;
         /**  /General 

@@ -1,11 +1,18 @@
 package se.goagubbar.twee;
 
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Date;
 
 import org.json.JSONObject;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import se.goagubbar.twee.Models.ExtendedSeries;
 import se.goagubbar.twee.Models.Series;
@@ -14,7 +21,9 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.app.NavUtils;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -32,6 +41,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class SettingsActivity extends BaseActivity {
 
@@ -253,15 +263,36 @@ public class SettingsActivity extends BaseActivity {
 		
 		Gson json = new Gson();
 		
-		ArrayList<Series> shows = new DatabaseHandler(SettingsActivity.this).BackupShows();
+		ArrayList<se.goagubbar.twee.dto.Series> shows = new DatabaseHandler(SettingsActivity.this).BackupShows();
 		
+		String result = "";
 		try {
-			json.toJson(shows);
+			Type listOfTestObject = new TypeToken<ArrayList<se.goagubbar.twee.dto.Series>>(){}.getType();
+			result =  json.toJson(shows, listOfTestObject);
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
 		
-		System.out.println(json);
+		
+		try {
+			String externalStoragePath = Environment.getExternalStorageDirectory().getPath();
+			File backupFolder = new File(externalStoragePath,"/Tvist");
+			
+			if(!backupFolder.exists())
+				backupFolder.mkdir();
+			File backupFile = new File(backupFolder + "/" + "backup.txt");
+
+
+		    BufferedWriter writer = new BufferedWriter(new FileWriter(backupFile));
+		    writer.write(result);
+		    writer.flush();
+		    writer.close();
+		} catch (Exception e) {
+			Log.d("Backup", e.getMessage());
+			Toast.makeText(SettingsActivity.this, R.string.message_backup_error, Toast.LENGTH_SHORT).show();
+		}
+		
+		Toast.makeText(SettingsActivity.this, R.string.message_backup_complete, Toast.LENGTH_SHORT).show();
 		
 	}
 
