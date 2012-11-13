@@ -381,6 +381,50 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
 		return series;
 	}
+	
+	public ArrayList<Series> BackupShows()
+	{
+
+		ArrayList<Series> series = new ArrayList<Series>();
+		SQLiteDatabase db = this.getReadableDatabase();
+
+		String sql = "SELECT * FROM " + TABLE_SERIES + " WHERE ProfileId = "+ Utils.selectedProfile + " ORDER BY "+ KEY_NAME +" ASC";
+
+		Cursor cursor = db.rawQuery(sql,null);
+		try {
+			cursor.moveToFirst();
+			while (!cursor.isAfterLast()) {
+				ExtendedSeries s = new ExtendedSeries();
+
+				s.setActors(cursor.getString(3));
+				s.setAirs(cursor.getString(4));
+				s.setImage(cursor.getString(9));
+				s.setGenre(cursor.getString(5));
+				s.setID(Integer.parseInt(cursor.getString(0)));
+				s.setImdbId(cursor.getString(6));
+				s.setName(cursor.getString(2));			
+				s.setRating(cursor.getString(7));
+				s.setStatus(cursor.getString(8));
+				s.setSummary(cursor.getString(1));
+				s.setFirstAired(cursor.getString(10));
+				s.setHeader(cursor.getString(11));
+				s.setSeriesId(cursor.getString(12));
+				series.add(s);
+				cursor.moveToNext();
+
+			}
+
+		} catch (Exception e) {
+			Log.d("GetMyShows",e.getMessage());
+			// TODO: handle exception
+		}
+		finally{
+			cursor.close();
+			db.close();
+		}
+
+		return series;
+	}
 
 	public Episode GetLastAiredEpisodeForShow(String seriesId)
 	{

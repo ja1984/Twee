@@ -5,7 +5,10 @@ import java.util.ArrayList;
 
 import org.json.JSONObject;
 
+import com.google.gson.Gson;
+
 import se.goagubbar.twee.Models.ExtendedSeries;
+import se.goagubbar.twee.Models.Series;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -246,12 +249,14 @@ public class SettingsActivity extends BaseActivity {
 	
 	private void CreateBackup()
 	{
-		JSONObject json = new JSONObject();
+		//JSONObject json = new JSONObject();
 		
-		ArrayList<ExtendedSeries> shows = new DatabaseHandler(SettingsActivity.this).GetMyShows();
+		Gson json = new Gson();
+		
+		ArrayList<Series> shows = new DatabaseHandler(SettingsActivity.this).BackupShows();
 		
 		try {
-			json.put("Shows", shows);
+			json.toJson(shows);
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
