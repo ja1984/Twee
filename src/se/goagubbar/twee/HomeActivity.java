@@ -9,10 +9,10 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 import se.goagubbar.twee.Adapters.SeriesAdapter;
-import se.goagubbar.twee.Models.Episode;
-import se.goagubbar.twee.Models.ExtendedSeries;
-import se.goagubbar.twee.Models.Profile;
-import se.goagubbar.twee.Models.Series;
+import se.goagubbar.twee.models.Episode;
+import se.goagubbar.twee.models.ExtendedSeries;
+import se.goagubbar.twee.models.Profile;
+import se.goagubbar.twee.models.Series;
 import se.goagubbar.twee.XMLParser;
 import android.app.AlertDialog;
 import android.app.SearchManager;
@@ -312,7 +312,7 @@ public class HomeActivity extends BaseActivity{
 
 		@Override
 		protected ArrayList<ExtendedSeries> doInBackground(String... params) {
-			ArrayList<ExtendedSeries> series = new ArrayList<Models.ExtendedSeries>();
+			ArrayList<ExtendedSeries> series = new ArrayList<ExtendedSeries>();
 			
 			series = new DatabaseHandler(HomeActivity.this).GetMyShows();
 			return series;

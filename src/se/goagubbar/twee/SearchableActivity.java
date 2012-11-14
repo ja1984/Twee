@@ -32,8 +32,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import se.goagubbar.twee.Adapters.SearchAdapter;
-import se.goagubbar.twee.Models.Episode;
-import se.goagubbar.twee.Models.Series;
+import se.goagubbar.twee.models.Episode;
+import se.goagubbar.twee.models.Series;
 
 public class SearchableActivity extends ListActivity {
 

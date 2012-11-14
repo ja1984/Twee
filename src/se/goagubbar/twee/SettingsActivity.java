@@ -14,8 +14,8 @@ import org.json.JSONObject;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import se.goagubbar.twee.Models.ExtendedSeries;
-import se.goagubbar.twee.Models.Series;
+import se.goagubbar.twee.models.ExtendedSeries;
+import se.goagubbar.twee.models.Series;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;

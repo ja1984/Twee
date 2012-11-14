@@ -6,8 +6,8 @@ import java.util.StringTokenizer;
 
 import se.goagubbar.twee.Adapters.EpisodeAdapter;
 import se.goagubbar.twee.Adapters.UpcomingEpisodesAdapter;
-import se.goagubbar.twee.Models.Episode;
-import se.goagubbar.twee.Models.Series;
+import se.goagubbar.twee.models.Episode;
+import se.goagubbar.twee.models.Series;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -32,56 +32,7 @@ public class Fragments {
 	static Activity activity;
 	
 	public static class SummaryFragment extends Fragment{
-    	Series show;
     	
-    	public SummaryFragment(Series show){
-    		this.show = show;
-    	}
-    	
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                Bundle savedInstanceState) {
-        	
-        	View v = inflater.inflate(R.layout.view_summary, container, false);
-        	TextView summary = (TextView)v.findViewById(R.id.txtSummary);
-        	TextView actors = (TextView)v.findViewById(R.id.txtActors);
-        	Button btnImdb = (Button)v.findViewById(R.id.btnOpenImdb);
-        	
-        	
-        	summary.setText(show.getSummary());
-        	
-        	StringTokenizer separatedActors = new StringTokenizer(show.getActors(),"|");
-        	
-        	String _actors = "";
-        	for (int i = 0; i <= separatedActors.countTokens(); i++) {
-        			_actors += separatedActors.nextToken() + "\n";
-			}
-        	
-        	actors.setText(_actors);
-        	
-        	
-        	btnImdb.setOnClickListener(new OnClickListener() {
-				
-				public void onClick(View v) {
-					String uri = "imdb:///title/" + show.getImdbId();
-					Intent test = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
-				    if(getActivity().getPackageManager().resolveActivity(test, 0) != null)
-				    {
-				    	startActivity(test);
-				    }
-				    else
-				    {
-				    	String uri2 = "http://m.imdb.com/title/" + show.getImdbId();
-				    	Intent imdbIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri2));               
-				    	startActivity(imdbIntent);
-
-				    }
-				}
-			});
-        	
-        	
-            return v;
-        }
 
     	
     }

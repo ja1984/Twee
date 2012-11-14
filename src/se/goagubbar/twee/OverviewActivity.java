@@ -24,8 +24,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 import se.goagubbar.twee.Fragments.EpisodesFragment;
-import se.goagubbar.twee.Models.Episode;
-import se.goagubbar.twee.Models.Series;
+import se.goagubbar.twee.models.Episode;
+import se.goagubbar.twee.models.Series;
 
 public class OverviewActivity extends FragmentActivity {
 

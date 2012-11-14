@@ -3,7 +3,7 @@ package se.goagubbar.twee;
 import java.util.ArrayList;
 
 import se.goagubbar.twee.Adapters.CalendarAdapter;
-import se.goagubbar.twee.Models.Episode;
+import se.goagubbar.twee.models.Episode;
 import android.app.ActionBar;
 import android.content.SharedPreferences;
 import android.os.Bundle;

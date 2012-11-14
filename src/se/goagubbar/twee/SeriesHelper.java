@@ -1,6 +1,6 @@
 package se.goagubbar.twee;
 
-import se.goagubbar.twee.Models.Episode;
+import se.goagubbar.twee.models.Episode;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;

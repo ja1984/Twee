@@ -5,7 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-import se.goagubbar.twee.Models.Episode;
+import se.goagubbar.twee.models.Episode;
 
 public class DateHelper {
 

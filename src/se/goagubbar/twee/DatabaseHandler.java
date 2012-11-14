@@ -1,10 +1,10 @@
 package se.goagubbar.twee;
 
 import java.util.ArrayList;
-import se.goagubbar.twee.Models.Episode;
-import se.goagubbar.twee.Models.ExtendedSeries;
-import se.goagubbar.twee.Models.Profile;
-import se.goagubbar.twee.Models.Series;
+import se.goagubbar.twee.models.Episode;
+import se.goagubbar.twee.models.ExtendedSeries;
+import se.goagubbar.twee.models.Profile;
+import se.goagubbar.twee.models.Series;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
