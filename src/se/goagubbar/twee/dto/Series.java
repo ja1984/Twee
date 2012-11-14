@@ -3,7 +3,6 @@ package se.goagubbar.twee.dto;
 import java.util.ArrayList;
 
 public class Series {
-	public int Id;
 	public String Summary;
 	public String LastUpdated;
 	public String SeriesId;
@@ -17,6 +16,5 @@ public class Series {
 	public String Image;
 	public String Header;
 	public String FirstAired;
-	public String ProfileId;
 	public ArrayList<Episode> Episodes;
 }
