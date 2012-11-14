@@ -399,7 +399,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 				s.Airs = cursor.getString(4);
 				s.Image = cursor.getString(9);
 				s.Genre = cursor.getString(5);
-				s.Id = Integer.parseInt(cursor.getString(0));
 				s.ImdbId = cursor.getString(6);
 				s.Name = cursor.getString(2);			
 				s.Rating = cursor.getString(7);
@@ -409,7 +408,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 				s.Header = cursor.getString(11);
 				s.SeriesId = cursor.getString(12);
 				s.LastUpdated = cursor.getString(13);
-				s.ProfileId = cursor.getString(14);
 				
 				s.Episodes = BackupEpisodes(s.SeriesId);
 				
@@ -445,15 +443,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 				
 				e.Aired = cursor.getString(4);
 				e.Episode = cursor.getString(2);
-				e.Id =Integer.parseInt(cursor.getString(0));
 				e.Season =cursor.getString(1);
-				e.SeriesId =cursor.getString(7);
-				e.Summary =cursor.getString(6);
 				e.Title =cursor.getString(3);
 				e.Watched = cursor.getString(5);
 				e.LastUpdated = cursor.getString(8);
 				e.EpisodeId = cursor.getString(9);
-				e.ProfileId = cursor.getString(10);
 				episodes.add(e);
 				cursor.moveToNext();
 
