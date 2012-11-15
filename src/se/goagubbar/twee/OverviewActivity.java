@@ -26,6 +26,7 @@ import android.widget.Toast;
 import se.goagubbar.twee.Fragments.EpisodesFragment;
 import se.goagubbar.twee.models.Episode;
 import se.goagubbar.twee.models.Series;
+import se.goagubbar.twee.fragments.Summary;
 
 public class OverviewActivity extends FragmentActivity {
 
@@ -70,7 +71,7 @@ public class OverviewActivity extends FragmentActivity {
 		//getActionBar().setTitle(series.getName());
 
 		fragments = new ArrayList<Fragment>();
-		fragments.add(new Fragments.SummaryFragment(series));
+		fragments.add(new Summary(series));
 		fragments.add(new Fragments.OverviewFragment(series));
 		fragments.add(new Fragments.EpisodesFragment(seriesId, totalEpisodes, watchedEpisodes));
 
