@@ -4,18 +4,13 @@ package se.goagubbar.twee;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.Date;
-
-import org.json.JSONObject;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import se.goagubbar.twee.models.ExtendedSeries;
-import se.goagubbar.twee.models.Series;
+import se.goagubbar.twee.dto.Backup;
+import se.goagubbar.twee.utils.DatabaseHandler;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -23,7 +18,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.NavUtils;
-import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -262,13 +256,22 @@ public class SettingsActivity extends BaseActivity {
 		//JSONObject json = new JSONObject();
 		
 		Gson json = new Gson();
+				
+		Backup backup = new Backup();
 		
-		ArrayList<se.goagubbar.twee.dto.Series> shows = new DatabaseHandler(SettingsActivity.this).BackupShows();
+		backup.Profile = "Jonathan";
+		backup.ProfileId = 1;
+		backup.Shows = new DatabaseHandler(SettingsActivity.this).BackupShows();
 		
 		String result = "";
 		try {
-			Type listOfTestObject = new TypeToken<ArrayList<se.goagubbar.twee.dto.Series>>(){}.getType();
-			result =  json.toJson(shows, listOfTestObject);
+			Type backupObject = new TypeToken<Backup>(){}.getType();
+			result =  json.toJson(backup, backupObject);
+			
+			
+			Backup test = json.fromJson(result, backupObject);
+			Log.d("Test","" + test.Profile);
+			Log.d("Test","" + test.Shows.size());
 		} catch (Exception e) {
 			// TODO: handle exception
 		}

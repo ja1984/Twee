@@ -1,4 +1,4 @@
-package se.goagubbar.twee;
+package se.goagubbar.twee.utils;
 
 import java.util.ArrayList;
 import se.goagubbar.twee.models.Episode;

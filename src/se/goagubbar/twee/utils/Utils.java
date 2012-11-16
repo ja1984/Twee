@@ -1,4 +1,4 @@
-package se.goagubbar.twee;
+package se.goagubbar.twee.utils;
 
 public class Utils {
 	private Utils() {};

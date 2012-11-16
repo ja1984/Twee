@@ -109,13 +109,19 @@
             android:id="@+id/btnAddProfile"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Add new profile" />
+            android:text="@string/button_title_newprofile" />
 
         <Button
             android:id="@+id/btnBackup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Backup" />
+            android:text="@string/button_title_backup" />
+        
+        <Button
+            android:id="@+id/btnRestore"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/button_title_restore" />
     </LinearLayout>
 
 </ScrollView>

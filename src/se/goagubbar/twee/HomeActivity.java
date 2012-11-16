@@ -8,12 +8,14 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
-import se.goagubbar.twee.Adapters.SeriesAdapter;
+import se.goagubbar.twee.adapters.SeriesAdapter;
 import se.goagubbar.twee.models.Episode;
 import se.goagubbar.twee.models.ExtendedSeries;
 import se.goagubbar.twee.models.Profile;
 import se.goagubbar.twee.models.Series;
-import se.goagubbar.twee.XMLParser;
+import se.goagubbar.twee.utils.DatabaseHandler;
+import se.goagubbar.twee.utils.Utils;
+import se.goagubbar.twee.utils.XMLParser;
 import android.app.AlertDialog;
 import android.app.SearchManager;
 import android.content.Context;

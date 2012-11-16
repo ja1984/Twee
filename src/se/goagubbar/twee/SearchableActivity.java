@@ -31,9 +31,12 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import se.goagubbar.twee.Adapters.SearchAdapter;
+import se.goagubbar.twee.adapters.SearchAdapter;
 import se.goagubbar.twee.models.Episode;
 import se.goagubbar.twee.models.Series;
+import se.goagubbar.twee.utils.DatabaseHandler;
+import se.goagubbar.twee.utils.ImageService;
+import se.goagubbar.twee.utils.XMLParser;
 
 public class SearchableActivity extends ListActivity {
 

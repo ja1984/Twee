@@ -2,13 +2,9 @@ package se.goagubbar.twee;
 
 
 import java.util.ArrayList;
-import java.util.Date;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
-
-import android.R.bool;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -23,9 +19,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
-import se.goagubbar.twee.Fragments.EpisodesFragment;
-import se.goagubbar.twee.models.Episode;
+import se.goagubbar.twee.fragments.Episodes;
+import se.goagubbar.twee.fragments.Overview;
 import se.goagubbar.twee.models.Series;
+import se.goagubbar.twee.utils.DatabaseHandler;
+import se.goagubbar.twee.utils.ImageService;
+import se.goagubbar.twee.utils.XMLParser;
 import se.goagubbar.twee.fragments.Summary;
 
 public class OverviewActivity extends FragmentActivity {
@@ -72,8 +71,8 @@ public class OverviewActivity extends FragmentActivity {
 
 		fragments = new ArrayList<Fragment>();
 		fragments.add(new Summary(series));
-		fragments.add(new Fragments.OverviewFragment(series));
-		fragments.add(new Fragments.EpisodesFragment(seriesId, totalEpisodes, watchedEpisodes));
+		fragments.add(new Overview(series));
+		fragments.add(new Episodes(seriesId, totalEpisodes, watchedEpisodes));
 
 		// Create the adapter that will return a fragment for each of the three primary sections
 		// of the app.
@@ -87,14 +86,14 @@ public class OverviewActivity extends FragmentActivity {
 
 	public void Reload()
 	{
-		EpisodesFragment fragment = (EpisodesFragment) fragments.get(2);
+		Episodes fragment = (Episodes) fragments.get(2);
 		//fragment = new Fragments.EpisodesFragment(series, totalEpisodes, watchedEpisodes);
 	}
 
 	public void Refresh()
 	{
 		View v = (View)fragments.get(1).getView();
-		Fragments.SetProgress(v, tvdbSeriesId);
+		Overview.SetProgress(v, tvdbSeriesId);
 	}
 
 

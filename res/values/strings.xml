@@ -25,6 +25,9 @@
     <string name="series_plot">Plot</string>
     <string name="series_summary">Summary</string>
     <string name="message_show_ended">This show has ended</string>
+    <string name="button_title_restore">Restore</string>
+    <string name="button_title_backup">Backup</string>
+    <string name="button_title_newprofile">Add new profile</string>
     <!-- /General -->
 
 

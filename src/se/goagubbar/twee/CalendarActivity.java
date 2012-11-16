@@ -2,8 +2,9 @@ package se.goagubbar.twee;
 
 import java.util.ArrayList;
 
-import se.goagubbar.twee.Adapters.CalendarAdapter;
+import se.goagubbar.twee.adapters.CalendarAdapter;
 import se.goagubbar.twee.models.Episode;
+import se.goagubbar.twee.utils.DatabaseHandler;
 import android.app.ActionBar;
 import android.content.SharedPreferences;
 import android.os.Bundle;

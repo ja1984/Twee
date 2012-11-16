@@ -1,6 +1,5 @@
-package se.goagubbar.twee;
+package se.goagubbar.twee.utils;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.UnsupportedEncodingException;

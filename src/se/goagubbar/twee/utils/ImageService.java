@@ -1,4 +1,4 @@
-package se.goagubbar.twee;
+package se.goagubbar.twee.utils;
 
 import java.io.File;
 import java.io.FileInputStream;
