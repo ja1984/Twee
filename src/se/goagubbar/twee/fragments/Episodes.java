@@ -11,6 +11,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,7 @@ public class Episodes extends Fragment{
 	DateHelper dateHelper;
 	TextView markSeasonAsWatched;
 	ListView episodes;
+	static EpisodeAdapter allEpisodes;
 	
 	
 	
@@ -56,7 +58,9 @@ public class Episodes extends Fragment{
 		@Override
 		protected void onPostExecute(ArrayList<Episode> result) {
 			super.onPostExecute(result);
-			episodes.setAdapter(new EpisodeAdapter(getActivity(), R.layout.listitem_allepisodes, episodes, result));
+			
+			allEpisodes = new EpisodeAdapter(getActivity(), R.layout.listitem_allepisodes, episodes, result);
+			episodes.setAdapter(allEpisodes);
 		}
 
 		@Override
@@ -69,4 +73,10 @@ public class Episodes extends Fragment{
     }
 	
 	
+    public static void MarkAllEpisodes()
+    {
+    	EpisodeAdapter.MarkShowAsWatched();
+    	allEpisodes.notifyDataSetChanged();
+    }
+    
 }

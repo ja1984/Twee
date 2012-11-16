@@ -94,6 +94,7 @@ public class OverviewActivity extends FragmentActivity {
 	{
 		View v = (View)fragments.get(1).getView();
 		Overview.SetProgress(v, tvdbSeriesId);
+		Episodes.MarkAllEpisodes();
 	}
 
 
@@ -115,11 +116,14 @@ public class OverviewActivity extends FragmentActivity {
 			new DatabaseHandler(getBaseContext()).MarkShowAsWatched(series.getSeriesId());
 			Toast.makeText(getBaseContext(), R.string.message_series_watched, Toast.LENGTH_SHORT).show();
 			Refresh();
+			break;
 
 
 		case R.id.menu_downloadimages:
 			new DownloadImagesTask().execute();
 			Toast.makeText(getBaseContext(), R.string.message_downloading_images, Toast.LENGTH_LONG).show();
+			break;
+			
 		}
 		return super.onOptionsItemSelected(item);
 	}

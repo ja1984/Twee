@@ -86,6 +86,7 @@
     <string name="message_downloading_images_error">Error while downloading images</string>
     <string name="message_backup_error">The backup failed</string>
     <string name="message_backup_complete">The backup has been saved to /sdcard/tvist/backup.txt</string>
+    <string name="message_noplot">No plot available</string>
     <!-- /Messages -->
 
 

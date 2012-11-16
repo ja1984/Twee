@@ -12,8 +12,10 @@ public class SeriesHelper {
 		
 		DateHelper dateHelper = new DateHelper();
 		
+		String message = episode.getSummary().equals("") ? context.getString(R.string.message_noplot) : episode.getSummary();
+		
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
-		builder.setMessage(episode.getSummary() + "\n\n" + dateHelper.Episodenumber(episode) + " | " + dateHelper.DisplayDate(episode.getAired()))
+		builder.setMessage(message + "\n\n" + dateHelper.Episodenumber(episode) + " | " + dateHelper.DisplayDate(episode.getAired()))
 		       .setCancelable(false)
 		       .setTitle(episode.getTitle())
 		       .setPositiveButton(R.string.about_close, new DialogInterface.OnClickListener() {

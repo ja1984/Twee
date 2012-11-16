@@ -8,6 +8,7 @@ import se.goagubbar.twee.SeriesHelper;
 import se.goagubbar.twee.models.Episode;
 import se.goagubbar.twee.utils.DatabaseHandler;
 import se.goagubbar.twee.utils.DateHelper;
+import android.R.bool;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,9 +25,9 @@ import android.widget.Toast;
 public class EpisodeAdapter extends ArrayAdapter<Episode> {
 
 	private final Context context;
-	private final ArrayList<Episode> episodes;
+	private static ArrayList<Episode> episodes;
 	private DateHelper dateHelper;
-	private ArrayList<Boolean> itemChecked = new ArrayList<Boolean>();
+	private static ArrayList<Boolean> itemChecked = new ArrayList<Boolean>();
 	private ArrayList<Boolean> visibleItems = new ArrayList<Boolean>();
 	private ArrayList<Boolean> showSeasonBanner = new ArrayList<Boolean>();
 	private String season;
@@ -165,5 +166,18 @@ public class EpisodeAdapter extends ArrayAdapter<Episode> {
 		RefreshOverView();
 
 	}
+	
+	
+	public static void MarkShowAsWatched()
+	{
+		//new DatabaseHandler(context).ToggleSeasonWatched("" + seriesId, season, true);
+		//Toast.makeText(context, R.string.message_season_watched, Toast.LENGTH_SHORT).show();
+		for (int i = 0; i < episodes.size(); i++) {
+				itemChecked.set(i, true);
+		}
+	}
+	
+	//notifyDataSetChanged();
+	//RefreshOverView();
 
 }

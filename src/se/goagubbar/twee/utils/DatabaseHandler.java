@@ -538,6 +538,50 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		return e;
 
 	}
+	
+	public ArrayList<Episode> GetNextEpisodesForShow(String seriesId)
+	{
+		SQLiteDatabase db = this.getReadableDatabase();
+		String dateWithoutTime  = android.text.format.DateFormat.format("yyyy-MM-dd", new java.util.Date()).toString();
+
+		String sql = "SELECT * FROM "+ TABLE_EPISODES +" WHERE date("+ KEY_AIRED +") >= date('"+ dateWithoutTime +"') AND "+KEY_SERIESID+" = "+ seriesId +" AND "+KEY_SEASON+" != 0 AND "+KEY_PROFILEID+" = "+Utils.selectedProfile+" ORDER BY "+ KEY_AIRED;	
+		ArrayList<Episode> episodes = new ArrayList<Episode>();
+		Cursor cursor = db.rawQuery(sql, null);
+		try {
+
+			cursor.moveToFirst();
+
+			while(!cursor.isAfterLast())
+			{
+				Episode e = new Episode();
+
+				e.setAired(cursor.getString(4));
+				e.setEpisode(cursor.getString(2));
+				e.setID(Integer.parseInt(cursor.getString(0)));
+				e.setSeason(cursor.getString(1));
+				e.setSeriesId(cursor.getString(7));
+				e.setSummary(cursor.getString(6));
+				e.setTitle(cursor.getString(3));
+				e.setWatched(cursor.getString(5));
+
+				episodes.add(e);
+
+				cursor.moveToNext();
+			}
+			
+
+		} catch (Exception ex) {
+			Log.d("GetNextEpisodesForSeries", ex.getMessage());
+			// TODO: handle exception
+		}
+		finally{
+			cursor.close();
+			db.close();
+		}
+
+		return episodes;
+
+	}
 
 	public Episode GetEpisodeById(String episodeId)
 	{
