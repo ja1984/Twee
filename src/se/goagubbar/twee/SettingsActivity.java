@@ -1,9 +1,12 @@
 package se.goagubbar.twee;
 
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileWriter;
+import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 
 import com.google.gson.Gson;
@@ -82,13 +85,20 @@ public class SettingsActivity extends BaseActivity {
 		oldCheckedButton.setChecked(true);
 
 		Button btnBackup = (Button)findViewById(R.id.btnBackup);
-		
 		btnBackup.setOnClickListener(new OnClickListener() {
-			
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				CreateBackup();
+			}
+		});
+		
+		Button btnRestore = (Button)findViewById(R.id.btnRestore);
+		btnRestore.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				RestoreBackup();
 			}
 		});
 		
@@ -253,8 +263,7 @@ public class SettingsActivity extends BaseActivity {
 	
 	private void CreateBackup()
 	{
-		//JSONObject json = new JSONObject();
-		
+	
 		Gson json = new Gson();
 				
 		Backup backup = new Backup();
@@ -267,11 +276,6 @@ public class SettingsActivity extends BaseActivity {
 		try {
 			Type backupObject = new TypeToken<Backup>(){}.getType();
 			result =  json.toJson(backup, backupObject);
-			
-			
-			Backup test = json.fromJson(result, backupObject);
-			Log.d("Test","" + test.Profile);
-			Log.d("Test","" + test.Shows.size());
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
@@ -299,4 +303,36 @@ public class SettingsActivity extends BaseActivity {
 		
 	}
 
+	private void RestoreBackup()
+	{
+		Gson json = new Gson();
+		Backup backup = new Backup();
+		String jsonString = "";
+		
+		String externalStoragePath = Environment.getExternalStorageDirectory().getPath();
+		File backupFolder = new File(externalStoragePath,"/Tvist");
+		File backupFile = new File(backupFolder + "/" + "backup.txt");
+				    
+		try {
+			FileInputStream fis = new FileInputStream(backupFile);
+		    InputStreamReader isr = new InputStreamReader(fis);
+		    BufferedReader br = new BufferedReader(isr, 8192);    // 2nd arg is buffer size
+		
+		    jsonString = br.readLine();
+		    Type backupObject = new TypeToken<Backup>(){}.getType();
+			backup = json.fromJson(jsonString, backupObject);
+		    
+			Log.d("Test",backup.Profile);
+			Log.d("Test",backup.Shows.size() + "");
+			
+			isr.close();
+	        fis.close();
+	        br.close();
+		} catch (Exception e) {
+			Toast.makeText(SettingsActivity.this, R.string.message_backup_error, Toast.LENGTH_SHORT).show();
+		}
+
+		Toast.makeText(SettingsActivity.this, R.string.message_backup_complete, Toast.LENGTH_SHORT).show();
+	}
+	
 }
