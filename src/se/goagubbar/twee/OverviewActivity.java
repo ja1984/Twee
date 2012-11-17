@@ -36,12 +36,12 @@ public class OverviewActivity extends FragmentActivity {
 	 * to switch to a {@link android.support.v4.app.FragmentStatePagerAdapter}.
 	 */
 	SectionsPagerAdapter mSectionsPagerAdapter;
-	ArrayList<Fragment> fragments;
+	static ArrayList<Fragment> fragments;
 	Series series;
 	int totalEpisodes;
 	int watchedEpisodes;
 	String seriesId;
-	String tvdbSeriesId;
+	static String tvdbSeriesId;
 	static final String KEY_FULLURL = "http://www.thetvdb.com/data/series/%s/all/";
 	static final String KEY_SERIES = "Series";
 	static final String KEY_IMAGE = "banner";
@@ -65,7 +65,7 @@ public class OverviewActivity extends FragmentActivity {
 		Bundle extras = getIntent().getExtras();
 
 		seriesId = extras.getString("SeriesId");
-		Log.d("showId",seriesId + "");
+		tvdbSeriesId = seriesId;
 		series = new DatabaseHandler(getBaseContext()).GetShowById(seriesId);
 		//getActionBar().setTitle(series.getName());
 
@@ -90,11 +90,11 @@ public class OverviewActivity extends FragmentActivity {
 		//fragment = new Fragments.EpisodesFragment(series, totalEpisodes, watchedEpisodes);
 	}
 
-	public void Refresh()
+	public static void Refresh()
 	{
 		View v = (View)fragments.get(1).getView();
 		Overview.SetProgress(v, tvdbSeriesId);
-		Episodes.MarkAllEpisodes();
+		//Episodes.MarkAllEpisodes();
 	}
 
 
@@ -115,6 +115,7 @@ public class OverviewActivity extends FragmentActivity {
 		case R.id.menu_markseries:
 			new DatabaseHandler(getBaseContext()).MarkShowAsWatched(series.getSeriesId());
 			Toast.makeText(getBaseContext(), R.string.message_series_watched, Toast.LENGTH_SHORT).show();
+			Episodes.MarkAllEpisodes();
 			Refresh();
 			break;
 
@@ -123,7 +124,7 @@ public class OverviewActivity extends FragmentActivity {
 			new DownloadImagesTask().execute();
 			Toast.makeText(getBaseContext(), R.string.message_downloading_images, Toast.LENGTH_LONG).show();
 			break;
-			
+
 		}
 		return super.onOptionsItemSelected(item);
 	}
@@ -173,8 +174,8 @@ public class OverviewActivity extends FragmentActivity {
 		protected Boolean doInBackground(Void... params) {
 
 			boolean success = true;
-			
-			
+
+
 			String completeAddress = String.format(KEY_FULLURL, seriesId);
 			XMLParser parser = new XMLParser();
 
@@ -206,21 +207,21 @@ public class OverviewActivity extends FragmentActivity {
 				} catch (Exception ex) {
 					Log.d("Error downloading header", ex.getMessage());
 					success = false;
-					
+
 				}
 			}
-			
+
 			new DatabaseHandler(OverviewActivity.this).UpdateShowImage(s);
 
 
-		return success;
-	}
+			return success;
+		}
 
 		@Override
 		protected void onPostExecute(Boolean result) {
 			// TODO Auto-generated method stub
 			super.onPostExecute(result);
-			
+
 			if(result)
 			{
 				Toast.makeText(getBaseContext(), R.string.message_downloading_images_success, Toast.LENGTH_SHORT).show();
@@ -229,15 +230,15 @@ public class OverviewActivity extends FragmentActivity {
 			{
 				Toast.makeText(getBaseContext(), R.string.message_downloading_images_error, Toast.LENGTH_SHORT).show();
 			}
-			
-			
-		}
-		
-		
-		
-		
 
-}
+
+		}
+
+
+
+
+
+	}
 
 
 }

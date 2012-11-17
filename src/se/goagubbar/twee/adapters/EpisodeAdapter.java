@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import se.goagubbar.twee.OverviewActivity;
 import se.goagubbar.twee.R;
 import se.goagubbar.twee.SeriesHelper;
+import se.goagubbar.twee.fragments.Overview;
 import se.goagubbar.twee.models.Episode;
 import se.goagubbar.twee.utils.DatabaseHandler;
 import se.goagubbar.twee.utils.DateHelper;
@@ -99,7 +100,7 @@ public class EpisodeAdapter extends ArrayAdapter<Episode> {
 
 			public void onClick(View v) {
 				MarkSeasonAsWatched(episodes.get(pos).getSeriesId(), episodes.get(pos).getSeason());
-
+				OverviewActivity.Refresh();
 			}
 		});
 
@@ -170,14 +171,9 @@ public class EpisodeAdapter extends ArrayAdapter<Episode> {
 	
 	public static void MarkShowAsWatched()
 	{
-		//new DatabaseHandler(context).ToggleSeasonWatched("" + seriesId, season, true);
-		//Toast.makeText(context, R.string.message_season_watched, Toast.LENGTH_SHORT).show();
 		for (int i = 0; i < episodes.size(); i++) {
 				itemChecked.set(i, true);
 		}
 	}
 	
-	//notifyDataSetChanged();
-	//RefreshOverView();
-
 }

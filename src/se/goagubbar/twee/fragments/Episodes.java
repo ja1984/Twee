@@ -53,8 +53,6 @@ public class Episodes extends Fragment{
     
     public class GetEpisodesTask extends AsyncTask<Context, Void, ArrayList<Episode>>{
 
-
-
 		@Override
 		protected void onPostExecute(ArrayList<Episode> result) {
 			super.onPostExecute(result);

@@ -19,6 +19,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView.FindListener;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -32,7 +33,7 @@ public class Overview extends Fragment{
 	ImageService imageService;
 	static Activity activity;
 	ListView episodes;
-
+	View v;
 
 	public Overview(Series show){
 		this.show = show;
@@ -43,7 +44,7 @@ public class Overview extends Fragment{
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View v = inflater.inflate(R.layout.view_overview, container, false);
+		v = inflater.inflate(R.layout.view_overview, container, false);
 
 		activity = getActivity();
 
@@ -104,23 +105,10 @@ public class Overview extends Fragment{
 
 
 		ArrayList<Episode> newEps = new ArrayList<Episode>();
-
-		String today = dateHelper.GetTodaysDate();
-
-
-		//        for (Episode episode : show.Episodes) {
-		//			
-		//			if(dateHelper.CompareDates(episode.getAired(), today) >= 0)
-		//			{
-		//				newEps.add(episode);
-		//			}
-		//		}
-
-		SetProgress(v, show.getSeriesId());
-		//Collections.reverse(newEps);
-		//episodes.setAdapter(new UpcomingEpisodesAdapter(getActivity(), R.id.lstEpisodes, episodes,newEps));
 		
 		new UpcomingEpisodesTask().execute();
+
+		SetProgress(v, show.getSeriesId());
 
 		seriesName.setText(show.getName());
 		seriesRating.setText(show.getRating());
@@ -133,6 +121,7 @@ public class Overview extends Fragment{
 	{
 
 		ArrayList<Episode> episodes = new DatabaseHandler(activity).GetAiredEpisodes(seriesId);
+		Log.d("episodes", "" + episodes.size());
 		int watched = 0;
 		int totalEpisodes = episodes.size();
 
@@ -142,7 +131,7 @@ public class Overview extends Fragment{
 				watched ++;
 			}
 		}
-
+				
 		ProgressBar progressWatched = (ProgressBar)view.findViewById(R.id.pgrWatched);
 		progressWatched.setMax(totalEpisodes);
 		progressWatched.setProgress(watched);
