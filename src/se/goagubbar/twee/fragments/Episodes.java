@@ -77,4 +77,9 @@ public class Episodes extends Fragment{
     	allEpisodes.notifyDataSetChanged();
     }
     
+    public static void MarkLastAiredEpisodesAsWatched()
+    {
+    	allEpisodes.notifyDataSetChanged();
+    }
+    
 }

@@ -5,6 +5,7 @@ import java.util.Collections;
 
 import se.goagubbar.twee.R;
 import se.goagubbar.twee.SeriesHelper;
+import se.goagubbar.twee.adapters.EpisodeAdapter;
 import se.goagubbar.twee.adapters.UpcomingEpisodesAdapter;
 import se.goagubbar.twee.models.Episode;
 import se.goagubbar.twee.models.Series;
@@ -70,6 +71,8 @@ public class Overview extends Fragment{
 
 				public void onClick(View v) {
 					new DatabaseHandler(activity).ToggleEpisodeWatched("" + lastAiredApisode.getID(), lastAiredEpisodeWatched.isChecked());
+					EpisodeAdapter.MarkLastAiredEpisodesAsWatched(lastAiredApisode,lastAiredEpisodeWatched.isChecked());
+					Episodes.MarkLastAiredEpisodesAsWatched();
 				}
 			});
 

@@ -176,4 +176,17 @@ public class EpisodeAdapter extends ArrayAdapter<Episode> {
 		}
 	}
 	
+	public static void MarkLastAiredEpisodesAsWatched(Episode lastEpisode, boolean isChecked)
+	{
+		for (int i = 0; i < episodes.size(); i++) {
+			Episode current = episodes.get(i);
+			if(current.getSeason().equals(lastEpisode.getSeason()) && current.getEpisode().equals(lastEpisode.getEpisode()))
+			{
+				itemChecked.set(i, isChecked);
+				break;
+			}
+			
+		}
+	}
+	
 }
