@@ -1,5 +1,6 @@
 package se.goagubbar.twee.fragments;
 
+import java.security.acl.LastOwnerException;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -16,11 +17,9 @@ import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebView.FindListener;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -35,6 +34,8 @@ public class Overview extends Fragment{
 	static Activity activity;
 	ListView episodes;
 	View v;
+	static Episode lastAiredApisode;
+	static CheckBox lastAiredEpisodeWatched;
 
 	public Overview(Series show){
 		this.show = show;
@@ -49,7 +50,7 @@ public class Overview extends Fragment{
 
 		activity = getActivity();
 
-		final Episode lastAiredApisode = new DatabaseHandler(activity).GetLastAiredEpisodeForShow(show.getSeriesId());
+		lastAiredApisode = new DatabaseHandler(activity).GetLastAiredEpisodeForShow(show.getSeriesId());
 		TextView seriesName = (TextView)v.findViewById(R.id.txtSeriesName);
 		TextView seriesRating = (TextView)v.findViewById(R.id.txtSeriesRating);
 		TextView seriesStatus = (TextView)v.findViewById(R.id.txtSeriesStatus);
@@ -59,7 +60,7 @@ public class Overview extends Fragment{
 		RelativeLayout lastAiredEpisode = (RelativeLayout)v.findViewById(R.id.rllHeader1);
 		TextView lastAiredEpisodeTitle = (TextView)v.findViewById(R.id.txtLastAiredTitle);
 		TextView lastAiredEpisodeInformation = (TextView)v.findViewById(R.id.txtLastAiredEpisodeNumber);
-		final CheckBox lastAiredEpisodeWatched = (CheckBox)v.findViewById(R.id.chkWatched);
+		lastAiredEpisodeWatched = (CheckBox)v.findViewById(R.id.chkWatched);
 
 		if(lastAiredApisode.getID() != 0)
 		{
@@ -69,10 +70,11 @@ public class Overview extends Fragment{
 
 			lastAiredEpisodeWatched.setOnClickListener(new View.OnClickListener() {
 
-				public void onClick(View v) {
+				public void onClick(View view) {
 					new DatabaseHandler(activity).ToggleEpisodeWatched("" + lastAiredApisode.getID(), lastAiredEpisodeWatched.isChecked());
 					EpisodeAdapter.MarkLastAiredEpisodesAsWatched(lastAiredApisode,lastAiredEpisodeWatched.isChecked());
 					Episodes.MarkLastAiredEpisodesAsWatched();
+					SetProgress(v, show.getSeriesId());
 				}
 			});
 
@@ -122,13 +124,11 @@ public class Overview extends Fragment{
 
 	public static void SetProgress(View view, String seriesId)
 	{
-
 		ArrayList<Episode> episodes = new DatabaseHandler(activity).GetAiredEpisodes(seriesId);
-		Log.d("episodes", "" + episodes.size());
 		int watched = 0;
 		int totalEpisodes = episodes.size();
 
-		for (Episode episode : episodes) {
+		for (Episode episode : episodes) {		
 			if(episode.getWatched().equals("1"))
 			{
 				watched ++;
@@ -148,19 +148,23 @@ public class Overview extends Fragment{
 
 		@Override
 		protected ArrayList<Episode> doInBackground(Void... params) {
-			// TODO Auto-generated method stub
 			ArrayList<Episode> episodes = new DatabaseHandler(activity).GetNextEpisodesForShow(show.getSeriesId());
-			Log.d("Test", episodes.size() + "");
 			return episodes;
 		}
 
 		@Override
 		protected void onPostExecute(ArrayList<Episode> result) {
-			// TODO Auto-generated method stub
 			episodes.setAdapter(new UpcomingEpisodesAdapter(getActivity(), R.id.lstEpisodes, episodes,result));
 			super.onPostExecute(result);
 		}
-
-
+	}
+	
+	
+	public static void MarkLastAiredEpisodeAsWatched(Episode episode, Boolean isChecked)
+	{
+		if(episode.getSeason().equals(lastAiredApisode.getSeason()) && episode.getEpisode().equals(lastAiredApisode.getEpisode()))
+		{
+			lastAiredEpisodeWatched.setChecked(isChecked);
+		}
 	}
 }

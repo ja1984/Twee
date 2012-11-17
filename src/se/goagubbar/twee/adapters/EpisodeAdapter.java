@@ -11,6 +11,7 @@ import se.goagubbar.twee.utils.DatabaseHandler;
 import se.goagubbar.twee.utils.DateHelper;
 import android.R.bool;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -84,6 +85,8 @@ public class EpisodeAdapter extends ArrayAdapter<Episode> {
 
 				RefreshOverView();			
 
+				Overview.MarkLastAiredEpisodeAsWatched(episodes.get(pos), cb.isChecked());
+				
 				if (cb.isChecked()) {
 					itemChecked.set(pos, true);
 					// do some operations here
