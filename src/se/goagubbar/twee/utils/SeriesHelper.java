@@ -1,7 +1,7 @@
-package se.goagubbar.twee;
+package se.goagubbar.twee.utils;
 
+import se.goagubbar.twee.R;
 import se.goagubbar.twee.models.Episode;
-import se.goagubbar.twee.utils.DateHelper;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;

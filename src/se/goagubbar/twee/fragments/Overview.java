@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import se.goagubbar.twee.R;
-import se.goagubbar.twee.SeriesHelper;
 import se.goagubbar.twee.adapters.EpisodeAdapter;
 import se.goagubbar.twee.adapters.UpcomingEpisodesAdapter;
 import se.goagubbar.twee.models.Episode;
@@ -13,6 +12,7 @@ import se.goagubbar.twee.models.Series;
 import se.goagubbar.twee.utils.DatabaseHandler;
 import se.goagubbar.twee.utils.DateHelper;
 import se.goagubbar.twee.utils.ImageService;
+import se.goagubbar.twee.utils.SeriesHelper;
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;

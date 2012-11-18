@@ -353,9 +353,8 @@ public class SearchableActivity extends ListActivity {
 			Log.d("Resultat", "" + result);
 			if(result)
 			{
-				//new GetMySeries().execute();
 				saveDialog.cancel();
-				//SearchableActivity.this.finish();
+				NavUtils.navigateUpFromSameTask(SearchableActivity.this);
 			}
 			super.onPostExecute(result);
 		}

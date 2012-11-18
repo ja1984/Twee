@@ -4,11 +4,11 @@ import java.util.ArrayList;
 
 import se.goagubbar.twee.OverviewActivity;
 import se.goagubbar.twee.R;
-import se.goagubbar.twee.SeriesHelper;
 import se.goagubbar.twee.fragments.Overview;
 import se.goagubbar.twee.models.Episode;
 import se.goagubbar.twee.utils.DatabaseHandler;
 import se.goagubbar.twee.utils.DateHelper;
+import se.goagubbar.twee.utils.SeriesHelper;
 import android.R.bool;
 import android.content.Context;
 import android.util.Log;
@@ -89,10 +89,8 @@ public class EpisodeAdapter extends ArrayAdapter<Episode> {
 				
 				if (cb.isChecked()) {
 					itemChecked.set(pos, true);
-					// do some operations here
 				} else if (!cb.isChecked()) {
 					itemChecked.set(pos, false);
-					// do some operations here
 				}
 
 			}
@@ -150,8 +148,7 @@ public class EpisodeAdapter extends ArrayAdapter<Episode> {
 
 	private void RefreshOverView()
 	{
-		OverviewActivity overViewFragment = (OverviewActivity)context;
-		overViewFragment.Refresh();
+		OverviewActivity.Refresh();
 	}
 
 	private void MarkSeasonAsWatched(String seriesId, String season)

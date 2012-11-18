@@ -3,9 +3,9 @@ package se.goagubbar.twee.adapters;
 import java.util.ArrayList;
 
 import se.goagubbar.twee.R;
-import se.goagubbar.twee.SeriesHelper;
 import se.goagubbar.twee.models.Episode;
 import se.goagubbar.twee.utils.DateHelper;
+import se.goagubbar.twee.utils.SeriesHelper;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
