@@ -1,6 +1,5 @@
 package se.goagubbar.twee;
 
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
 import org.w3c.dom.Document;
@@ -8,7 +7,6 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 import android.app.ActionBar;
-import android.app.Activity;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.app.SearchManager;
@@ -29,11 +27,16 @@ import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import se.goagubbar.twee.Adapters.SearchAdapter;
-import se.goagubbar.twee.Models.Episode;
-import se.goagubbar.twee.Models.Series;
+import se.goagubbar.twee.adapters.SearchAdapter;
+import se.goagubbar.twee.models.Episode;
+import se.goagubbar.twee.models.Series;
+import se.goagubbar.twee.utils.DatabaseHandler;
+import se.goagubbar.twee.utils.ImageService;
+import se.goagubbar.twee.utils.XMLParser;
 
 public class SearchableActivity extends ListActivity {
 
@@ -63,7 +66,7 @@ public class SearchableActivity extends ListActivity {
 	static final String KEY_EP_SEASON = "SeasonNumber";
 	static final String KEY_EP_SUMMARY = "Overview";
 	static final String KEY_EP_TITLE = "EpisodeName";
-	TextView emptyView;
+	RelativeLayout emptyView;
 	String searchQuery;
 	ImageService imageService;
 	ListView searchResult;
@@ -88,7 +91,7 @@ public class SearchableActivity extends ListActivity {
 
 		imageService = new ImageService();
 		searchResult = (ListView)getListView();
-		emptyView = (TextView)findViewById(android.R.id.empty);
+		emptyView = (RelativeLayout)findViewById(android.R.id.empty);
 
 		Intent intent = getIntent();
 		if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
@@ -111,9 +114,9 @@ public class SearchableActivity extends ListActivity {
 			public void onItemClick(AdapterView<?> arg0, View rowView, int arg2, long arg3) {
 				String seriesId = rowView.getTag().toString();
 
-				if(!db.SeriesExist(seriesId))
+				if(!db.ShowExists(seriesId))
 				{
-					setProgressBarIndeterminateVisibility(true);
+					//setProgressBarIndeterminateVisibility(true);
 
 					FetchAndSaveSeries fas = new FetchAndSaveSeries();
 					fas.execute(seriesId);
@@ -148,7 +151,7 @@ public class SearchableActivity extends ListActivity {
 		}
 		else
 		{
-			emptyView.setText(R.string.message_nointernet);
+			//emptyView.setText(R.string.message_nointernet);
 		}
 	}
 
@@ -209,10 +212,15 @@ public class SearchableActivity extends ListActivity {
 		protected void onPostExecute(ArrayList<Series> series) {
 			setProgressBarIndeterminateVisibility(false);
 
-			emptyView.setText(R.string.message_noresult);
+			//emptyView.setText(R.string.message_noresult);
 
+			TextView txtMessage = (TextView) emptyView.findViewById(R.id.txtMessage);
+			ProgressBar searchProgress = (ProgressBar) emptyView.findViewById(R.id.pgrSearch);
+			searchProgress.setVisibility(View.GONE);
+			txtMessage.setText("No results found");
+			
+			
 			SearchAdapter sa = new SearchAdapter(SearchableActivity.this,R.layout.listitem_searchresult,series);
-
 			setListAdapter(sa);
 
 		}
@@ -255,12 +263,17 @@ public class SearchableActivity extends ListActivity {
 
 			s.setSeriesId(q[0]);
 
-			
+
 			publishProgress(getString(R.string.message_download_banner));
 			String image = parser.getValue(e, KEY_IMAGE);
 
 			if(!image.equals("")){
-				s.setImage(imageService.getBitmapFromURL(image, s.getSeriesId(), SearchableActivity.this));
+				try {
+					s.setImage(imageService.getBitmapFromURL(image, s.getSeriesId(), SearchableActivity.this));
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 
 			if(downloadHeader){
@@ -269,12 +282,17 @@ public class SearchableActivity extends ListActivity {
 				String header = parser.getValue(e, KEY_HEADER);
 
 				if(!header.equals("")){
-					s.setHeader(imageService.getBitmapFromURL(header,s.getSeriesId() + "_big", SearchableActivity.this));
+					try {
+						s.setHeader(imageService.getBitmapFromURL(header,s.getSeriesId() + "_big", SearchableActivity.this));
+					} catch (Exception e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 				}
 			}
 
 			publishProgress(getString(R.string.message_download_save_series));
-			
+
 			s.setImdbId(parser.getValue(e, KEY_IMDBID));
 			s.setName(parser.getValue(e, KEY_NAME));			
 			s.setRating(parser.getValue(e, KEY_RATING));
@@ -282,7 +300,7 @@ public class SearchableActivity extends ListActivity {
 			s.setSummary(parser.getValue(e, KEY_SUMMARY));
 			s.setLastUpdated(parser.getValue(e, KEY_LASTUPDATED));
 
-			db.addSeries(s);
+			db.AddShow(s);
 
 			publishProgress(getString(R.string.message_download_save_episodes));
 
@@ -307,7 +325,7 @@ public class SearchableActivity extends ListActivity {
 
 			}
 
-			db.addEpisodes(Episodes);
+			db.AddEpisodes(Episodes);
 
 
 			return true;
@@ -315,14 +333,14 @@ public class SearchableActivity extends ListActivity {
 
 		@Override
 		protected void onPreExecute(){
-		saveDialog = ProgressDialog.show(SearchableActivity.this, getString(R.string.message_download_pleasewait),getString(R.string.message_download_information),true,true, new DialogInterface.OnCancelListener(){
+			saveDialog = ProgressDialog.show(SearchableActivity.this, getString(R.string.message_download_pleasewait),getString(R.string.message_download_information),true,true, new DialogInterface.OnCancelListener(){
 				@Override
 				public void onCancel(DialogInterface dialog) {
 					FetchAndSaveSeries.this.cancel(true);
 				}
 			}
 					);
-		
+
 		}
 
 		protected void onProgressUpdate(String... value) {
@@ -332,11 +350,12 @@ public class SearchableActivity extends ListActivity {
 
 		@Override
 		protected void onPostExecute(Boolean result) {
+			Log.d("Resultat", "" + result);
 			if(result)
 			{
 				//new GetMySeries().execute();
 				saveDialog.cancel();
-				SearchableActivity.this.finish();
+				//SearchableActivity.this.finish();
 			}
 			super.onPostExecute(result);
 		}

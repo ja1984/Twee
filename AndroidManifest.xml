@@ -18,7 +18,6 @@
         <activity
             android:name=".HomeActivity"
             android:label="@string/title_activity_home"
-            android:screenOrientation="portrait"
             android:value=".SearchableActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -76,6 +75,14 @@
         <activity
             android:name=".AboutActivity"
             android:label="@string/title_activity_about" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="se.goagubbar.twee.HomeActivity" />
+        </activity>
+        <activity
+            android:name=".ProfileChoose"
+            android:label="@string/title_activity_profile_choose"
+            android:theme="@android:style/Theme.Holo.Light.Dialog" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="se.goagubbar.twee.HomeActivity" />
