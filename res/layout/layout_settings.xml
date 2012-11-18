@@ -1,74 +1,127 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical"
-    android:paddingLeft="5dp"
-    android:paddingRight="5dp" >
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content" >
 
-    <TextView
-        style="?android:attr/listSeparatorTextViewStyle"
+    <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
-        android:text="@string/settings_theme_header"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
+        android:orientation="vertical"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp" >
 
-    <RadioGroup
-        android:id="@+id/grpTheme"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" >
+        <TextView
+            style="?android:attr/listSeparatorTextViewStyle"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:text="@string/settings_theme_header"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
 
-        <RadioButton
-            android:id="@+id/radioTheme0"
+        <RadioGroup
+            android:id="@+id/grpTheme"
             android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+
+            <RadioButton
+                android:id="@+id/radioTheme0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="@string/settings_theme_option_light" />
+
+            <RadioButton
+                android:id="@+id/radioTheme1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/settings_theme_option_darklight" />
+
+            <RadioButton
+                android:id="@+id/radioTheme2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/settings_theme_option_dark" />
+        </RadioGroup>
+
+        <TextView
+            style="?android:attr/listSeparatorTextViewStyle"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:text="@string/settings_header_header"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/settings_header_description"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+        <Switch
+            android:id="@+id/switchHeader"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:checked="true"
-            android:text="@string/settings_theme_option_light"/>
+            android:text="@string/settings_header_switch" />
 
-        <RadioButton
-            android:id="@+id/radioTheme1"
+        <TextView
+            style="?android:attr/listSeparatorTextViewStyle"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:text="@string/settings_header_display"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+        <RadioGroup
+            android:id="@+id/grpDisplay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+
+            <RadioButton
+                android:id="@+id/rdoDisplay1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:checked="true"
+                android:drawableRight="@drawable/display_alt1" />
+
+            <RadioButton
+                android:id="@+id/rdoDisplay2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableRight="@drawable/display_alt2" />
+        </RadioGroup>
+
+        <TextView
+            style="?android:attr/listSeparatorTextViewStyle"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:text="@string/settings_header_profile"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/settings_theme_option_darklight" />
+            android:text="@string/settings_description_profile"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
 
-        <RadioButton
-            android:id="@+id/radioTheme2"
-            android:layout_width="wrap_content"
+        <Button
+            android:id="@+id/btnAddProfile"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/settings_theme_option_dark" />
+            android:text="@string/button_title_newprofile" />
+
+        <Button
+            android:id="@+id/btnBackup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/button_title_backup" />
         
-    </RadioGroup>
-    <TextView
-        style="?android:attr/listSeparatorTextViewStyle"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
-        android:text="@string/settings_header_header"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
+        <Button
+            android:id="@+id/btnRestore"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/button_title_restore" />
+    </LinearLayout>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/settings_header_description"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
-
-    <Switch
-        android:id="@+id/switchHeader"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:checked="true"
-        android:text="@string/settings_header_switch" />
-
-    <Button
-        android:id="@+id/btnBackup"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Backup" />
-    
-    <Button
-        android:id="@+id/btnRestore"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Restore" />
-
-</LinearLayout>
+</ScrollView>

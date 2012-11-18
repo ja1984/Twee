@@ -8,24 +8,28 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
-import se.goagubbar.twee.Adapters.SeriesAdapter;
-import se.goagubbar.twee.Models.Episode;
-import se.goagubbar.twee.Models.Series;
+import se.goagubbar.twee.adapters.SeriesAdapter;
+import se.goagubbar.twee.models.Episode;
+import se.goagubbar.twee.models.ExtendedSeries;
+import se.goagubbar.twee.models.Profile;
+import se.goagubbar.twee.models.Series;
+import se.goagubbar.twee.utils.DatabaseHandler;
+import se.goagubbar.twee.utils.Utils;
+import se.goagubbar.twee.utils.XMLParser;
 import android.app.AlertDialog;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.text.InputFilter.LengthFilter;
 import android.util.Log;
 import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnLongClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
@@ -33,7 +37,7 @@ import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Toast;
 
-public class HomeActivity extends BaseActivity {
+public class HomeActivity extends BaseActivity{
 
 
 	private DatabaseHandler db;
@@ -67,19 +71,31 @@ public class HomeActivity extends BaseActivity {
 	private static ListView mySeries;
 	protected Object mActionMode;
 	public String selectedItem = null;
+	public int selectedProfile;
+	public int newSelectedProfile;
+	View selectedView;
+	
+	SeriesAdapter seriesAdapter;
+	Menu menu;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
-		db = new DatabaseHandler(this);
+		final SharedPreferences settings = getSharedPreferences("Twee", 0);
+		Utils.selectedProfile = settings.getInt("Profile", 1);
+		
 		setContentView(R.layout.layout_home);
 
 		mySeries = (ListView)findViewById(R.id.lstMySeries);
 		mySeries.setDividerHeight(1);
 		mySeries.setLongClickable(true);
 
+		mySeries.setEmptyView(findViewById(R.id.emptyView));
+		
 		registerForContextMenu(mySeries);
+
+	
+		//findViewById(R.id.menu_chooseprofile).
 
 
 		mySeries.setOnItemLongClickListener(new OnItemLongClickListener() {
@@ -89,9 +105,9 @@ public class HomeActivity extends BaseActivity {
 				if(mActionMode != null){
 					return false;
 				}
-
-
 				mActionMode = mySeries.startActionMode(mActionModeCallback);
+				view.setAlpha((float) .3);
+				selectedView = view;
 				view.setSelected(true);
 				selectedItem = view.getTag(R.string.homeactivity_tag_seriesid).toString();
 				return true;
@@ -99,30 +115,36 @@ public class HomeActivity extends BaseActivity {
 
 		});
 
-
 		mySeries.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
 				Intent intent = new Intent(getBaseContext(), OverviewActivity.class);
-				intent.putExtra("SeriesId", view.getTag(R.string.homeactivity_tag_id).toString());
+				intent.putExtra("SeriesId", view.getTag(R.string.homeactivity_tag_seriesid).toString());
 				startActivity(intent);
 
 			}
 		});
 
+		new GetMySeries().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
-		new GetMySeries().execute();
-
+	}
+	
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		db = new DatabaseHandler(this);
 	}
 
 	@Override
 	protected void onRestart() {
 		// TODO Auto-generated method stub
 		super.onRestart();
-		new GetMySeries().execute();
+		seriesAdapter.notifyDataSetChanged();
+		//new GetMySeries().execute();
 		//mySeries.notify();
 	}
-	
+
 	private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
 
 		@Override
@@ -132,6 +154,8 @@ public class HomeActivity extends BaseActivity {
 
 		@Override
 		public void onDestroyActionMode(ActionMode mode) {
+			selectedView.setAlpha(1);
+			selectedView = null;
 			selectedItem = null;
 			mActionMode = null;
 		}
@@ -149,16 +173,16 @@ public class HomeActivity extends BaseActivity {
 			switch (item.getItemId()) {
 			case R.id.menu_delete:
 				deleteSeries(selectedItem);
-				new GetMySeries().execute();
+				new GetMySeries().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 				mode.finish();		
 				return true;
-				
+
 			case R.id.menu_refresh:
 				Toast.makeText(HomeActivity.this, R.string.message_episodes_updates, Toast.LENGTH_SHORT).show();
 				new GetNewEpisodes().execute(selectedItem);
 				mode.finish();
 				return true;
-				
+
 			default:
 				return false;
 			}
@@ -171,7 +195,7 @@ public class HomeActivity extends BaseActivity {
 		getMenuInflater().inflate(R.menu.menu_home, menu);
 
 		setupSearchView(menu);
-
+		this.menu = menu;
 		return true;
 	}
 
@@ -195,7 +219,8 @@ public class HomeActivity extends BaseActivity {
 			return true;
 
 		case R.id.menu_refresh:
-			new GetMySeries().execute();
+			//seriesAdapter.notifyDataSetChanged();
+			 new GetMySeries().execute();
 			return true;
 
 		case R.id.menu_calendar:
@@ -210,47 +235,121 @@ public class HomeActivity extends BaseActivity {
 			startActivity(new Intent(this,AboutActivity.class));
 			return true;
 
+		case R.id.menu_chooseprofile:
+			displayProfileChooser();
+			return true;
+
 		default:
 			return super.onOptionsItemSelected(item);
 		}
 	}
 
+	private void displayProfileChooser(){
+
+		
+		selectedProfile = Utils.selectedProfile;
+		newSelectedProfile = selectedProfile;
+
+		final ArrayList<Profile> profiles = db.GetAllprofiles();
+		ArrayList<String> availableProfiles = new ArrayList<String>();
+
+		for (int i = 0; i < profiles.size(); i++) {
+			availableProfiles.add(profiles.get(i).getName());
+			if(profiles.get(i).getId() == selectedProfile)
+			{
+				selectedProfile = i;
+			}
+		}
+
+
+		String[] allProfiles = availableProfiles.toArray(new String[availableProfiles.size()]);
+
+		AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this);
+		builder.setTitle(R.string.dialog_selectprofile_header)
+		.setSingleChoiceItems(allProfiles, selectedProfile, new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+				newSelectedProfile = profiles.get(which).getId();
+			}
+		})
+
+		.setPositiveButton(R.string.dialog_ok, new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int id) {
+				final SharedPreferences settings = getSharedPreferences("Twee", 0);
+				SharedPreferences.Editor editor = settings.edit();
+				Utils.selectedProfile = newSelectedProfile;
+				editor.putInt("Profile", newSelectedProfile);
+				editor.apply();
+				new GetMySeries().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+			}
+		})
+		.setNegativeButton(R.string.delete_cancel, new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int id) {
+				// Just close
+			}
+		}).show();	
+
+	}
+
 	private void deleteSeries(final String seriesId)
 	{
-		Log.d("Del", "Borja deleta");
 		new AlertDialog.Builder(this)
 		.setMessage(R.string.delete_text)
 		.setTitle(R.string.delete_title)
 		.setCancelable(false)
-		.setPositiveButton(R.string.delete_proceed, new DialogInterface.OnClickListener() {
+		.setPositiveButton(R.string.dialog_ok, new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int id) {
-				db.DeleteSeries(seriesId);
-				new GetMySeries().execute();
+				db.DeleteShow(seriesId);
+				new GetMySeries().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 			}
 		})
-		.setNegativeButton(R.string.delete_cancel, null)
+		.setNegativeButton(R.string.dialog_cancel, null)
 		.show();
 
 
 	}
 
-	
-	public class GetMySeries extends AsyncTask<String, Void, ArrayList<Series>>{
+	public class GetMySeries extends AsyncTask<String, Void, ArrayList<ExtendedSeries>>{
 
 		@Override
-		protected ArrayList<Series> doInBackground(String... params) {
-			ArrayList<Series> series = db.getAllSeries();
+		protected ArrayList<ExtendedSeries> doInBackground(String... params) {
+			ArrayList<ExtendedSeries> series = new ArrayList<ExtendedSeries>();
+			
+			series = new DatabaseHandler(HomeActivity.this).GetMyShows();
 			return series;
 		}
+		
 
 		@Override
-		protected void onPostExecute(ArrayList<Series> result) {
-			SeriesAdapter sa = new SeriesAdapter(getApplicationContext(), R.layout.listitem_series, mySeries, result);
-			mySeries.setAdapter(sa);
+		protected void onPostExecute(ArrayList<ExtendedSeries> result) {
+			
+			int selectedView = getSharedPreferences("Twee", 0).getInt("Display", 0);
+			int viewToDisplay = 0;
+			switch (selectedView) {
+			case 0:
+				viewToDisplay = R.layout.listitem_series;
+				break;
+			case 1:
+				viewToDisplay = R.layout.listitem_series_alt;
+				break;
+			default:
+				break;
+			}
+			
+			if(result.size() == 0)
+			{
+				findViewById(R.id.pgrSearch).setVisibility(View.INVISIBLE);
+				findViewById(R.id.txtMessage).setVisibility(View.VISIBLE);
+			}
+			
+			seriesAdapter = new SeriesAdapter(getApplicationContext(), viewToDisplay, mySeries, result);
+			mySeries.setAdapter(seriesAdapter);
 
 		}
 
 	}
+
 
 	public class GetNewEpisodes extends AsyncTask<String, Void, Boolean>
 	{
@@ -270,7 +369,6 @@ public class HomeActivity extends BaseActivity {
 
 			//Fetch series and save;
 
-			Series s = new Series();
 			Element e = (Element) nl.item(0);
 
 
@@ -278,35 +376,36 @@ public class HomeActivity extends BaseActivity {
 			{
 				Episode ep = new Episode();
 				e = (Element) episodes.item(i);
-					ep.setAired(parser.getValue(e, KEY_EP_AIRED));
-					ep.setEpisode(parser.getValue(e, KEY_EP_EPISODE));
-					ep.setSeason(parser.getValue(e, KEY_EP_SEASON));
-					ep.setSeriesId(q[0].toString());
-					ep.setSummary(parser.getValue(e, KEY_EP_SUMMARY));
-					ep.setTitle(parser.getValue(e, KEY_EP_TITLE));
-					ep.setLastUpdated(parser.getValue(e, KEY_LASTUPDATED));
-					ep.setEpisodeId(parser.getValue(e, KEY_EP_ID));
-					ep.setWatched("0");
-					Episodes.add(ep);
+				ep.setAired(parser.getValue(e, KEY_EP_AIRED));
+				ep.setEpisode(parser.getValue(e, KEY_EP_EPISODE));
+				ep.setSeason(parser.getValue(e, KEY_EP_SEASON));
+				ep.setSeriesId(q[0].toString());
+				ep.setSummary(parser.getValue(e, KEY_EP_SUMMARY));
+				ep.setTitle(parser.getValue(e, KEY_EP_TITLE));
+				ep.setLastUpdated(parser.getValue(e, KEY_LASTUPDATED));
+				ep.setEpisodeId(parser.getValue(e, KEY_EP_ID));
+				ep.setWatched("0");
+				Episodes.add(ep);
 			}
-			
+
 			Log.d("Parsat episoderna","Klart");
-			
-			db.updateAndAddEpisodes(Episodes, q[0]);
-				
-			
-			
+
+			db.UpdateAndAddEpisodes(Episodes, q[0]);
+
+
+
 			return true;
 		}
-		
+
 		@Override
 		protected void onPostExecute(Boolean result) {
 			// TODO Auto-generated method stub
 			super.onPostExecute(result);
 			Toast.makeText(HomeActivity.this, R.string.message_episodes_updates_done, Toast.LENGTH_SHORT).show();
-			
+
 		}
 
 	}
 
+	
 }

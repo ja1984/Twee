@@ -10,6 +10,7 @@ public class BaseActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		SharedPreferences settings = getSharedPreferences("Twee", 0);
 	    int theme = settings.getInt("Theme", R.style.Light);
+	    
 		setTheme(theme);
 		
 		super.onCreate(savedInstanceState);
