@@ -116,6 +116,7 @@ public class OverviewActivity extends FragmentActivity {
 			new DatabaseHandler(getBaseContext()).MarkShowAsWatched(series.getSeriesId());
 			Toast.makeText(getBaseContext(), R.string.message_series_watched, Toast.LENGTH_SHORT).show();
 			Episodes.MarkAllEpisodes();
+			Overview.MarkLastAiredEpisodeAsWatched(true);
 			Refresh();
 			break;
 

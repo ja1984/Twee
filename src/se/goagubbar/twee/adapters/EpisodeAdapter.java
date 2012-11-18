@@ -160,11 +160,13 @@ public class EpisodeAdapter extends ArrayAdapter<Episode> {
 		Toast.makeText(context, R.string.message_season_watched, Toast.LENGTH_SHORT).show();
 
 		for (int i = 0; i < episodes.size(); i++) {
-
 			if(episodes.get(i).getSeason().equals(season))
 			{
 				itemChecked.set(i, true);
 			}
+			
+			Overview.MarkLastAiredEpisodeAsWatched(episodes.get(i),true);
+			
 		}
 		notifyDataSetChanged();
 		RefreshOverView();

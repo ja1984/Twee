@@ -164,7 +164,13 @@ public class Overview extends Fragment{
 	{
 		if(episode.getSeason().equals(lastAiredApisode.getSeason()) && episode.getEpisode().equals(lastAiredApisode.getEpisode()))
 		{
-			lastAiredEpisodeWatched.setChecked(isChecked);
+			MarkLastAiredEpisodeAsWatched(isChecked);
 		}
 	}
+	
+	public static void MarkLastAiredEpisodeAsWatched(Boolean isChecked)
+	{
+			lastAiredEpisodeWatched.setChecked(isChecked);
+	}
+	
 }
