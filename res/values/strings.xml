@@ -87,6 +87,7 @@
     <string name="message_backup_error">The backup failed</string>
     <string name="message_backup_complete">The backup has been saved to /sdcard/tvist/backup.txt</string>
     <string name="message_noplot">No plot available</string>
+    <string name="message_empty_collection">Your collection is empty!</string>
     <!-- /Messages -->
 
 

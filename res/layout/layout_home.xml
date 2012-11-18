@@ -15,14 +15,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true" />
-
         <TextView
             android:id="@+id/txtMessage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:clickable="false"
-            android:text="Your collection is empty"
+            android:text="@string/message_empty_collection"
             android:visibility="invisible" />
 
     </RelativeLayout>

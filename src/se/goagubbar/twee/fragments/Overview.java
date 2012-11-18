@@ -1,9 +1,6 @@
 package se.goagubbar.twee.fragments;
 
-import java.security.acl.LastOwnerException;
 import java.util.ArrayList;
-import java.util.Collections;
-
 import se.goagubbar.twee.R;
 import se.goagubbar.twee.adapters.EpisodeAdapter;
 import se.goagubbar.twee.adapters.UpcomingEpisodesAdapter;
