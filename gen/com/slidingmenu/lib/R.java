@@ -5,7 +5,7 @@
  * should not be modified by hand.
  */
 
-package se.goagubbar.twee;
+package com.slidingmenu.lib;
 
 public final class R {
     public static final class array {

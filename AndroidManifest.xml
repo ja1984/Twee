@@ -87,6 +87,22 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="se.goagubbar.twee.HomeActivity" />
         </activity>
+        <activity
+            android:name=".PreferenceFragm"
+            android:label="@string/title_activity_preference" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="se.goagubbar.twee.HomeActivity" />
+        </activity>
+        <activity
+            android:name=".PreferenceActivity"
+            android:label="@string/title_activity_preference" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

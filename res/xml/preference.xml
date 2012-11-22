@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <CheckBoxPreference
+        android:key="pref_header"
+        android:title="@string/settings_header_header"
+        android:summary="@string/settings_header_description"
+        android:defaultValue="true" />
+    
+    <ListPreference
+        android:title="@string/settings_theme_header"
+        android:dialogTitle="@string/settings_theme_header"
+        android:entries="@array/pref_themes_array"
+        android:entryValues="@array/pref_themes_array_values"
+        android:defaultValue="1"
+        android:summary="@string/test" />
+</PreferenceScreen>

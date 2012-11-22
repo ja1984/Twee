@@ -8,6 +8,9 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+import com.slidingmenu.lib.SlidingMenu;
+import com.slidingmenu.lib.app.SlidingActivity;
+
 import se.goagubbar.twee.adapters.SeriesAdapter;
 import se.goagubbar.twee.models.Episode;
 import se.goagubbar.twee.models.ExtendedSeries;
@@ -16,6 +19,7 @@ import se.goagubbar.twee.models.Series;
 import se.goagubbar.twee.utils.DatabaseHandler;
 import se.goagubbar.twee.utils.Utils;
 import se.goagubbar.twee.utils.XMLParser;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.SearchManager;
 import android.content.Context;
@@ -37,7 +41,7 @@ import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Toast;
 
-public class HomeActivity extends BaseActivity{
+public class HomeActivity extends SlidingActivity {
 
 
 	private DatabaseHandler db;
@@ -74,7 +78,6 @@ public class HomeActivity extends BaseActivity{
 	public int selectedProfile;
 	public int newSelectedProfile;
 	View selectedView;
-	
 	SeriesAdapter seriesAdapter;
 	Menu menu;
 
@@ -85,7 +88,13 @@ public class HomeActivity extends BaseActivity{
 		Utils.selectedProfile = settings.getInt("Profile", 1);
 		
 		setContentView(R.layout.layout_home);
-
+		//setBehindContentView(R.layout.layout_sidebar);
+		
+//		getSlidingMenu().setShadowWidthRes(R.dimen.shadow_width);
+//		getSlidingMenu().setShadowDrawable(R.drawable.shadow);
+//		getSlidingMenu().setBehindOffsetRes(R.dimen.actionbar_home_width);
+//		getSlidingMenu().setBehindScrollScale(0.25f);
+		
 		mySeries = (ListView)findViewById(R.id.lstMySeries);
 		mySeries.setDividerHeight(1);
 		mySeries.setLongClickable(true);
@@ -94,7 +103,8 @@ public class HomeActivity extends BaseActivity{
 		
 		registerForContextMenu(mySeries);
 
-	
+		//getActionBar().setDisplayHomeAsUpEnabled(true);
+		
 		//findViewById(R.id.menu_chooseprofile).
 
 
@@ -128,6 +138,8 @@ public class HomeActivity extends BaseActivity{
 		new GetMySeries().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
 	}
+	
+	
 	
 	@Override
 	protected void onResume() {
@@ -209,12 +221,16 @@ public class HomeActivity extends BaseActivity{
 	public boolean onOptionsItemSelected(MenuItem item){
 
 		switch(item.getItemId()){
-		case android.R.id.home:
-			Intent intent = new Intent(this, HomeActivity.class);
-			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-			startActivity(intent);
-			return true;
+//		case android.R.id.home:
+//			Intent intent = new Intent(this, HomeActivity.class);
+//			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//			startActivity(intent);
+//			return true;
 
+        case android.R.id.home:
+        	toggle();
+            return true;
+			
 		case R.id.menu_add:
 			return true;
 
@@ -228,7 +244,7 @@ public class HomeActivity extends BaseActivity{
 			return true;
 
 		case R.id.menu_settings:
-			startActivity(new Intent(this,SettingsActivity.class));
+			startActivity(new Intent(this,PreferenceActivity.class));
 			return true;
 
 		case R.id.menu_about:
