@@ -41,7 +41,7 @@ import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Toast;
 
-public class HomeActivity extends SlidingActivity {
+public class HomeActivity extends BaseActivity {
 
 
 	private DatabaseHandler db;
@@ -228,7 +228,7 @@ public class HomeActivity extends SlidingActivity {
 //			return true;
 
         case android.R.id.home:
-        	toggle();
+        	//toggle();
             return true;
 			
 		case R.id.menu_add:
