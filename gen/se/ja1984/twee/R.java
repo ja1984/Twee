@@ -5,7 +5,7 @@
  * should not be modified by hand.
  */
 
-package com.slidingmenu.lib;
+package se.ja1984.twee;
 
 public final class R {
     public static final class array {

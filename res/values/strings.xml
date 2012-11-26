@@ -1,7 +1,7 @@
 <resources>
 
     <!-- General -->
-    <string name="app_name">Tvist</string>
+    <string name="app_name">Twee</string>
     <string name="search_hint">Search show</string>
     <string name="details_lastaired">Last aired</string>
     <string name="details_upcoming">Upcoming episodes</string>
@@ -12,7 +12,7 @@
     <string name="button_imdb">More information</string>
     <string name="text_seriesrating">Rating</string>
     <string name="search_header">Searching for</string>
-    <string name="settings_theme_header">Tvist theme</string>
+    <string name="settings_theme_header">Theme</string>
     <string name="settings_header_header">Download header image</string>
     <string name="settings_header_switch">Download header image</string>
     <string name="settings_header_description">Choose whether to download the header image or not (it\'s the large image in a show\'s overview - aprox. 1.5 MB).</string>
@@ -32,12 +32,12 @@
 
 
     <!-- Titles -->
-    <string name="title_activity_home">Tvist</string>
+    <string name="title_activity_home">Twee</string>
     <string name="title_activity_settings">Settings</string>
     <string name="title_activity_overview">Overview</string>
     <string name="title_activity_searchable">Search</string>
     <string name="title_activity_calendar">Calendar</string>
-    <string name="title_activity_about">About Tvist</string>
+    <string name="title_activity_about">About Twee</string>
     <string name="title_activity_profile_choose">Choose profile</string>
     <!-- /Titles -->
 
@@ -85,9 +85,11 @@
     <string name="message_downloading_images_success">Done downloading images</string>
     <string name="message_downloading_images_error">Error while downloading images</string>
     <string name="message_backup_error">The backup failed</string>
-    <string name="message_backup_complete">The backup has been saved to /sdcard/tvist/backup.txt</string>
+    <string name="message_backup_complete">The backup has been saved to /sdcard/twee/backup.txt</string>
     <string name="message_noplot">No plot available</string>
     <string name="message_empty_collection">Your collection is empty!</string>
+    <string name="pref_header_display">Display options</string>
+    <string name="pref_header_other">Other options</string>
     <!-- /Messages -->
 
 
@@ -97,11 +99,16 @@
     <string name="settings_theme_option_dark">Dark theme</string>
     <!-- /Settings -->
 
+<string name="settings_display_option_small">Minimal</string>
+<string name="settings_display_option_deafult">Default</string>
+
+<string name="settings_header_backup">Backup and restore</string>
+
 
     <!-- About -->
     <string name="about_close">Close</string>
-    <string name="about_header">About Tvist</string>
-    <string name="about_text">Tvist is getting all its information from thetvdb.com, support them in any way possible!</string>
+    <string name="about_header">About Twee</string>
+    <string name="about_text">Twee is getting all its information from thetvdb.com, support them in any way possible!</string>
     <string name="thanks_header">Thanks to</string>
     <string name="thanks_text">klizzer, vastis, M203, Reconnnn, mates, Arias, toffe, grief, zero, happyoccasion, helevorn, milky81, Oxygen and Cat.</string>
 
@@ -126,10 +133,11 @@
     <string name="settings_description_profile_popup">Enter the name of the new profile</string>
     <string name="dialog_addprofile_header">New profile</string>
     <string name="hello_world">Hello world!</string>
-    <string name="title_activity_preference">PreferenceActivity</string>
+    <string name="title_activity_preference">Settings</string>
 
     
     <string name="pref_themes_array_default">Light</string>
-    <string name="test">Selected theme: %s</string>
+    <string name="pref_themes_summary">Selected theme: %s</string>
+    <string name="pref_display_summary">Display layout: %s</string>
     
 </resources>

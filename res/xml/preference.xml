@@ -1,16 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <PreferenceCategory android:title="@string/pref_header_display" >
+        <ListPreference
+            android:defaultValue="2"
+            android:dialogTitle="@string/settings_theme_header"
+            android:entries="@array/pref_themes_array"
+            android:entryValues="@array/pref_themes_array_values"
+            android:key="pref_theme"
+            android:summary="%s"
+            android:title="@string/settings_theme_header" />
+        
+        <ListPreference
+            android:defaultValue="0"
+            android:dialogTitle="@string/settings_header_display"
+            android:entries="@array/pref_display_array"
+            android:entryValues="@array/pref_display_array_values"
+            android:key="pref_display"
+            android:summary="%s"
+            android:title="@string/settings_header_display" />
+            />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/pref_header_other" >
     <CheckBoxPreference
-        android:key="pref_header"
-        android:title="@string/settings_header_header"
+        android:defaultValue="true"
+        android:key="pref_downloadheader"
         android:summary="@string/settings_header_description"
-        android:defaultValue="true" />
+        android:title="@string/settings_header_header" />
     
-    <ListPreference
-        android:title="@string/settings_theme_header"
-        android:dialogTitle="@string/settings_theme_header"
-        android:entries="@array/pref_themes_array"
-        android:entryValues="@array/pref_themes_array_values"
-        android:defaultValue="1"
-        android:summary="@string/test" />
+    <Preference android:title="@string/settings_header_backup" >
+  <intent   android:action="se.ja1984.twee.SettingsActivity"/>
+</Preference>
+    
+    </PreferenceCategory>
+
 </PreferenceScreen>
