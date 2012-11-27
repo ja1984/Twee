@@ -28,6 +28,7 @@
     <string name="button_title_restore">Restore</string>
     <string name="button_title_backup">Backup</string>
     <string name="button_title_newprofile">Add new profile</string>
+    <string name="message_backup_warning">Backup or restore all your profiles and their added shows. \n\n<b>CAUTION!</b>\nWhen you restore an backup the database is wiped before restore, all non backed up information will be deleated!</string>
     <!-- /General -->
 
 
@@ -60,7 +61,7 @@
     <string name="menu_calendar">Calendar</string>
     <string name="menu_markseries">Mark show as watched</string>
     <string name="menu_delete">Delete</string>
-    <string name="menu_chooseprofile">Profiles</string>
+    <string name="menu_chooseprofile">Select profile</string>
     <string name="menu_downloadimages">Download missing images</string>
     <!-- /Menu -->
 
@@ -86,6 +87,8 @@
     <string name="message_downloading_images_error">Error while downloading images</string>
     <string name="message_backup_error">The backup failed</string>
     <string name="message_backup_complete">The backup has been saved to /sdcard/twee/backup.txt</string>
+    <string name="message_restore_error">The restore failed</string>
+    <string name="message_restore_complete">All information have been restored!</string>
     <string name="message_noplot">No plot available</string>
     <string name="message_empty_collection">Your collection is empty!</string>
     <string name="pref_header_display">Display options</string>
@@ -99,11 +102,9 @@
     <string name="settings_theme_option_dark">Dark theme</string>
     <!-- /Settings -->
 
-<string name="settings_display_option_small">Minimal</string>
-<string name="settings_display_option_deafult">Default</string>
-
-<string name="settings_header_backup">Backup and restore</string>
-
+    <string name="settings_display_option_small">Minimal</string>
+    <string name="settings_display_option_deafult">Default</string>
+    <string name="settings_header_backup">Backup and restore</string>
 
     <!-- About -->
     <string name="about_close">Close</string>
@@ -134,10 +135,10 @@
     <string name="dialog_addprofile_header">New profile</string>
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_preference">Settings</string>
-
-    
     <string name="pref_themes_array_default">Light</string>
     <string name="pref_themes_summary">Selected theme: %s</string>
     <string name="pref_display_summary">Display layout: %s</string>
-    
+    <string name="title_activity_backup">Backup and restore</string>
+    <string name="title_activity_profile">Profiles</string>
+
 </resources>

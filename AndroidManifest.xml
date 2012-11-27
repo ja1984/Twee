@@ -21,6 +21,7 @@
             android:value=".SearchableActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
@@ -32,12 +33,6 @@
             android:name="se.ja1984.twee.SettingsActivity"
             android:label="@string/title_activity_settings"
             android:screenOrientation="portrait" >
-            
-            <intent-filter>
-               <action android:name="se.ja1984.twee.SettingsActivity" />
-               <category android:name="android.intent.category.DEFAULT" />
-           </intent-filter>
-            
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="se.ja1984.twee.HomeActivity" />
@@ -105,6 +100,32 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="se.ja1984.twee.HomeActivity" />
+        </activity>
+        <activity
+            android:name=".BackupActivity"
+            android:label="@string/title_activity_backup" >
+            <intent-filter>
+                <action android:name="se.ja1984.twee.BackupActivity" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="se.ja1984.twee.PreferenceActivity" />
+        </activity>
+        <activity
+            android:name=".ProfileActivity"
+            android:label="@string/title_activity_profile" >
+            <intent-filter>
+                <action android:name="se.ja1984.twee.ProfileActivity" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="se.ja1984.twee.PreferenceActivity" />
         </activity>
     </application>
 

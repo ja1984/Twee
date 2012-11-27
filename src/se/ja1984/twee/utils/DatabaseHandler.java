@@ -15,8 +15,8 @@ import android.util.Log;
 
 public class DatabaseHandler extends SQLiteOpenHelper {
 
-	private static final int DATABASE_VERSION = 18;
-	private static final String DATABASE_NAME = "Teewee";
+	private static final int DATABASE_VERSION = 1;
+	private static final String DATABASE_NAME = "Twee";
 
 	private static final String TABLE_SERIES = "Series";
 	private static final String TABLE_EPISODES = "Episodes";
@@ -98,6 +98,31 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
 	//CRUD
 
+	public Boolean KillDb(){
+		
+		try {
+			SQLiteDatabase db = this.getWritableDatabase();
+			db.execSQL("DROP TABLE IF EXISTS " + TABLE_EPISODES);
+			db.execSQL("DROP TABLE IF EXISTS " + TABLE_SERIES);
+			db.execSQL("DROP TABLE IF EXISTS " + TABLE_PROFILE);
+			
+			String CREATE_SERIES_TABLE = String.format("CREATE TABLE %s(%s INTEGER PRIMARY KEY autoincrement, %s TEXT,%s TEXT,%s TEXT,%s TEXT,%s TEXT,%s TEXT,%s TEXT,%s TEXT,%s TEXT, %s TEXT, %s TEXT, %s TEXT, %s TEXT, %S TEXT)", TABLE_SERIES, KEY_ID, KEY_SUMMARY, KEY_NAME,KEY_ACTORS,KEY_DAYTIME,KEY_GENRE,KEY_IMDBID,KEY_RATING,KEY_STATUS,KEY_IMAGE, KEY_FIRSTAIRED, KEY_HEADER, KEY_SERIESID, KEY_LASTUPDATED, KEY_PROFILEID);
+			db.execSQL(CREATE_SERIES_TABLE);
+
+			String CREATE_EPISODE_TABLE = String.format("CREATE TABLE %s(%s INTEGER PRIMARY KEY autoincrement,%s TEXT,%s TEXT,%s TEXT,%s TEXT,%s TEXT,%s TEXT, %s TEXT, %s TEXT, %s TEXT, %S TEXT)", TABLE_EPISODES, KEY_ID, KEY_SEASON, KEY_EPISODE, KEY_TITLE, KEY_AIRED, KEY_WATCHED, KEY_SUMMARY, KEY_SERIESID, KEY_LASTUPDATED, KEY_EPISODEID, KEY_PROFILEID);
+			db.execSQL(CREATE_EPISODE_TABLE);
+			
+			String CREATE_PROFILE_TABLE = String.format("CREATE TABLE %s(%s INTEGER PRIMARY KEY autoincrement,%s TEXT)", TABLE_PROFILE, KEY_ID, KEY_PROFILENAME);
+			db.execSQL(CREATE_PROFILE_TABLE);
+			
+		} catch (Exception e) {
+			Log.d("KillDb", "" + e.getMessage());
+			return false;
+		}
+		
+		return true;
+	}
+	
 	public void AddShow(Series series)
 	{
 		SQLiteDatabase db = this.getWritableDatabase();
@@ -966,15 +991,16 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		return profiles;
 	}
 
-	public void AddNewProfile(String profileName)
+	public Long AddNewProfile(String profileName)
 	{
 		SQLiteDatabase db = this.getWritableDatabase();
-
+		Long profileId = Long.MIN_VALUE;
 		try {
 			ContentValues values = new ContentValues();
 
 			values.put(KEY_PROFILENAME, profileName);
-			db.insert(TABLE_PROFILE, null, values);			
+			profileId = db.insert(TABLE_PROFILE, null, values);
+			return profileId;
 		} catch (Exception e) {
 			Log.d("AddNewProfile",e.getMessage());
 			// TODO: handle exception
@@ -982,8 +1008,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		finally{
 			db.close();
 		}
-
-
+		
+		return profileId;
 
 	}
 

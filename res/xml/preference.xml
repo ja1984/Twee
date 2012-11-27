@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
 
+    <Preference
+        android:icon="?pref_backup"
+        android:title="@string/settings_header_backup" >
+        <intent android:action="se.ja1984.twee.BackupActivity" />
+    </Preference>
+    <Preference
+        android:icon="?pref_profiles"
+        android:title="@string/settings_header_profile" >
+        <intent android:action="se.ja1984.twee.ProfileActivity" />
+    </Preference>
+
     <PreferenceCategory android:title="@string/pref_header_display" >
         <ListPreference
             android:defaultValue="2"
@@ -10,7 +21,6 @@
             android:key="pref_theme"
             android:summary="%s"
             android:title="@string/settings_theme_header" />
-        
         <ListPreference
             android:defaultValue="0"
             android:dialogTitle="@string/settings_header_display"
@@ -19,20 +29,14 @@
             android:key="pref_display"
             android:summary="%s"
             android:title="@string/settings_header_display" />
-            />
+            />
     </PreferenceCategory>
-
     <PreferenceCategory android:title="@string/pref_header_other" >
-    <CheckBoxPreference
-        android:defaultValue="true"
-        android:key="pref_downloadheader"
-        android:summary="@string/settings_header_description"
-        android:title="@string/settings_header_header" />
-    
-    <Preference android:title="@string/settings_header_backup" >
-  <intent   android:action="se.ja1984.twee.SettingsActivity"/>
-</Preference>
-    
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="pref_downloadheader"
+            android:summary="@string/settings_header_description"
+            android:title="@string/settings_header_header" />
     </PreferenceCategory>
 
 </PreferenceScreen>

@@ -5,6 +5,8 @@
         <item name="menu_delete">@drawable/ic_delete_light</item>
         <item name="menu_calendar">@drawable/ic_calendar_light</item>
         <item name="menu_refresh">@drawable/ic_refresh_light</item>
+        <item name="pref_profiles">@drawable/ic_profiles_light</item>
+        <item name="pref_backup">@drawable/ic_backup_light</item>
     </style>
 
     <style name="LightDark" parent="android:Theme.Holo.Light.DarkActionBar">
@@ -12,6 +14,8 @@
         <item name="menu_delete">@drawable/ic_delete_dark</item>
         <item name="menu_calendar">@drawable/ic_calendar_dark</item>
         <item name="menu_refresh">@drawable/ic_refresh_dark</item>
+        <item name="pref_profiles">@drawable/ic_profiles_light</item>
+        <item name="pref_backup">@drawable/ic_backup_light</item>
     </style>
 
     <style name="Dark" parent="android:Theme.Holo">
@@ -19,6 +23,8 @@
         <item name="menu_delete">@drawable/ic_delete_dark</item>
         <item name="menu_calendar">@drawable/ic_calendar_dark</item>
         <item name="menu_refresh">@drawable/ic_refresh_dark</item>
+        <item name="pref_profiles">@drawable/ic_profiles_dark</item>
+        <item name="pref_backup">@drawable/ic_backup_dark</item>
     </style>
 
     <style name="SkypeStyle" parent="@android:style/Theme.Holo.Light">
