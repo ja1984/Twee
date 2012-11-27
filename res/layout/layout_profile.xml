@@ -16,4 +16,10 @@
         android:layout_height="wrap_content"
         android:text="@string/button_title_newprofile" />
 
+    <ListView
+        android:id="@+id/lstProfiles"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+    </ListView>
+
 </LinearLayout>

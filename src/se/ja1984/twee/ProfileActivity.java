@@ -1,9 +1,15 @@
 package se.ja1984.twee;
 
+import java.util.ArrayList;
+
+import se.ja1984.twee.adapters.ProfileAdapter;
+import se.ja1984.twee.models.Profile;
 import se.ja1984.twee.utils.DatabaseHandler;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -11,22 +17,42 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.support.v4.app.NavUtils;
 
 public class ProfileActivity extends BaseActivity {
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.layout_profile);
-        getActionBar().setDisplayHomeAsUpEnabled(true);
-        
-        Button btnAddProfile = (Button)findViewById(R.id.btnAddProfile);
-        btnAddProfile.setOnClickListener(new OnClickListener() {
+	ListView lstProfiles;
+
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.layout_profile);
+		getActionBar().setDisplayHomeAsUpEnabled(true);
+
+		new GetProfilesTask().execute();
+
+		Button btnAddProfile = (Button)findViewById(R.id.btnAddProfile);
+		lstProfiles = (ListView)findViewById(R.id.lstProfiles);
+
+		lstProfiles.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+				Toast.makeText(ProfileActivity.this, R.string.edit_notimplemented, Toast.LENGTH_SHORT).show();
+			}
+		});
+
+
+		btnAddProfile.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
@@ -36,7 +62,7 @@ public class ProfileActivity extends BaseActivity {
 
 				//layout.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
 				final EditText txtProfileName = new EditText(getApplicationContext());
-				
+
 				final TextView txtInformation = new TextView(getApplicationContext());
 				txtProfileName.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
 				txtInformation.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
@@ -47,10 +73,10 @@ public class ProfileActivity extends BaseActivity {
 
 				LayoutInflater inflater = getLayoutInflater();
 				final View dialoglayout = inflater.inflate(R.layout.layout_addnewprofile, (ViewGroup) getCurrentFocus());
-				
+
 				AlertDialog.Builder addProfile = new AlertDialog.Builder(ProfileActivity.this);
 				addProfile.setTitle(R.string.dialog_addprofile_header);
-				
+
 				addProfile.setView(dialoglayout);
 
 				addProfile.setPositiveButton(R.string.dialog_ok, new DialogInterface.OnClickListener() {
@@ -79,25 +105,43 @@ public class ProfileActivity extends BaseActivity {
 
 			}
 		});
-        
-        
-    }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.layout_profile, menu);
-        return true;
-    }
 
-    
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                NavUtils.navigateUpFromSameTask(this);
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.layout_profile, menu);
+		return true;
+	}
+
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case android.R.id.home:
+			NavUtils.navigateUpFromSameTask(this);
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
+	}
+
+
+	public class GetProfilesTask extends AsyncTask<String, Void, ArrayList<Profile>>
+	{
+
+		@Override
+		protected ArrayList<Profile> doInBackground(String... params) {		
+			return new DatabaseHandler(ProfileActivity.this).GetAllprofiles();
+		}
+
+		@Override
+		protected void onPostExecute(ArrayList<Profile> result) {
+			ProfileAdapter profileAdapter = new ProfileAdapter(ProfileActivity.this, R.layout.listitem_profile , lstProfiles, result);
+			lstProfiles.setAdapter(profileAdapter);
+			super.onPostExecute(result);
+		}
+
+	}
 
 }
