@@ -338,9 +338,6 @@ public class SettingsActivity extends BaseActivity {
 		    jsonString = br.readLine();
 		    Type backupObject = new TypeToken<Backup>(){}.getType();
 			backup = json.fromJson(jsonString, backupObject);
-		    
-			Log.d("Test",backup.Profile);
-			Log.d("Test",backup.Shows.size() + "");
 			
 			isr.close();
 	        fis.close();

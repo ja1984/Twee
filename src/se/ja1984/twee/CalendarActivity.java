@@ -41,9 +41,7 @@ public class CalendarActivity extends FragmentActivity implements ActionBar.OnNa
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
         episodes = new DatabaseHandler(getBaseContext()).GetAllEpisodesForGivenTimePeriod(2);
-        
-        Log.d("test", "" + episodes.size());
-        
+                
         // Set up the action bar.
         final ActionBar actionBar = getActionBar();
         actionBar.setDisplayShowTitleEnabled(false);
@@ -119,7 +117,6 @@ public class CalendarActivity extends FragmentActivity implements ActionBar.OnNa
         }
         
         public static final String ARG_SECTION_NUMBER = "section_number";
-        String test = "";
                
 
         @Override

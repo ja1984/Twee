@@ -200,91 +200,90 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int shadow=0x7f020023;
     }
     public static final class id {
-        public static final int btnAddProfile=0x7f050012;
+        public static final int btnAddProfile=0x7f050011;
         public static final int btnBackup=0x7f050008;
-        public static final int btnOpenImdb=0x7f050046;
+        public static final int btnOpenImdb=0x7f050045;
         public static final int btnRestore=0x7f050009;
-        public static final int chkWatched=0x7f050023;
-        public static final int chkWatchedSeason=0x7f05001e;
+        public static final int chkWatched=0x7f050022;
+        public static final int chkWatchedSeason=0x7f05001d;
         public static final int container=0x7f05000a;
-        public static final int containerWatched=0x7f05003b;
-        public static final int daySeparator=0x7f050025;
+        public static final int containerWatched=0x7f05003a;
+        public static final int daySeparator=0x7f050024;
         public static final int emptyView=0x7f05000b;
         public static final int fullscreen=0x7f050001;
-        public static final int grpDisplay=0x7f050018;
-        public static final int grpTheme=0x7f050013;
-        public static final int imgEditProfile=0x7f050029;
-        public static final int imgSeriesHeader=0x7f050035;
-        public static final int imgSeriesImage=0x7f050027;
-        public static final int layoutEpisode=0x7f050020;
-        public static final int lstAllEpisodes=0x7f050034;
-        public static final int lstEpisodes=0x7f050042;
+        public static final int grpDisplay=0x7f050017;
+        public static final int grpTheme=0x7f050012;
+        public static final int imgEditProfile=0x7f050028;
+        public static final int imgSeriesHeader=0x7f050034;
+        public static final int imgSeriesImage=0x7f050026;
+        public static final int layoutEpisode=0x7f05001f;
+        public static final int lstAllEpisodes=0x7f050033;
+        public static final int lstEpisodes=0x7f050041;
         public static final int lstMySeries=0x7f05000e;
-        public static final int lstProfiles=0x7f05001b;
+        public static final int lstProfiles=0x7f05001a;
         public static final int margin=0x7f050000;
-        public static final int menu_about=0x7f05004d;
-        public static final int menu_add=0x7f05004a;
-        public static final int menu_calendar=0x7f05004b;
-        public static final int menu_chooseprofile=0x7f05004c;
-        public static final int menu_delete=0x7f050048;
-        public static final int menu_downloadimages=0x7f05004f;
-        public static final int menu_markseries=0x7f05004e;
-        public static final int menu_refresh=0x7f050049;
-        public static final int menu_settings=0x7f050047;
+        public static final int menu_about=0x7f05004c;
+        public static final int menu_add=0x7f050049;
+        public static final int menu_calendar=0x7f05004a;
+        public static final int menu_chooseprofile=0x7f05004b;
+        public static final int menu_delete=0x7f050047;
+        public static final int menu_downloadimages=0x7f05004e;
+        public static final int menu_markseries=0x7f05004d;
+        public static final int menu_refresh=0x7f050048;
+        public static final int menu_settings=0x7f050046;
         public static final int pager=0x7f05000f;
         public static final int pager_title_strip=0x7f050010;
         public static final int pgrSearch=0x7f05000c;
-        public static final int pgrWatched=0x7f05002e;
-        public static final int radioTheme0=0x7f050014;
-        public static final int radioTheme1=0x7f050015;
-        public static final int radioTheme2=0x7f050016;
-        public static final int rdgProfiles=0x7f050011;
-        public static final int rdoDisplay1=0x7f050019;
-        public static final int rdoDisplay2=0x7f05001a;
-        public static final int relProgressView=0x7f05002d;
-        public static final int rllHeader1=0x7f05003e;
-        public static final int seasonTest=0x7f05001c;
-        public static final int side_navigation_menu_item1=0x7f050050;
-        public static final int side_navigation_menu_item2=0x7f050051;
-        public static final int side_navigation_menu_item3=0x7f050052;
-        public static final int side_navigation_menu_item4=0x7f050053;
-        public static final int side_navigation_menu_item5=0x7f050054;
-        public static final int slidingmenulayout=0x7f050031;
-        public static final int slidingmenumain=0x7f050030;
-        public static final int slidingmenurowicon=0x7f050032;
-        public static final int slidingmenurowtitle=0x7f050033;
-        public static final int switchHeader=0x7f050017;
+        public static final int pgrWatched=0x7f05002d;
+        public static final int radioTheme0=0x7f050013;
+        public static final int radioTheme1=0x7f050014;
+        public static final int radioTheme2=0x7f050015;
+        public static final int rdoDisplay1=0x7f050018;
+        public static final int rdoDisplay2=0x7f050019;
+        public static final int relProgressView=0x7f05002c;
+        public static final int rllHeader1=0x7f05003d;
+        public static final int seasonTest=0x7f05001b;
+        public static final int side_navigation_menu_item1=0x7f05004f;
+        public static final int side_navigation_menu_item2=0x7f050050;
+        public static final int side_navigation_menu_item3=0x7f050051;
+        public static final int side_navigation_menu_item4=0x7f050052;
+        public static final int side_navigation_menu_item5=0x7f050053;
+        public static final int slidingmenulayout=0x7f050030;
+        public static final int slidingmenumain=0x7f05002f;
+        public static final int slidingmenurowicon=0x7f050031;
+        public static final int slidingmenurowtitle=0x7f050032;
+        public static final int switchHeader=0x7f050016;
         public static final int textView1=0x7f050006;
         public static final int txtAboutHeader=0x7f050002;
-        public static final int txtActors=0x7f050045;
-        public static final int txtActorsHeader=0x7f050044;
-        public static final int txtDate=0x7f050026;
-        public static final int txtEpisodeInformation=0x7f050028;
-        public static final int txtEpisodeNumber=0x7f050024;
-        public static final int txtExtra=0x7f050021;
-        public static final int txtLastAired=0x7f05003d;
-        public static final int txtLastAiredEpisodeNumber=0x7f050040;
-        public static final int txtLastAiredTitle=0x7f05003f;
-        public static final int txtMarkSeasonAsWatched=0x7f05001f;
+        public static final int txtActors=0x7f050044;
+        public static final int txtActorsHeader=0x7f050043;
+        public static final int txtDate=0x7f050025;
+        public static final int txtEpisodeInformation=0x7f050027;
+        public static final int txtEpisodeNumber=0x7f050023;
+        public static final int txtExtra=0x7f050020;
+        public static final int txtLastAired=0x7f05003c;
+        public static final int txtLastAiredEpisodeNumber=0x7f05003f;
+        public static final int txtLastAiredTitle=0x7f05003e;
+        public static final int txtMarkSeasonAsWatched=0x7f05001e;
         public static final int txtMessage=0x7f05000d;
-        public static final int txtName=0x7f05002a;
+        public static final int txtName=0x7f050029;
         public static final int txtProfileName=0x7f050007;
-        public static final int txtSeasonNumber=0x7f05001d;
-        public static final int txtSeriesName=0x7f050036;
-        public static final int txtSeriesPlot=0x7f05002b;
-        public static final int txtSeriesRating=0x7f050038;
-        public static final int txtSeriesRatingText=0x7f050039;
-        public static final int txtSeriesStatus=0x7f050037;
+        public static final int txtSeasonNumber=0x7f05001c;
+        public static final int txtSeriesName=0x7f050035;
+        public static final int txtSeriesPlot=0x7f05002a;
+        public static final int txtSeriesRating=0x7f050037;
+        public static final int txtSeriesRatingText=0x7f050038;
+        public static final int txtSeriesStatus=0x7f050036;
         public static final int txtSummary=0x7f050003;
-        public static final int txtSummaryHeader=0x7f050043;
+        public static final int txtSummaryHeader=0x7f050042;
         public static final int txtThanks=0x7f050005;
         public static final int txtThanksHeader=0x7f050004;
-        public static final int txtTitle=0x7f050022;
-        public static final int txtTotalWatched=0x7f05003a;
-        public static final int txtUpcomingEpisode=0x7f05002f;
-        public static final int txtUpcomingEpisodes=0x7f050041;
-        public static final int txtWatched=0x7f05003c;
-        public static final int txtYear=0x7f05002c;
+        public static final int txtTitle=0x7f050021;
+        public static final int txtTotalWatched=0x7f050039;
+        public static final int txtUpcomingEpisode=0x7f05002e;
+        public static final int txtUpcomingEpisodes=0x7f050040;
+        public static final int txtWatched=0x7f05003b;
+        public static final int txtYear=0x7f05002b;
     }
     public static final class layout {
         public static final int activity_preference=0x7f030000;
@@ -295,25 +294,24 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int layout_home=0x7f030005;
         public static final int layout_overview=0x7f030006;
         public static final int layout_profile=0x7f030007;
-        public static final int layout_profilechoose=0x7f030008;
-        public static final int layout_searchable=0x7f030009;
-        public static final int layout_settings=0x7f03000a;
-        public static final int layout_sidebar=0x7f03000b;
-        public static final int list=0x7f03000c;
-        public static final int listitem_allepisodes=0x7f03000d;
-        public static final int listitem_calendar=0x7f03000e;
-        public static final int listitem_episode=0x7f03000f;
-        public static final int listitem_profile=0x7f030010;
-        public static final int listitem_searchresult=0x7f030011;
-        public static final int listitem_series=0x7f030012;
-        public static final int listitem_series_alt=0x7f030013;
-        public static final int shadow=0x7f030014;
-        public static final int slidingmenumain=0x7f030015;
-        public static final int slidingmenumainlist=0x7f030016;
-        public static final int slidingmenurow=0x7f030017;
-        public static final int view_episodes=0x7f030018;
-        public static final int view_overview=0x7f030019;
-        public static final int view_summary=0x7f03001a;
+        public static final int layout_searchable=0x7f030008;
+        public static final int layout_settings=0x7f030009;
+        public static final int layout_sidebar=0x7f03000a;
+        public static final int list=0x7f03000b;
+        public static final int listitem_allepisodes=0x7f03000c;
+        public static final int listitem_calendar=0x7f03000d;
+        public static final int listitem_episode=0x7f03000e;
+        public static final int listitem_profile=0x7f03000f;
+        public static final int listitem_searchresult=0x7f030010;
+        public static final int listitem_series=0x7f030011;
+        public static final int listitem_series_alt=0x7f030012;
+        public static final int shadow=0x7f030013;
+        public static final int slidingmenumain=0x7f030014;
+        public static final int slidingmenumainlist=0x7f030015;
+        public static final int slidingmenurow=0x7f030016;
+        public static final int view_episodes=0x7f030017;
+        public static final int view_overview=0x7f030018;
+        public static final int view_summary=0x7f030019;
     }
     public static final class menu {
         public static final int activity_preference=0x7f0b0000;
@@ -325,16 +323,17 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int menu_contextual_home=0x7f0b0006;
         public static final int menu_home=0x7f0b0007;
         public static final int menu_overview=0x7f0b0008;
-        public static final int menu_searchable=0x7f0b0009;
-        public static final int menu_settings=0x7f0b000a;
-        public static final int menu_sidebar=0x7f0b000b;
+        public static final int menu_profile=0x7f0b0009;
+        public static final int menu_searchable=0x7f0b000a;
+        public static final int menu_settings=0x7f0b000b;
+        public static final int menu_sidebar=0x7f0b000c;
     }
     public static final class string {
         /**  About 
          */
-        public static final int about_close=0x7f090052;
-        public static final int about_header=0x7f090053;
-        public static final int about_text=0x7f090054;
+        public static final int about_close=0x7f090053;
+        public static final int about_header=0x7f090054;
+        public static final int about_text=0x7f090055;
         public static final int actors_header=0x7f090006;
         /**  General 
          */
@@ -346,123 +345,124 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         /**  /Delete 
  ContentDescriptions 
          */
-        public static final int cd_series_header=0x7f09005b;
-        public static final int delete_cancel=0x7f090059;
-        public static final int delete_proceed=0x7f090058;
-        public static final int delete_text=0x7f09005a;
+        public static final int cd_series_header=0x7f09005c;
+        public static final int delete_cancel=0x7f09005a;
+        public static final int delete_proceed=0x7f090059;
+        public static final int delete_text=0x7f09005b;
         /**  /About 
  Delete 
          */
-        public static final int delete_title=0x7f090057;
+        public static final int delete_title=0x7f090058;
         public static final int details_lastaired=0x7f090002;
         public static final int details_totalwatched=0x7f090004;
         public static final int details_upcoming=0x7f090003;
-        public static final int dialog_addprofile_header=0x7f090060;
-        public static final int dialog_cancel=0x7f09005d;
+        public static final int dialog_addprofile_header=0x7f090061;
+        public static final int dialog_cancel=0x7f09005e;
         /**  /ContentDescriptions 
          */
-        public static final int dialog_ok=0x7f09005c;
-        public static final int dialog_selectprofile_header=0x7f09005e;
-        public static final int hello_world=0x7f090061;
+        public static final int dialog_ok=0x7f09005d;
+        public static final int dialog_selectprofile_header=0x7f09005f;
+        public static final int hello_world=0x7f090062;
         public static final int homeactivity_tag_id=0x7f090013;
         public static final int homeactivity_tag_seriesid=0x7f090012;
         public static final int imdb_header=0x7f090007;
-        public static final int menu_about=0x7f09002b;
-        public static final int menu_add=0x7f09002a;
-        public static final int menu_calendar=0x7f09002d;
-        public static final int menu_chooseprofile=0x7f090030;
-        public static final int menu_delete=0x7f09002f;
-        public static final int menu_downloadimages=0x7f090031;
-        public static final int menu_markseries=0x7f09002e;
-        public static final int menu_refresh=0x7f09002c;
+        public static final int menu_about=0x7f09002c;
+        public static final int menu_add=0x7f09002b;
+        public static final int menu_calendar=0x7f09002e;
+        public static final int menu_chooseprofile=0x7f090031;
+        public static final int menu_delete=0x7f090030;
+        public static final int menu_downloadimages=0x7f090032;
+        public static final int menu_markseries=0x7f09002f;
+        public static final int menu_refresh=0x7f09002d;
         /**  /Sections 
  Menu 
          */
-        public static final int menu_settings=0x7f090029;
-        public static final int message_backup_complete=0x7f090045;
-        public static final int message_backup_error=0x7f090044;
+        public static final int menu_settings=0x7f09002a;
+        public static final int message_backup_complete=0x7f090046;
+        public static final int message_backup_error=0x7f090045;
         public static final int message_backup_warning=0x7f09001b;
-        public static final int message_download_banner=0x7f09003c;
-        public static final int message_download_header=0x7f09003d;
-        public static final int message_download_information=0x7f09003b;
-        public static final int message_download_pleasewait=0x7f090040;
-        public static final int message_download_save_episodes=0x7f09003f;
-        public static final int message_download_save_series=0x7f09003e;
-        public static final int message_downloading_images=0x7f090041;
-        public static final int message_downloading_images_error=0x7f090043;
-        public static final int message_downloading_images_success=0x7f090042;
-        public static final int message_empty_collection=0x7f090049;
-        public static final int message_episodes_updates=0x7f090039;
-        public static final int message_episodes_updates_done=0x7f09003a;
-        public static final int message_nointernet=0x7f090036;
-        public static final int message_noplot=0x7f090048;
-        public static final int message_noresult=0x7f090037;
-        public static final int message_restore_complete=0x7f090047;
-        public static final int message_restore_error=0x7f090046;
-        public static final int message_season_watched=0x7f090033;
-        public static final int message_series_double=0x7f090038;
-        public static final int message_series_fetching=0x7f090034;
-        public static final int message_series_fetching_done=0x7f090035;
+        public static final int message_download_banner=0x7f09003d;
+        public static final int message_download_header=0x7f09003e;
+        public static final int message_download_information=0x7f09003c;
+        public static final int message_download_pleasewait=0x7f090041;
+        public static final int message_download_save_episodes=0x7f090040;
+        public static final int message_download_save_series=0x7f09003f;
+        public static final int message_downloading_images=0x7f090042;
+        public static final int message_downloading_images_error=0x7f090044;
+        public static final int message_downloading_images_success=0x7f090043;
+        public static final int message_empty_collection=0x7f09004a;
+        public static final int message_episodes_updates=0x7f09003a;
+        public static final int message_episodes_updates_done=0x7f09003b;
+        public static final int message_nointernet=0x7f090037;
+        public static final int message_noplot=0x7f090049;
+        public static final int message_noresult=0x7f090038;
+        public static final int message_profile_description=0x7f09001c;
+        public static final int message_restore_complete=0x7f090048;
+        public static final int message_restore_error=0x7f090047;
+        public static final int message_season_watched=0x7f090034;
+        public static final int message_series_double=0x7f090039;
+        public static final int message_series_fetching=0x7f090035;
+        public static final int message_series_fetching_done=0x7f090036;
         /**  /Menu 
  Messages 
          */
-        public static final int message_series_watched=0x7f090032;
+        public static final int message_series_watched=0x7f090033;
         public static final int message_show_ended=0x7f090017;
-        public static final int pref_display_summary=0x7f090065;
-        public static final int pref_header_display=0x7f09004a;
-        public static final int pref_header_other=0x7f09004b;
-        public static final int pref_themes_array_default=0x7f090063;
-        public static final int pref_themes_summary=0x7f090064;
+        public static final int pref_display_summary=0x7f090066;
+        public static final int pref_header_display=0x7f09004b;
+        public static final int pref_header_other=0x7f09004c;
+        public static final int pref_themes_array_default=0x7f090064;
+        public static final int pref_themes_summary=0x7f090065;
         public static final int search_header=0x7f09000a;
         public static final int search_hint=0x7f090001;
         public static final int season_markaswatched=0x7f090014;
-        public static final int section_dropdown_today=0x7f090026;
-        public static final int section_dropdown_tomorrow=0x7f090027;
-        public static final int section_dropdown_week=0x7f090028;
+        public static final int section_dropdown_today=0x7f090027;
+        public static final int section_dropdown_tomorrow=0x7f090028;
+        public static final int section_dropdown_week=0x7f090029;
         /**  /Titles 
  Sections 
          */
-        public static final int section_title_episodes=0x7f090023;
-        public static final int section_title_overview=0x7f090024;
-        public static final int section_title_summary=0x7f090025;
+        public static final int section_title_episodes=0x7f090024;
+        public static final int section_title_overview=0x7f090025;
+        public static final int section_title_summary=0x7f090026;
         public static final int series_plot=0x7f090015;
         public static final int series_summary=0x7f090016;
         public static final int settings_description_profile=0x7f090011;
-        public static final int settings_description_profile_popup=0x7f09005f;
-        public static final int settings_display_option_deafult=0x7f090050;
+        public static final int settings_description_profile_popup=0x7f090060;
+        public static final int settings_display_option_deafult=0x7f090051;
         /**  /Settings 
          */
-        public static final int settings_display_option_small=0x7f09004f;
-        public static final int settings_header_backup=0x7f090051;
+        public static final int settings_display_option_small=0x7f090050;
+        public static final int settings_header_backup=0x7f090052;
         public static final int settings_header_description=0x7f09000e;
         public static final int settings_header_display=0x7f09000f;
         public static final int settings_header_header=0x7f09000c;
         public static final int settings_header_profile=0x7f090010;
         public static final int settings_header_switch=0x7f09000d;
         public static final int settings_theme_header=0x7f09000b;
-        public static final int settings_theme_option_dark=0x7f09004e;
-        public static final int settings_theme_option_darklight=0x7f09004d;
+        public static final int settings_theme_option_dark=0x7f09004f;
+        public static final int settings_theme_option_darklight=0x7f09004e;
         /**  /Messages 
  Settings 
          */
-        public static final int settings_theme_option_light=0x7f09004c;
+        public static final int settings_theme_option_light=0x7f09004d;
         public static final int summary_header=0x7f090005;
         public static final int text_seriesrating=0x7f090009;
-        public static final int thanks_header=0x7f090055;
-        public static final int thanks_text=0x7f090056;
-        public static final int title_activity_about=0x7f090021;
-        public static final int title_activity_backup=0x7f090066;
-        public static final int title_activity_calendar=0x7f090020;
+        public static final int thanks_header=0x7f090056;
+        public static final int thanks_text=0x7f090057;
+        public static final int title_activity_about=0x7f090022;
+        public static final int title_activity_backup=0x7f090067;
+        public static final int title_activity_calendar=0x7f090021;
         /**  /General 
  Titles 
          */
-        public static final int title_activity_home=0x7f09001c;
-        public static final int title_activity_overview=0x7f09001e;
-        public static final int title_activity_preference=0x7f090062;
-        public static final int title_activity_profile=0x7f090067;
-        public static final int title_activity_profile_choose=0x7f090022;
-        public static final int title_activity_searchable=0x7f09001f;
-        public static final int title_activity_settings=0x7f09001d;
+        public static final int title_activity_home=0x7f09001d;
+        public static final int title_activity_overview=0x7f09001f;
+        public static final int title_activity_preference=0x7f090063;
+        public static final int title_activity_profile=0x7f090068;
+        public static final int title_activity_profile_choose=0x7f090023;
+        public static final int title_activity_searchable=0x7f090020;
+        public static final int title_activity_settings=0x7f09001e;
     }
     public static final class style {
         public static final int AppTheme=0x7f0a0006;

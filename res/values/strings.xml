@@ -29,6 +29,7 @@
     <string name="button_title_backup">Backup</string>
     <string name="button_title_newprofile">Add new profile</string>
     <string name="message_backup_warning">Backup or restore all your profiles and their added shows. \n\n<b>CAUTION!</b>\nWhen you restore an backup the database is wiped before restore, all non backed up information will be deleated!</string>
+    <string name="message_profile_description">Multiple profiles makes it possible for your iphone using partner (maybe) to experience the pure awesomeness of <b>Twee</b> ;) without you having to spoil your nice collection of shows with his/her sucky (again maybe..) shows :D</string>
     <!-- /General -->
 
 
