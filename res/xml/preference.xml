@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res/se.ja1984.twee" >
 
     <Preference
         android:icon="?pref_backup"
@@ -21,6 +22,7 @@
             android:key="pref_theme"
             android:summary="%s"
             android:title="@string/settings_theme_header" />
+
         <ListPreference
             android:defaultValue="0"
             android:dialogTitle="@string/settings_header_display"
@@ -29,7 +31,7 @@
             android:key="pref_display"
             android:summary="%s"
             android:title="@string/settings_header_display" />
-            />
+            />
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/pref_header_other" >
         <CheckBoxPreference

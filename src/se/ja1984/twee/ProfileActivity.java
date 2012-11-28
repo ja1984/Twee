@@ -44,7 +44,6 @@ public class ProfileActivity extends BaseActivity {
 		lstProfiles = (ListView)findViewById(R.id.lstProfiles);
 
 		lstProfiles.setOnItemClickListener(new OnItemClickListener() {
-
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
 				Toast.makeText(ProfileActivity.this, R.string.edit_notimplemented, Toast.LENGTH_SHORT).show();
@@ -57,22 +56,22 @@ public class ProfileActivity extends BaseActivity {
 			@Override
 			public void onClick(View v) {
 
-				LinearLayout layout = new LinearLayout(getApplicationContext());
-				layout.setOrientation(LinearLayout.VERTICAL);
+//				LinearLayout layout = new LinearLayout(ProfileActivity.this);
+//				layout.setOrientation(LinearLayout.VERTICAL);
 
 				//layout.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
-				final EditText txtProfileName = new EditText(getApplicationContext());
+//				final EditText textProfileName = new EditText(ProfileActivity.this);
+//
+//				final TextView txtInformation = new TextView(ProfileActivity.this);
+//				textProfileName.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+//				txtInformation.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+//				txtInformation.setText(R.string.settings_description_profile_popup);
 
-				final TextView txtInformation = new TextView(getApplicationContext());
-				txtProfileName.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
-				txtInformation.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
-				txtInformation.setText(R.string.settings_description_profile_popup);
-
-				layout.addView(txtInformation);
-				layout.addView(txtProfileName);
+//				layout.addView(txtInformation);
+//				layout.addView(textProfileName);
 
 				LayoutInflater inflater = getLayoutInflater();
-				final View dialoglayout = inflater.inflate(R.layout.layout_addnewprofile, (ViewGroup) getCurrentFocus());
+				final View dialoglayout = inflater.inflate(R.layout.layout_addnewprofile, null);
 
 				AlertDialog.Builder addProfile = new AlertDialog.Builder(ProfileActivity.this);
 				addProfile.setTitle(R.string.dialog_addprofile_header);
@@ -82,10 +81,11 @@ public class ProfileActivity extends BaseActivity {
 				addProfile.setPositiveButton(R.string.dialog_ok, new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
-						EditText profileName = (EditText)dialoglayout.findViewById(R.id.txtProfileName);
+						EditText profileName = (EditText)dialoglayout.findViewById(R.id.editProfileName);
 						if(!profileName.getText().toString().equals(""))
 						{
-							new DatabaseHandler(ProfileActivity.this).AddNewProfile(profileName.getText().toString());	
+							new DatabaseHandler(ProfileActivity.this).AddNewProfile(profileName.getText().toString());
+							new GetProfilesTask().execute();
 						}
 
 
