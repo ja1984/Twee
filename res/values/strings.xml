@@ -92,7 +92,7 @@
     <string name="message_restore_error">The restore failed</string>
     <string name="message_restore_complete">All information has been restored!</string>
     <string name="message_noplot">No plot available</string>
-    <string name="message_empty_collection">Your collection is empty!</string>
+    <string name="message_empty_collection"><b>Your collection is empty!</b>\n<i>press the magnifier to start adding shows</i></string>
     <string name="pref_header_display">Display options</string>
     <string name="pref_header_other">Other options</string>
     <!-- /Messages -->
