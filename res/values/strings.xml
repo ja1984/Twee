@@ -28,9 +28,9 @@
     <string name="button_title_restore">Restore</string>
     <string name="button_title_backup">Backup</string>
     <string name="button_title_newprofile">Add new profile</string>
-    <string name="message_backup_warning">Backup or restore all your profiles and their added shows. \n\n<b>CAUTION!</b>\nWhen you restore an backup the database is wiped before restore, all non backed up information will be deleated!</string>
-    <string name="message_profile_description">Multiple profiles makes it possible for your iphone using partner (maybe) to experience the pure awesomeness of <b>Twee</b> ;) without you having to spoil your nice collection of shows with his/her sucky (again maybe..) shows :D</string>
-    <string name="edit_notimplemented">Edit profile is not implementet yet!</string>
+    <string name="message_backup_warning">Backup or restore all your profiles and their added shows. \n\n<b>CAUTION!</b>\nWhen you restore a backup the database is wiped before restore, all non backed up information will be deleted!</string>
+    <string name="message_profile_description">Multiple profiles makes it possible for your iPhone-using partner to experience the pure awesomeness of <b>Twee</b> without spoiling your nice collection of shows with his or her sucky shows ;D </string>
+    <string name="edit_notimplemented">Edit profile is not implemented yet.</string>
     <!-- /General -->
 
 
@@ -90,7 +90,7 @@
     <string name="message_backup_error">The backup failed</string>
     <string name="message_backup_complete">The backup has been saved to /sdcard/twee/backup.txt</string>
     <string name="message_restore_error">The restore failed</string>
-    <string name="message_restore_complete">All information have been restored!</string>
+    <string name="message_restore_complete">All information has been restored!</string>
     <string name="message_noplot">No plot available</string>
     <string name="message_empty_collection">Your collection is empty!</string>
     <string name="pref_header_display">Display options</string>
