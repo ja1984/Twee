@@ -152,7 +152,11 @@ public class HomeActivity extends BaseActivity {
 	protected void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
-		db = new DatabaseHandler(this);
+
+		if(seriesAdapter != null)
+		{
+			new GetMySeries().execute();
+		}
 	}
 
 	@Override

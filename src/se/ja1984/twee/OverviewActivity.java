@@ -68,15 +68,23 @@ public class OverviewActivity extends FragmentActivity {
 		Bundle extras = getIntent().getExtras();
 
 		seriesId = extras.getString("SeriesId");
+		
 		tvdbSeriesId = seriesId;
 		series = new DatabaseHandler(getBaseContext()).GetShowById(seriesId);
 		//getActionBar().setTitle(series.getName());
 
 		fragments = new ArrayList<Fragment>();
-		fragments.add(new Summary(series));
-		fragments.add(new Overview(series));
-		fragments.add(new Episodes(seriesId, totalEpisodes, watchedEpisodes));
+		
 
+	
+		
+		fragments.add(new Summary());
+		
+		fragments.add(new Overview());
+		
+		fragments.add(new Episodes());
+
+		
 		// Create the adapter that will return a fragment for each of the three primary sections
 		// of the app.
 		mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
@@ -149,6 +157,9 @@ public class OverviewActivity extends FragmentActivity {
 		public Fragment getItem(int i) {
 			Fragment fragment = fragments.get(i); //array new DummySectionFragment();
 			Bundle args = new Bundle();
+			args.putString("showId", seriesId);
+			args.putInt("totalEpisodes", totalEpisodes);
+			args.putInt("watchedEpisodes", watchedEpisodes);
 			//args.putInt(DummySectionFragment.ARG_SECTION_NUMBER, i + 1);
 			fragment.setArguments(args);
 			return fragment;

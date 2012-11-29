@@ -32,18 +32,21 @@ public class Overview extends Fragment{
 	ListView episodes;
 	View v;
 	static Episode lastAiredApisode;
-	static CheckBox lastAiredEpisodeWatched;
+	static CheckBox lastAiredEpisodeWatched; 
 
-	public Overview(Series show){
-		this.show = show;
+	public Overview(){
 		this.dateHelper = new DateHelper();
 		this.imageService = new ImageService();
 	}
 
 
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		v = inflater.inflate(R.layout.view_overview, container, false);
+
+		String showId = getArguments().getString("showId");
+		show = new DatabaseHandler(getActivity()).GetShowById(showId);
 
 		activity = getActivity();
 
@@ -106,8 +109,6 @@ public class Overview extends Fragment{
 		}
 
 
-		ArrayList<Episode> newEps = new ArrayList<Episode>();
-		
 		new UpcomingEpisodesTask().execute();
 
 		SetProgress(v, show.getSeriesId());
@@ -131,7 +132,7 @@ public class Overview extends Fragment{
 				watched ++;
 			}
 		}
-				
+
 		ProgressBar progressWatched = (ProgressBar)view.findViewById(R.id.pgrWatched);
 		progressWatched.setMax(totalEpisodes);
 		progressWatched.setProgress(watched);
@@ -155,8 +156,8 @@ public class Overview extends Fragment{
 			super.onPostExecute(result);
 		}
 	}
-	
-	
+
+
 	public static void MarkLastAiredEpisodeAsWatched(Episode episode, Boolean isChecked)
 	{
 		if(episode.getSeason().equals(lastAiredApisode.getSeason()) && episode.getEpisode().equals(lastAiredApisode.getEpisode()))
@@ -164,10 +165,10 @@ public class Overview extends Fragment{
 			MarkLastAiredEpisodeAsWatched(isChecked);
 		}
 	}
-	
+
 	public static void MarkLastAiredEpisodeAsWatched(Boolean isChecked)
 	{
-			lastAiredEpisodeWatched.setChecked(isChecked);
+		lastAiredEpisodeWatched.setChecked(isChecked);
 	}
-	
+
 }

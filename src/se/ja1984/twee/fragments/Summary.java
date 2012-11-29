@@ -2,12 +2,15 @@ package se.ja1984.twee.fragments;
 
 import java.util.StringTokenizer;
 
+import se.ja1984.twee.OverviewActivity;
 import se.ja1984.twee.R;
 import se.ja1984.twee.models.Series;
+import se.ja1984.twee.utils.DatabaseHandler;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,13 +21,16 @@ import android.widget.TextView;
 public class Summary extends Fragment {
 	Series show;
 	
-	public Summary(Series show){
-		this.show = show;
+	public Summary(){
+		//this.show = show;
 	}
 	
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    	    	
+    	    	String showId = getArguments().getString("showId");
+
+    	show = new DatabaseHandler(getActivity()).GetShowById(showId);
     	
     	View v = inflater.inflate(R.layout.view_summary, container, false);
     	TextView summary = (TextView)v.findViewById(R.id.txtSummary);
