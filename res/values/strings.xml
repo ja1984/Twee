@@ -3,8 +3,8 @@
     <!-- General -->
     <string name="app_name">Twee</string>
     <string name="search_hint">Search show</string>
-    <string name="details_lastaired">Last aired</string>
-    <string name="details_upcoming">Upcoming episodes</string>
+    <string name="details_lastaired">Last aired episode</string>
+    <string name="details_upcoming">Next episodes</string>
     <string name="details_totalwatched">Episodes watched</string>
     <string name="summary_header">Summary</string>
     <string name="actors_header">Actors</string>
@@ -46,9 +46,9 @@
 
 
     <!-- Sections -->
-    <string name="section_title_episodes">Episodes</string>
-    <string name="section_title_overview">Overview</string>
-    <string name="section_title_summary">Summary</string>
+    <string name="section_title_episodes">EPISODES</string>
+    <string name="section_title_overview">OVERVIEW</string>
+    <string name="section_title_summary">SUMMARY</string>
     <string name="section_dropdown_today">Today</string>
     <string name="section_dropdown_tomorrow">This week</string>
     <string name="section_dropdown_week">This month</string>

@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import se.ja1984.twee.R;
 import se.ja1984.twee.utils.Utils;
 
 public class BaseActivity extends Activity {

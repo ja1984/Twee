@@ -1,7 +1,6 @@
 package se.ja1984.twee.utils;
 
 import android.os.Environment;
-import android.util.Log;
 import se.ja1984.twee.R;
 
 public class Utils {

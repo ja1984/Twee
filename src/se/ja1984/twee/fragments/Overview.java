@@ -14,6 +14,7 @@ import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,11 +33,20 @@ public class Overview extends Fragment{
 	ListView episodes;
 	View v;
 	static Episode lastAiredApisode;
+	static Episode nextEpisode;
 	static CheckBox lastAiredEpisodeWatched; 
 
 	public Overview(){
 		this.dateHelper = new DateHelper();
 		this.imageService = new ImageService();
+	}
+
+
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		activity = getActivity();
+		super.onCreate(savedInstanceState);
 	}
 
 
@@ -51,16 +61,26 @@ public class Overview extends Fragment{
 		activity = getActivity();
 
 		lastAiredApisode = new DatabaseHandler(activity).GetLastAiredEpisodeForShow(show.getSeriesId());
+		nextEpisode = new DatabaseHandler(activity).GetNextEpisodeForShow(show.getSeriesId());
+		
+		//v.findViewById(R.id.lstEpisodes).setVisibility(View.GONE);
+		
 		TextView seriesName = (TextView)v.findViewById(R.id.txtSeriesName);
 		TextView seriesRating = (TextView)v.findViewById(R.id.txtSeriesRating);
 		TextView seriesStatus = (TextView)v.findViewById(R.id.txtSeriesStatus);
 		ImageView seriesHeader = (ImageView)v.findViewById(R.id.imgSeriesHeader);
 
-		episodes = (ListView)v.findViewById(R.id.lstEpisodes);
+		//episodes = (ListView)v.findViewById(R.id.lstEpisodes);
 		RelativeLayout lastAiredEpisode = (RelativeLayout)v.findViewById(R.id.rllHeader1);
+
 		TextView lastAiredEpisodeTitle = (TextView)v.findViewById(R.id.txtLastAiredTitle);
 		TextView lastAiredEpisodeInformation = (TextView)v.findViewById(R.id.txtLastAiredEpisodeNumber);
 		lastAiredEpisodeWatched = (CheckBox)v.findViewById(R.id.chkWatched);
+
+
+		RelativeLayout rlNextEpisode = (RelativeLayout)v.findViewById(R.id.rllHeader2);
+		TextView nextEpisodeTitle = (TextView)v.findViewById(R.id.txtNextEpisodeTitle);
+		TextView nextEpisodeNumber = (TextView)v.findViewById(R.id.txtNextEpisodeNumber);
 
 		if(lastAiredApisode.getID() != 0)
 		{
@@ -97,6 +117,18 @@ public class Overview extends Fragment{
 		}
 
 
+		if(!nextEpisode.getTitle().equals(""))
+		{
+			nextEpisodeTitle.setText(nextEpisode.getTitle());
+			nextEpisodeNumber.setText(dateHelper.Episodenumber(nextEpisode) + " | " + dateHelper.DisplayDate(nextEpisode.getAired()));
+
+			rlNextEpisode.setOnClickListener(new View.OnClickListener() {
+				public void onClick(View v) {
+					new SeriesHelper().displayPlot(nextEpisode, activity);
+				}
+			});
+		}
+
 
 		if(show.getHeader() != null){
 			seriesHeader.setImageBitmap(imageService.GetImage(show.getHeader(), activity));
@@ -109,7 +141,7 @@ public class Overview extends Fragment{
 		}
 
 
-		new UpcomingEpisodesTask().execute();
+		//new UpcomingEpisodesTask().execute();
 
 		SetProgress(v, show.getSeriesId());
 
@@ -152,7 +184,7 @@ public class Overview extends Fragment{
 
 		@Override
 		protected void onPostExecute(ArrayList<Episode> result) {
-			episodes.setAdapter(new UpcomingEpisodesAdapter(getActivity(), R.id.lstEpisodes, episodes,result));
+			//episodes.setAdapter(new UpcomingEpisodesAdapter(getActivity(), R.id.lstEpisodes, episodes,result));
 			super.onPostExecute(result);
 		}
 	}

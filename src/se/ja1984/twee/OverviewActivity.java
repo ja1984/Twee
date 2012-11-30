@@ -58,8 +58,8 @@ public class OverviewActivity extends FragmentActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-	    String theme = prefs.getString("pref_theme", "2");
-	    setTheme(Utils.GetTheme(Integer.parseInt(theme)));
+		String theme = prefs.getString("pref_theme", "2");
+		setTheme(Utils.GetTheme(Integer.parseInt(theme)));
 
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.layout_overview);
@@ -68,23 +68,23 @@ public class OverviewActivity extends FragmentActivity {
 		Bundle extras = getIntent().getExtras();
 
 		seriesId = extras.getString("SeriesId");
-		
+
 		tvdbSeriesId = seriesId;
 		series = new DatabaseHandler(getBaseContext()).GetShowById(seriesId);
 		//getActionBar().setTitle(series.getName());
 
 		fragments = new ArrayList<Fragment>();
-		
 
-	
-		
+
+
+
 		fragments.add(new Summary());
-		
+
 		fragments.add(new Overview());
-		
+
 		fragments.add(new Episodes());
 
-		
+
 		// Create the adapter that will return a fragment for each of the three primary sections
 		// of the app.
 		mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
@@ -97,15 +97,16 @@ public class OverviewActivity extends FragmentActivity {
 
 	public void Reload()
 	{
-		Episodes fragment = (Episodes) fragments.get(2);
-		//fragment = new Fragments.EpisodesFragment(series, totalEpisodes, watchedEpisodes);
+		//Episodes fragment = (Episodes) fragments.get(2);
 	}
 
 	public static void Refresh()
 	{
+
 		View v = (View)fragments.get(1).getView();
-		Overview.SetProgress(v, tvdbSeriesId);
-		//Episodes.MarkAllEpisodes();
+
+		if(v != null)
+			Overview.SetProgress(v, tvdbSeriesId);
 	}
 
 
@@ -173,9 +174,9 @@ public class OverviewActivity extends FragmentActivity {
 		@Override
 		public CharSequence getPageTitle(int position) {
 			switch (position) {
-			case 0: return getString(R.string.section_title_summary).toUpperCase();
-			case 1: return getString(R.string.section_title_overview).toUpperCase();
-			case 2: return getString(R.string.section_title_episodes).toUpperCase();
+			case 0: return getString(R.string.section_title_summary);
+			case 1: return getString(R.string.section_title_overview);
+			case 2: return getString(R.string.section_title_episodes);
 			}
 			return null;
 		}
@@ -232,7 +233,6 @@ public class OverviewActivity extends FragmentActivity {
 
 		@Override
 		protected void onPostExecute(Boolean result) {
-			// TODO Auto-generated method stub
 			super.onPostExecute(result);
 
 			if(result)

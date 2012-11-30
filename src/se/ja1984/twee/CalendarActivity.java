@@ -124,7 +124,7 @@ public class CalendarActivity extends FragmentActivity implements ActionBar.OnNa
                 Bundle savedInstanceState) {
         	ListView listView = new ListView(getActivity());
             Bundle args = getArguments();
-            CalendarAdapter calendarAdapter = new CalendarAdapter(getActivity(), R.id.lstEpisodes, listView, new DatabaseHandler(getActivity()).GetAllEpisodesForGivenTimePeriod(args.getInt(ARG_SECTION_NUMBER)));
+            CalendarAdapter calendarAdapter = new CalendarAdapter(getActivity(), R.id.btnAddProfile, listView, new DatabaseHandler(getActivity()).GetAllEpisodesForGivenTimePeriod(args.getInt(ARG_SECTION_NUMBER)));
             listView.setAdapter(calendarAdapter);
             return listView;
         }

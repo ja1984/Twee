@@ -148,7 +148,6 @@ public class BackupActivity extends BaseActivity {
 	private void RestoreBackup()
 	{
 		Gson json = new Gson();
-		Backup backup = new Backup();
 		ArrayList<Backup> backups = new ArrayList<Backup>();
 		String jsonString = "";
 

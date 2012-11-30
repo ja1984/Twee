@@ -8,9 +8,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
-import com.slidingmenu.lib.SlidingMenu;
-import com.slidingmenu.lib.app.SlidingActivity;
-
 import se.ja1984.twee.R;
 import se.ja1984.twee.adapters.SeriesAdapter;
 import se.ja1984.twee.models.Episode;
@@ -20,14 +17,12 @@ import se.ja1984.twee.models.Series;
 import se.ja1984.twee.utils.DatabaseHandler;
 import se.ja1984.twee.utils.Utils;
 import se.ja1984.twee.utils.XMLParser;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -150,7 +145,6 @@ public class HomeActivity extends BaseActivity {
 
 	@Override
 	protected void onResume() {
-		// TODO Auto-generated method stub
 		super.onResume();
 
 		if(seriesAdapter != null)
@@ -161,11 +155,8 @@ public class HomeActivity extends BaseActivity {
 
 	@Override
 	protected void onRestart() {
-		// TODO Auto-generated method stub
 		super.onRestart();
 		seriesAdapter.notifyDataSetChanged();
-		//new GetMySeries().execute();
-		//mySeries.notify();
 	}
 
 	private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
@@ -277,7 +268,7 @@ public class HomeActivity extends BaseActivity {
 		selectedProfile = Utils.selectedProfile;
 		newSelectedProfile = selectedProfile;
 
-		final ArrayList<Profile> profiles = db.GetAllprofiles();
+		final ArrayList<Profile> profiles = new DatabaseHandler(HomeActivity.this).GetAllprofiles();
 		ArrayList<String> availableProfiles = new ArrayList<String>();
 
 		for (int i = 0; i < profiles.size(); i++) {
@@ -428,7 +419,6 @@ public class HomeActivity extends BaseActivity {
 
 		@Override
 		protected void onPostExecute(Boolean result) {
-			// TODO Auto-generated method stub
 			super.onPostExecute(result);
 			Toast.makeText(HomeActivity.this, R.string.message_episodes_updates_done, Toast.LENGTH_SHORT).show();
 
