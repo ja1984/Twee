@@ -17,7 +17,7 @@ public class PreferenceActivity extends BaseActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.activity_preference, menu);
+        getMenuInflater().inflate(R.menu.menu_preference, menu);
         return true;
     }
     

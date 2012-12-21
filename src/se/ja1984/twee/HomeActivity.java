@@ -9,6 +9,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 import se.ja1984.twee.R;
+import se.ja1984.twee.SearchableActivity.FetchAndSaveSeries;
 import se.ja1984.twee.adapters.SeriesAdapter;
 import se.ja1984.twee.models.Episode;
 import se.ja1984.twee.models.ExtendedSeries;
@@ -18,6 +19,7 @@ import se.ja1984.twee.utils.DatabaseHandler;
 import se.ja1984.twee.utils.Utils;
 import se.ja1984.twee.utils.XMLParser;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -42,7 +44,6 @@ import android.widget.Toast;
 public class HomeActivity extends BaseActivity {
 
 
-	private DatabaseHandler db;
 	static final String KEY_URL = "http://www.thetvdb.com/api/GetSeries.php?seriesname=";
 	static final String KEY_FULLURL = "http://www.thetvdb.com//data/series/%s/all/";
 	static final String KEY_SERIES = "Series";
@@ -78,6 +79,9 @@ public class HomeActivity extends BaseActivity {
 	View selectedView;
 	SeriesAdapter seriesAdapter;
 	Menu menu;
+	Integer currentPosition;
+	Integer currentIndex;
+	ProgressDialog saveDialog;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -102,7 +106,7 @@ public class HomeActivity extends BaseActivity {
 		mySeries.setEmptyView(findViewById(R.id.emptyView));
 
 		registerForContextMenu(mySeries);
-
+	
 		new GetSelectedUserTask().execute();
 
 		//getActionBar().setDisplayHomeAsUpEnabled(true);
@@ -148,7 +152,7 @@ public class HomeActivity extends BaseActivity {
 		super.onResume();
 
 		if(seriesAdapter != null)
-		{
+		{		
 			new GetMySeries().execute();
 		}
 	}
@@ -156,6 +160,7 @@ public class HomeActivity extends BaseActivity {
 	@Override
 	protected void onRestart() {
 		super.onRestart();
+		Log.d("test","rte");
 		seriesAdapter.notifyDataSetChanged();
 	}
 
@@ -187,12 +192,10 @@ public class HomeActivity extends BaseActivity {
 			switch (item.getItemId()) {
 			case R.id.menu_delete:
 				deleteSeries(selectedItem);
-				new GetMySeries().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-				mode.finish();		
+				mode.finish();
 				return true;
 
 			case R.id.menu_refresh:
-				Toast.makeText(HomeActivity.this, R.string.message_episodes_updates, Toast.LENGTH_SHORT).show();
 				new GetNewEpisodes().execute(selectedItem);
 				mode.finish();
 				return true;
@@ -255,6 +258,10 @@ public class HomeActivity extends BaseActivity {
 
 		case R.id.menu_chooseprofile:
 			displayProfileChooser();
+			return true;
+			
+		case R.id.menu_trending:
+			startActivity(new Intent(this,TrendingActivity.class));
 			return true;
 
 		default:
@@ -319,11 +326,18 @@ public class HomeActivity extends BaseActivity {
 		.setCancelable(false)
 		.setPositiveButton(R.string.dialog_ok, new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int id) {
-				db.DeleteShow(seriesId);
-				new GetMySeries().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+			 new DatabaseHandler(HomeActivity.this).DeleteShow(seriesId);
+			 new GetMySeries().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 			}
 		})
-		.setNegativeButton(R.string.dialog_cancel, null)
+		.setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				// TODO Auto-generated method stub
+				
+			}
+		})
 		.show();
 
 
@@ -338,7 +352,6 @@ public class HomeActivity extends BaseActivity {
 			series = new DatabaseHandler(HomeActivity.this).GetMyShows();
 			return series;
 		}
-
 
 		@Override
 		protected void onPostExecute(ArrayList<ExtendedSeries> result) {
@@ -363,24 +376,48 @@ public class HomeActivity extends BaseActivity {
 				findViewById(R.id.txtMessage).setVisibility(View.VISIBLE);
 			}
 
+			
+			currentIndex = mySeries.getFirstVisiblePosition();
+			View v = mySeries.getChildAt(0);
+			currentPosition = (v == null) ? 0 : v.getTop();
+			
 			seriesAdapter = new SeriesAdapter(getApplicationContext(), viewToDisplay, mySeries, result);
 			mySeries.setAdapter(seriesAdapter);
+			
+			if(currentPosition != null && currentIndex != null)
+				mySeries.setSelectionFromTop(currentIndex, currentPosition);
 
 		}
 
 	}
 
 
-	public class GetNewEpisodes extends AsyncTask<String, Void, Boolean>
+	public class GetNewEpisodes extends AsyncTask<String, String, Boolean>
 	{
 
+		@Override
+		protected void onPreExecute(){
+			saveDialog = ProgressDialog.show(HomeActivity.this, getString(R.string.message_download_pleasewait),getString(R.string.message_download_information),true,false, new DialogInterface.OnCancelListener(){
+				@Override
+				public void onCancel(DialogInterface dialog) {
+					//GetNewEpisodes.this.cancel(true);
+				}
+			}
+					);
+		}
+		
+		protected void onProgressUpdate(String... value) {
+			super.onProgressUpdate(value);
+			saveDialog.setMessage(value[0]);
+		}
+		
 		@Override
 		protected Boolean doInBackground(String... q) {
 			String completeAddress = String.format(KEY_FULLURL, q[0]);
 			XMLParser parser = new XMLParser();
 
-			String xml = parser.getXmlFromUrl(completeAddress);		
-
+			String xml = parser.getXmlFromUrl(completeAddress);
+			publishProgress(getString(R.string.message_episodes_updates));
 			Document doc = parser.getDomElement(xml);
 			NodeList nl = doc.getElementsByTagName(KEY_SERIES);
 			NodeList episodes = doc.getElementsByTagName(KEY_EPISODE);		
@@ -407,12 +444,9 @@ public class HomeActivity extends BaseActivity {
 				ep.setWatched("0");
 				Episodes.add(ep);
 			}
-
-			Log.d("Parsat episoderna","Klart");
-
-			db.UpdateAndAddEpisodes(Episodes, q[0]);
-
-
+			publishProgress(getString(R.string.message_download_save_episodes));
+			
+			new DatabaseHandler(HomeActivity.this).UpdateAndAddEpisodes(Episodes, q[0]);
 
 			return true;
 		}
@@ -420,8 +454,7 @@ public class HomeActivity extends BaseActivity {
 		@Override
 		protected void onPostExecute(Boolean result) {
 			super.onPostExecute(result);
-			Toast.makeText(HomeActivity.this, R.string.message_episodes_updates_done, Toast.LENGTH_SHORT).show();
-
+			saveDialog.cancel();
 		}
 
 	}

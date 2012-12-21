@@ -18,6 +18,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView.FindListener;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -116,8 +117,7 @@ public class Overview extends Fragment{
 			lastAiredHeader.setVisibility(View.GONE);
 		}
 
-
-		if(!nextEpisode.getTitle().equals(""))
+		if(nextEpisode.getTitle() != null)
 		{
 			nextEpisodeTitle.setText(nextEpisode.getTitle());
 			nextEpisodeNumber.setText(dateHelper.Episodenumber(nextEpisode) + " | " + dateHelper.DisplayDate(nextEpisode.getAired()));
@@ -127,6 +127,11 @@ public class Overview extends Fragment{
 					new SeriesHelper().displayPlot(nextEpisode, activity);
 				}
 			});
+		}
+		else
+		{
+			rlNextEpisode.setVisibility(View.GONE);
+			v.findViewById(R.id.txtUpcomingEpisodes).setVisibility(View.GONE);
 		}
 
 

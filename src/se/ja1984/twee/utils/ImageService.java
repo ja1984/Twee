@@ -36,6 +36,9 @@ public class ImageService {
 			connection.connect();
 			InputStream input = connection.getInputStream();
 			//Bitmap myBitmap = BitmapFactory.decodeStream(input,null,new Options().);
+			
+					
+			
 			Bitmap myBitmap = BitmapFactory.decodeStream(input);
 
 			if((int)myBitmap.getWidth() > 800)
@@ -47,6 +50,7 @@ public class ImageService {
 			return SaveImage(myBitmap, name, ctx);
 		} catch (OutOfMemoryError e) {
 			Log.d("Fel vid sparning",e.getMessage());
+			
 			if(tryAgain)
 			{
 				tryAgain = false;

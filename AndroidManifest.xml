@@ -1,11 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="se.ja1984.twee"
-    android:versionCode="2"
-    android:versionName="1.01" >
+    android:versionCode="8"
+    android:versionName="1.07" >
 
     <uses-sdk
         android:minSdkVersion="14"
-        android:targetSdkVersion="15" />
+        android:targetSdkVersion="17" />
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -17,10 +18,10 @@
         android:theme="@style/Light" >
         <activity
             android:name="se.ja1984.twee.HomeActivity"
-            android:label="@string/title_activity_home"
-            android:value=".SearchableActivity"
             android:configChanges="keyboardHidden|orientation"
-             >
+            android:label="@string/title_activity_home"
+            android:screenOrientation="portrait"
+            android:value=".SearchableActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -33,25 +34,27 @@
         </activity>
         <activity
             android:name="se.ja1984.twee.SettingsActivity"
+            android:configChanges="keyboardHidden|orientation"
             android:label="@string/title_activity_settings"
-            android:configChanges="keyboardHidden|orientation" >
+            android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="se.ja1984.twee.HomeActivity" />
         </activity>
         <activity
             android:name="se.ja1984.twee.OverviewActivity"
-            android:label="@string/title_activity_overview"
             android:configChanges="keyboardHidden|orientation"
-            >
+            android:label="@string/title_activity_overview"
+            android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="se.ja1984.twee.HomeActivity" />
         </activity>
         <activity
             android:name="se.ja1984.twee.SearchableActivity"
+            android:configChanges="keyboardHidden|orientation"
             android:label="@string/title_activity_searchable"
-            android:configChanges="keyboardHidden|orientation" >
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
 
@@ -70,18 +73,18 @@
         </activity>
         <activity
             android:name="se.ja1984.twee.CalendarActivity"
-            android:label="@string/title_activity_calendar"
             android:configChanges="keyboardHidden|orientation"
-             >
+            android:label="@string/title_activity_calendar"
+            android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="se.ja1984.twee.HomeActivity" />
         </activity>
         <activity
             android:name="se.ja1984.twee.AboutActivity"
-            android:label="@string/title_activity_about"
             android:configChanges="keyboardHidden|orientation"
-             >
+            android:label="@string/title_activity_about"
+            android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="se.ja1984.twee.HomeActivity" />
@@ -95,18 +98,18 @@
         </activity>
         <activity
             android:name="se.ja1984.twee.PreferenceActivity"
-            android:label="@string/title_activity_preference"
             android:configChanges="keyboardHidden|orientation"
-             >
+            android:label="@string/title_activity_preference"
+            android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="se.ja1984.twee.HomeActivity" />
         </activity>
         <activity
-            android:name=".BackupActivity"
-            android:label="@string/title_activity_backup"
+            android:name="se.ja1984.twee.BackupActivity"
             android:configChanges="keyboardHidden|orientation"
-             >
+            android:label="@string/title_activity_backup"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="se.ja1984.twee.BackupActivity" />
 
@@ -118,10 +121,10 @@
                 android:value="se.ja1984.twee.PreferenceActivity" />
         </activity>
         <activity
-            android:name=".ProfileActivity"
-            android:label="@string/title_activity_profile"
+            android:name="se.ja1984.twee.ProfileActivity"
             android:configChanges="keyboardHidden|orientation"
-             >
+            android:label="@string/title_activity_profile"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="se.ja1984.twee.ProfileActivity" />
 
@@ -131,6 +134,14 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="se.ja1984.twee.PreferenceActivity" />
+        </activity>
+        <activity
+            android:name="se.ja1984.twee.TrendingActivity"
+            android:label="@string/title_activity_trending"
+            android:parentActivityName="se.ja1984.twee.HomeActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="se.ja1984.twee.HomeActivity" />
         </activity>
     </application>
 

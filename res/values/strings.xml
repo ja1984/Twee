@@ -1,10 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
 
     <!-- General -->
     <string name="app_name">Twee</string>
     <string name="search_hint">Search show</string>
     <string name="details_lastaired">Last aired episode</string>
-    <string name="details_upcoming">Next episodes</string>
+    <string name="details_upcoming">Next episode</string>
     <string name="details_totalwatched">Episodes watched</string>
     <string name="summary_header">Summary</string>
     <string name="actors_header">Actors</string>
@@ -65,6 +66,8 @@
     <string name="menu_delete">Delete</string>
     <string name="menu_chooseprofile">Select profile</string>
     <string name="menu_downloadimages">Download missing images</string>
+    <string name="menu_tredning">Add from trakt.tv trending</string>
+    <string name="menu_information">Information</string>
     <!-- /Menu -->
 
 
@@ -93,6 +96,7 @@
     <string name="message_restore_complete">All information has been restored!</string>
     <string name="message_noplot">No plot available</string>
     <string name="message_empty_collection"><b>Your collection is empty!</b>\n<i>press the magnifier to start adding shows</i></string>
+    <string name="message_trending_information">These shows are the top 10 trending shows on Trakt.tv\n It\'s based on what people are watching <b>right now</b>\n\n <i>tip: refresh, and they may change :)</i></string>
     <string name="pref_header_display">Display options</string>
     <string name="pref_header_other">Other options</string>
     <!-- /Messages -->
@@ -113,8 +117,8 @@
     <string name="about_header">About Twee</string>
     <string name="about_text">Twee is getting all its information from thetvdb.com, support them in any way possible!</string>
     <string name="thanks_header">Thanks to</string>
-    <string name="thanks_text">klizzer, vastis, M203, Reconnnn, mates, Arias, toffe, grief, zero, happyoccasion, helevorn, milky81, Oxygen and Cat.</string>
-
+    <string name="thanks_text">klizzer, vastis, M203, Reconnnn, mates, Arias, toffe, grief, zero, happyoccasion, helevorn, milky81, Oxygen, Cat and Snargaflab</string>
+	<string name="stats_header">Numbers (beacause numbera are fun)</string>
     <!-- /About -->
 
 
@@ -135,6 +139,7 @@
     <string name="dialog_selectprofile_header">Select profile</string>
     <string name="settings_description_profile_popup">Enter the name of the new profile</string>
     <string name="dialog_addprofile_header">New profile</string>
+    <string name="dialog_editprofile_header">Edit profile</string>
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_preference">Settings</string>
     <string name="pref_themes_array_default">Light</string>
@@ -142,5 +147,6 @@
     <string name="pref_display_summary">Display layout: %s</string>
     <string name="title_activity_backup">Backup and restore</string>
     <string name="title_activity_profile">Profiles</string>
+    <string name="title_activity_trending">Trending on Trakt.tv</string>
 
 </resources>

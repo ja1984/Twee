@@ -47,6 +47,8 @@ public class ProfileAdapter extends ArrayAdapter<Profile> {
 			convertView = inflator.inflate(R.layout.listitem_profile, null);
 		}
 		
+		convertView.setTag(profiles.get(position).getId().toString());
+		
 		TextView txtProfileName = (TextView)convertView.findViewById(R.id.txtProfileName);
 		
 		txtProfileName.setText(profiles.get(position).getName());

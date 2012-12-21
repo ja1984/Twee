@@ -19,7 +19,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Toast;
+import android.widget.TextView;
 import android.support.v4.app.NavUtils;
 
 public class ProfileActivity extends BaseActivity {
@@ -41,7 +41,48 @@ public class ProfileActivity extends BaseActivity {
 		lstProfiles.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-				Toast.makeText(ProfileActivity.this, R.string.edit_notimplemented, Toast.LENGTH_SHORT).show();
+				
+				final String profileId = (String) arg1.getTag();
+				TextView profileName = (TextView)arg1.findViewById(R.id.txtProfileName);
+				
+				final String oldProfileName = (String) profileName.getText().toString();
+				
+				
+				LayoutInflater inflater = getLayoutInflater();
+				final View dialoglayout = inflater.inflate(R.layout.layout_addnewprofile, null);
+				EditText txtProfileName  = (EditText)dialoglayout.findViewById(R.id.editProfileName);
+				txtProfileName.setText(oldProfileName);
+				AlertDialog.Builder addProfile = new AlertDialog.Builder(ProfileActivity.this);
+				addProfile.setTitle(R.string.dialog_editprofile_header);
+
+				addProfile.setView(dialoglayout);
+
+				addProfile.setPositiveButton(R.string.dialog_ok, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						EditText profileName = (EditText)dialoglayout.findViewById(R.id.editProfileName);
+						if(!profileName.getText().toString().equals("") && !profileName.getText().toString().equals(oldProfileName))
+						{
+							new DatabaseHandler(ProfileActivity.this).EditProfile(profileId, profileName.getText().toString());
+							new GetProfilesTask().execute();
+						}
+
+
+					}
+				});
+
+				addProfile.setNegativeButton(R.string.delete_cancel, new DialogInterface.OnClickListener() {
+
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						//Do nothing	
+					}
+				});
+
+				addProfile.create().show();
+				
+				
+//				Toast.makeText(ProfileActivity.this, R.string.edit_notimplemented, Toast.LENGTH_SHORT).show();
 			}
 		});
 
@@ -50,21 +91,6 @@ public class ProfileActivity extends BaseActivity {
 
 			@Override
 			public void onClick(View v) {
-
-//				LinearLayout layout = new LinearLayout(ProfileActivity.this);
-//				layout.setOrientation(LinearLayout.VERTICAL);
-
-				//layout.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
-//				final EditText textProfileName = new EditText(ProfileActivity.this);
-//
-//				final TextView txtInformation = new TextView(ProfileActivity.this);
-//				textProfileName.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
-//				txtInformation.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
-//				txtInformation.setText(R.string.settings_description_profile_popup);
-
-//				layout.addView(txtInformation);
-//				layout.addView(textProfileName);
-
 				LayoutInflater inflater = getLayoutInflater();
 				final View dialoglayout = inflater.inflate(R.layout.layout_addnewprofile, null);
 
@@ -106,7 +132,7 @@ public class ProfileActivity extends BaseActivity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.layout_profile, menu);
+		getMenuInflater().inflate(R.menu.menu_profile, menu);
 		return true;
 	}
 

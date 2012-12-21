@@ -385,7 +385,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 				}
 				else
 				{
-					s.setNextEpisodeInformation(e.getAired() != null ? new DateHelper().Episodenumber(e) + " " + e.getTitle() + " - " + new DateHelper().DaysTilNextEpisode(e.getAired()) : "No information");	
+					s.setNextEpisodeInformation(e.getAired() != null ? new DateHelper().Episodenumber(e) + " " + e.getTitle() + " - " + new DateHelper().DaysTilNextEpisode(e.getAired()) : "No information about next episode");	
 				}
 
 
@@ -1043,6 +1043,21 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		return name;
 	}
 
+	
+	public void EditProfile(String profileId, String name)
+	{
+		SQLiteDatabase db = this.getWritableDatabase();
+		try {
+			db.execSQL("UPDATE Profile SET Name = '"+ name +"' Where Id = " + profileId + "");	
+		} catch (Exception e) {
+			Log.d("EditProfile","" + e.getMessage());
+		}
+		finally{
+			db.close();
+		}
+		
+		//TODO: implement!
+	}
 
 	private int GetTotalEpisodes(String seriesId){
 		SQLiteDatabase db = this.getReadableDatabase();

@@ -12,13 +12,14 @@ public class AboutActivity extends BaseActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_about);
-        getActionBar().setDisplayHomeAsUpEnabled(true);        
+        getActionBar().setDisplayHomeAsUpEnabled(true);
+        
     }
     
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.layout_about, menu);
+        getMenuInflater().inflate(R.menu.menu_about, menu);
         return true;
     }
 
@@ -33,4 +34,7 @@ public class AboutActivity extends BaseActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    
+    
+    
 }

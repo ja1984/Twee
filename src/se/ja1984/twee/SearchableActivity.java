@@ -20,6 +20,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NavUtils;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -42,6 +43,7 @@ import se.ja1984.twee.utils.Utils;
 import se.ja1984.twee.utils.XMLParser;
 
 public class SearchableActivity extends ListActivity {
+
 
 	private DatabaseHandler db;
 	static final String KEY_URL = "http://www.thetvdb.com/api/GetSeries.php?seriesname=";
@@ -79,9 +81,9 @@ public class SearchableActivity extends ListActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 
-		
+
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-	    String theme = prefs.getString("pref_theme", "2");
+		String theme = prefs.getString("pref_theme", "2");
 		setTheme(Utils.GetTheme(Integer.parseInt(theme)));
 		downloadHeader = prefs.getBoolean("pref_downloadheader", true);
 
@@ -104,14 +106,6 @@ public class SearchableActivity extends ListActivity {
 			doSearchQuery(query);
 		}
 
-		emptyView.setOnClickListener(new OnClickListener() {
-			public void onClick(View v) {
-				doSearchQuery(searchQuery);
-			}
-		}); 
-
-
-
 		searchResult.setOnItemClickListener(new android.widget.AdapterView.OnItemClickListener() {
 
 			public void onItemClick(AdapterView<?> arg0, View rowView, int arg2, long arg3) {
@@ -119,8 +113,6 @@ public class SearchableActivity extends ListActivity {
 
 				if(!db.ShowExists(seriesId))
 				{
-					//setProgressBarIndeterminateVisibility(true);
-
 					FetchAndSaveSeries fas = new FetchAndSaveSeries();
 					fas.execute(seriesId);
 				}
@@ -221,8 +213,8 @@ public class SearchableActivity extends ListActivity {
 			ProgressBar searchProgress = (ProgressBar) emptyView.findViewById(R.id.pgrSearch);
 			searchProgress.setVisibility(View.GONE);
 			txtMessage.setText("No results found");
-			
-			
+
+
 			SearchAdapter sa = new SearchAdapter(SearchableActivity.this,R.layout.listitem_searchresult,series);
 			setListAdapter(sa);
 
@@ -236,7 +228,7 @@ public class SearchableActivity extends ListActivity {
 		@Override
 		protected Boolean doInBackground(String... q) {
 			saveDialog.setMessage(getString(R.string.message_download_information));
-			String completeAddress = String.format(KEY_FULLURL, q[0]);
+			String completeAddress = String.format(KEY_FULLURL, TextUtils.htmlEncode(q[0].replaceAll("[^a-zA-Z0-9 ]+", "")));
 			//String completeAddress = "http://www.thetvdb.com/data/series/" + q[0] +"/all/";
 			XMLParser parser = new XMLParser();
 
@@ -336,10 +328,10 @@ public class SearchableActivity extends ListActivity {
 
 		@Override
 		protected void onPreExecute(){
-			saveDialog = ProgressDialog.show(SearchableActivity.this, getString(R.string.message_download_pleasewait),getString(R.string.message_download_information),true,true, new DialogInterface.OnCancelListener(){
+			saveDialog = ProgressDialog.show(SearchableActivity.this, getString(R.string.message_download_pleasewait),getString(R.string.message_download_information),true,false, new DialogInterface.OnCancelListener(){
 				@Override
 				public void onCancel(DialogInterface dialog) {
-					FetchAndSaveSeries.this.cancel(true);
+					//FetchAndSaveSeries.this.cancel(true);
 				}
 			}
 					);
@@ -353,7 +345,7 @@ public class SearchableActivity extends ListActivity {
 
 		@Override
 		protected void onPostExecute(Boolean result) {
-			Log.d("Resultat", "" + result);
+
 			if(result)
 			{
 				saveDialog.cancel();
