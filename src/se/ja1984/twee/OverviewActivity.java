@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
+
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -49,6 +52,7 @@ public class OverviewActivity extends FragmentActivity {
 	static final String KEY_SERIES = "Series";
 	static final String KEY_IMAGE = "banner";
 	static final String KEY_HEADER = "fanart";
+	ProgressDialog saveDialog;
 
 	/**
 	 * The {@link ViewPager} that will host the section contents.
@@ -135,7 +139,6 @@ public class OverviewActivity extends FragmentActivity {
 
 		case R.id.menu_downloadimages:
 			new DownloadImagesTask().execute();
-			Toast.makeText(getBaseContext(), R.string.message_downloading_images, Toast.LENGTH_LONG).show();
 			break;
 
 		}
@@ -183,15 +186,30 @@ public class OverviewActivity extends FragmentActivity {
 	}
 
 
-	private class DownloadImagesTask extends AsyncTask<Void, Void, Boolean> 
+	private class DownloadImagesTask extends AsyncTask<Void, String, Boolean> 
 	{
 
+		@Override
+		protected void onPreExecute(){
+			saveDialog = ProgressDialog.show(OverviewActivity.this, getString(R.string.message_download_pleasewait),getString(R.string.message_download_information),true,false, new DialogInterface.OnCancelListener(){
+				@Override
+				public void onCancel(DialogInterface dialog) {
+					//FetchAndSaveSeries.this.cancel(true);
+				}
+			}
+					);
+
+		}
+		
+		protected void onProgressUpdate(String... value) {
+			super.onProgressUpdate(value);
+			saveDialog.setMessage(value[0]);
+		}
+		
 		@Override
 		protected Boolean doInBackground(Void... params) {
 
 			boolean success = true;
-
-
 			String completeAddress = String.format(KEY_FULLURL, seriesId);
 			XMLParser parser = new XMLParser();
 
@@ -204,6 +222,7 @@ public class OverviewActivity extends FragmentActivity {
 			Series s = new Series();
 			Element e = (Element) nl.item(0);
 
+			publishProgress(getString(R.string.message_download_banner));
 			s.setSeriesId(seriesId);
 			String image = parser.getValue(e, KEY_IMAGE);		
 			if(!image.equals("")){
@@ -215,6 +234,7 @@ public class OverviewActivity extends FragmentActivity {
 				}
 			}
 
+			publishProgress(getString(R.string.message_download_header));
 			String header = parser.getValue(e, KEY_HEADER);
 			if(!header.equals("")){
 				try {
@@ -227,24 +247,18 @@ public class OverviewActivity extends FragmentActivity {
 
 			new DatabaseHandler(OverviewActivity.this).UpdateShowImage(s);
 
-
 			return success;
 		}
 
 		@Override
 		protected void onPostExecute(Boolean result) {
 			super.onPostExecute(result);
-
-			if(result)
-			{
-				Toast.makeText(getBaseContext(), R.string.message_downloading_images_success, Toast.LENGTH_SHORT).show();
-			}
-			else
+			saveDialog.cancel();
+			if(!result)
 			{
 				Toast.makeText(getBaseContext(), R.string.message_downloading_images_error, Toast.LENGTH_SHORT).show();
 			}
-
-
+						
 		}
 
 
