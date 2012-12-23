@@ -40,7 +40,7 @@ public class CalendarActivity extends FragmentActivity implements ActionBar.OnNa
         setContentView(R.layout.layout_calendar);
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
-        episodes = new DatabaseHandler(getBaseContext()).GetAllEpisodesForGivenTimePeriod(2);
+        episodes = new DatabaseHandler(getBaseContext()).GetAllEpisodesForGivenTimePeriod(1);
                 
         // Set up the action bar.
         final ActionBar actionBar = getActionBar();
@@ -55,6 +55,7 @@ public class CalendarActivity extends FragmentActivity implements ActionBar.OnNa
                         android.R.layout.simple_list_item_1,
                         android.R.id.text1,
                         new String[]{
+                        		getString(R.string.section_dropdown_yesterday),
                                 getString(R.string.section_dropdown_today),
                                 getString(R.string.section_dropdown_tomorrow),
                                 getString(R.string.section_dropdown_week),

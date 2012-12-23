@@ -152,7 +152,6 @@ public class EpisodeAdapter extends ArrayAdapter<Episode> {
 	private void MarkSeasonAsWatched(String seriesId, String season)
 	{
 		new DatabaseHandler(context).ToggleSeasonWatched("" + seriesId, season, true);
-		Toast.makeText(context, R.string.message_season_watched, Toast.LENGTH_SHORT).show();
 
 		for (int i = 0; i < episodes.size(); i++) {
 			if(episodes.get(i).getSeason().equals(season))

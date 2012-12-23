@@ -172,14 +172,19 @@ public class SearchableActivity extends ListActivity {
 
 		@Override
 		protected ArrayList<Series> doInBackground(String... q) {
-			setProgressBarIndeterminateVisibility(true);
+			//setProgressBarIndeterminateVisibility(true);
 			String completeAddress = KEY_URL + q[0];
 
 			XMLParser parser = new XMLParser();
 			String xml = parser.getXmlFromUrl(completeAddress);
-
+			
 			ArrayList<Series> series = new ArrayList<Series>();
-
+			Log.d("Xml","" + xml);
+			if(xml == null || xml.equals("") || xml.contains("Query failed"))
+			{
+				return series;
+			}
+			
 			if (xml != null)
 			{
 				Document doc = parser.getDomElement(xml);

@@ -50,6 +50,7 @@
     <string name="section_title_episodes">EPISODES</string>
     <string name="section_title_overview">OVERVIEW</string>
     <string name="section_title_summary">SUMMARY</string>
+    <string name="section_dropdown_yesterday">Yesterday</string>
     <string name="section_dropdown_today">Today</string>
     <string name="section_dropdown_tomorrow">This week</string>
     <string name="section_dropdown_week">This month</string>
