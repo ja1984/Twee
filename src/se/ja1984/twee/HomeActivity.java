@@ -2,6 +2,8 @@ package se.ja1984.twee;
 
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.w3c.dom.Document;
@@ -82,12 +84,14 @@ public class HomeActivity extends BaseActivity {
 	Integer currentPosition;
 	Integer currentIndex;
 	ProgressDialog saveDialog;
+	
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		final SharedPreferences settings = getSharedPreferences("Twee", 0);
 		Utils.selectedProfile = settings.getInt("Profile", 1);
+		
 
 		setContentView(R.layout.layout_home);
 
@@ -160,8 +164,6 @@ public class HomeActivity extends BaseActivity {
 	@Override
 	protected void onRestart() {
 		super.onRestart();
-		Log.d("test","rte");
-		seriesAdapter.notifyDataSetChanged();
 	}
 
 	private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
@@ -263,6 +265,10 @@ public class HomeActivity extends BaseActivity {
 		case R.id.menu_trending:
 			startActivity(new Intent(this,TrendingActivity.class));
 			return true;
+			
+		case R.id.menu_unwatched:
+			startActivity(new Intent(this,UnwatchedActivity.class));
+			return true;
 
 		default:
 			return super.onOptionsItemSelected(item);
@@ -347,9 +353,13 @@ public class HomeActivity extends BaseActivity {
 
 		@Override
 		protected ArrayList<ExtendedSeries> doInBackground(String... params) {
+			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(HomeActivity.this);
+			Utils.PreferedSortOrder = Integer.parseInt(prefs.getString("pref_sortorder","0"));
+			Utils.ShowShows = Integer.parseInt(prefs.getString("pref_showshows","0"));
 			ArrayList<ExtendedSeries> series = new ArrayList<ExtendedSeries>();
 
 			series = new DatabaseHandler(HomeActivity.this).GetMyShows();
+			
 			return series;
 		}
 

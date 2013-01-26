@@ -14,7 +14,6 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.NavUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -27,12 +26,12 @@ public class CalendarActivity extends FragmentActivity implements ActionBar.OnNa
 
     private static final String STATE_SELECTED_NAVIGATION_ITEM = "selected_navigation_item";
     ArrayList<Episode> episodes;
-    
+    SharedPreferences prefs;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
     	
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+		prefs = PreferenceManager.getDefaultSharedPreferences(this);
 	    String theme = prefs.getString("pref_theme", "2");
 	    setTheme(Utils.GetTheme(Integer.parseInt(theme)));
     	
@@ -40,7 +39,8 @@ public class CalendarActivity extends FragmentActivity implements ActionBar.OnNa
         setContentView(R.layout.layout_calendar);
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
-        episodes = new DatabaseHandler(getBaseContext()).GetAllEpisodesForGivenTimePeriod(1);
+        Integer selectedView = prefs.getInt("calendar_defaultview", 1);
+        episodes = new DatabaseHandler(getBaseContext()).GetAllEpisodesForGivenTimePeriod(selectedView);
                 
         // Set up the action bar.
         final ActionBar actionBar = getActionBar();
@@ -58,9 +58,12 @@ public class CalendarActivity extends FragmentActivity implements ActionBar.OnNa
                         		getString(R.string.section_dropdown_yesterday),
                                 getString(R.string.section_dropdown_today),
                                 getString(R.string.section_dropdown_tomorrow),
-                                getString(R.string.section_dropdown_week),
+                                getString(R.string.section_dropdown_week)
                         }),
                 this);
+        
+        actionBar.setSelectedNavigationItem(selectedView);
+        
     }
 
     @Override
@@ -100,6 +103,7 @@ public class CalendarActivity extends FragmentActivity implements ActionBar.OnNa
         // When the given tab is selected, show the tab contents in the container
         Fragment fragment = new DummySectionFragment(episodes);
         Bundle args = new Bundle();
+        prefs.edit().putInt("calendar_defaultview", position).apply();
         args.putInt(DummySectionFragment.ARG_SECTION_NUMBER, position);
         fragment.setArguments(args);
         getSupportFragmentManager().beginTransaction()
@@ -125,6 +129,7 @@ public class CalendarActivity extends FragmentActivity implements ActionBar.OnNa
                 Bundle savedInstanceState) {
         	ListView listView = new ListView(getActivity());
             Bundle args = getArguments();
+
             CalendarAdapter calendarAdapter = new CalendarAdapter(getActivity(), R.id.btnAddProfile, listView, new DatabaseHandler(getActivity()).GetAllEpisodesForGivenTimePeriod(args.getInt(ARG_SECTION_NUMBER)));
             listView.setAdapter(calendarAdapter);
             return listView;

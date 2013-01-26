@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="se.ja1984.twee"
-    android:versionCode="10"
-    android:versionName="1.09" >
+    android:versionCode="17"
+    android:versionName="1.14" >
 
     <uses-sdk
         android:minSdkVersion="14"
@@ -138,6 +138,22 @@
         <activity
             android:name="se.ja1984.twee.TrendingActivity"
             android:label="@string/title_activity_trending"
+            android:parentActivityName="se.ja1984.twee.HomeActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="se.ja1984.twee.HomeActivity" />
+        </activity>
+        <activity
+            android:name="se.ja1984.twee.BannerActivity"
+            android:label="@string/title_activity_banner"
+            android:parentActivityName="se.ja1984.twee.OverviewActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="se.ja1984.twee.OverviewActivity" />
+        </activity>
+        <activity
+            android:name="se.ja1984.twee.UnwatchedActivity"
+            android:label="@string/title_activity_unwatched"
             android:parentActivityName="se.ja1984.twee.HomeActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

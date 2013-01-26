@@ -88,7 +88,7 @@ public class SearchableActivity extends ListActivity {
 		downloadHeader = prefs.getBoolean("pref_downloadheader", true);
 
 		super.onCreate(savedInstanceState);
-		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+		//requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 
 		setContentView(R.layout.layout_searchable);
 		ActionBar actionBar = getActionBar();
@@ -179,7 +179,6 @@ public class SearchableActivity extends ListActivity {
 			String xml = parser.getXmlFromUrl(completeAddress);
 			
 			ArrayList<Series> series = new ArrayList<Series>();
-			Log.d("Xml","" + xml);
 			if(xml == null || xml.equals("") || xml.contains("Query failed"))
 			{
 				return series;
@@ -196,7 +195,6 @@ public class SearchableActivity extends ListActivity {
 					Element e = (Element) nl.item(i);
 
 					s.setName(parser.getValue(e, KEY_NAME));
-					Log.d("Namn",parser.getValue(e, KEY_NAME));
 					s.setID(Integer.parseInt(parser.getValue(e, KEY_ID)));
 					s.setAirs(parser.getValue(e, KEY_AIRED));
 					s.setSummary(parser.getValue(e, KEY_SUMMARY));
@@ -239,7 +237,14 @@ public class SearchableActivity extends ListActivity {
 
 			String xml = parser.getXmlFromUrl(completeAddress);		
 
+			if(xml == null || xml.equals(""))
+				return false;
+			
 			Document doc = parser.getDomElement(xml);
+			
+			if(doc == null || doc.equals(""))
+				return false;
+			
 			NodeList nl = doc.getElementsByTagName(KEY_SERIES);
 			NodeList episodes = doc.getElementsByTagName(KEY_EPISODE);		
 
@@ -355,6 +360,10 @@ public class SearchableActivity extends ListActivity {
 			{
 				saveDialog.cancel();
 				NavUtils.navigateUpFromSameTask(SearchableActivity.this);
+			}
+			else{
+				saveDialog.cancel();
+				Toast.makeText(SearchableActivity.this, R.string.message_downloading_show_error, Toast.LENGTH_SHORT).show();
 			}
 			super.onPostExecute(result);
 		}

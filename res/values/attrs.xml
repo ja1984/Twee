@@ -9,4 +9,5 @@
     <attr name="pref_backup" format="integer" />
     <attr name="menu_trending" format="integer" />
     <attr name="menu_information" format="integer" />
+    <attr name="menu_backlog" format="integer" />
 </resources>

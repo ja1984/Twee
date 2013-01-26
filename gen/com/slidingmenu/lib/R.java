@@ -9,21 +9,21 @@ package com.slidingmenu.lib;
 public final class R {
 	public static final class id {
 		public static final int fullscreen = 0x7f050001;
-		public static final int slidingmenulayout = 0x7f050035;
-		public static final int slidingmenurowicon = 0x7f050036;
-		public static final int slidingmenumain = 0x7f050034;
-		public static final int slidingmenurowtitle = 0x7f050037;
+		public static final int slidingmenulayout = 0x7f05003a;
+		public static final int slidingmenurowicon = 0x7f05003b;
+		public static final int slidingmenumain = 0x7f050039;
+		public static final int slidingmenurowtitle = 0x7f05003c;
 		public static final int margin = 0x7f050000;
 	}
 	public static final class color {
 		public static final int holo_blue_bright = 0x7f060000;
 	}
 	public static final class layout {
-		public static final int slidingmenumain = 0x7f030018;
-		public static final int list = 0x7f03000d;
-		public static final int slidingmenurow = 0x7f03001a;
-		public static final int slidingmenumainlist = 0x7f030019;
-		public static final int shadow = 0x7f030017;
+		public static final int slidingmenumain = 0x7f03001c;
+		public static final int list = 0x7f03000f;
+		public static final int slidingmenurow = 0x7f03001e;
+		public static final int slidingmenumainlist = 0x7f03001d;
+		public static final int shadow = 0x7f03001b;
 	}
 	public static final class styleable {
 		public static final int SlidingMenu_behindOffset = 2;
@@ -39,9 +39,9 @@ public final class R {
 		public static final int SlidingMenu_shadowDrawable = 6;
 	}
 	public static final class drawable {
-		public static final int defaultshadow = 0x7f020004;
-		public static final int list_section_divider_holo_custom = 0x7f02001e;
-		public static final int header_background = 0x7f020007;
+		public static final int defaultshadow = 0x7f020005;
+		public static final int list_section_divider_holo_custom = 0x7f020022;
+		public static final int header_background = 0x7f020008;
 	}
 	public static final class attr {
 		public static final int shadowWidth = 0x7f010007;

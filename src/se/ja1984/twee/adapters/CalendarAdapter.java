@@ -90,6 +90,10 @@ public class CalendarAdapter extends ArrayAdapter<Episode> {
 		{
 			dateSeparatorWrapper.setVisibility(View.GONE);
 		}
+		else
+		{
+			dateSeparatorWrapper.setVisibility(View.VISIBLE);
+		}
 
 		return convertView;
 

@@ -1,6 +1,7 @@
 package se.ja1984.twee.utils;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import se.ja1984.twee.models.Episode;
 import se.ja1984.twee.models.ExtendedSeries;
@@ -99,30 +100,30 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	//CRUD
 
 	public Boolean KillDb(){
-		
+
 		try {
 			SQLiteDatabase db = this.getWritableDatabase();
 			db.execSQL("DROP TABLE IF EXISTS " + TABLE_EPISODES);
 			db.execSQL("DROP TABLE IF EXISTS " + TABLE_SERIES);
 			db.execSQL("DROP TABLE IF EXISTS " + TABLE_PROFILE);
-			
+
 			String CREATE_SERIES_TABLE = String.format("CREATE TABLE %s(%s INTEGER PRIMARY KEY autoincrement, %s TEXT,%s TEXT,%s TEXT,%s TEXT,%s TEXT,%s TEXT,%s TEXT,%s TEXT,%s TEXT, %s TEXT, %s TEXT, %s TEXT, %s TEXT, %S TEXT)", TABLE_SERIES, KEY_ID, KEY_SUMMARY, KEY_NAME,KEY_ACTORS,KEY_DAYTIME,KEY_GENRE,KEY_IMDBID,KEY_RATING,KEY_STATUS,KEY_IMAGE, KEY_FIRSTAIRED, KEY_HEADER, KEY_SERIESID, KEY_LASTUPDATED, KEY_PROFILEID);
 			db.execSQL(CREATE_SERIES_TABLE);
 
 			String CREATE_EPISODE_TABLE = String.format("CREATE TABLE %s(%s INTEGER PRIMARY KEY autoincrement,%s TEXT,%s TEXT,%s TEXT,%s TEXT,%s TEXT,%s TEXT, %s TEXT, %s TEXT, %s TEXT, %S TEXT)", TABLE_EPISODES, KEY_ID, KEY_SEASON, KEY_EPISODE, KEY_TITLE, KEY_AIRED, KEY_WATCHED, KEY_SUMMARY, KEY_SERIESID, KEY_LASTUPDATED, KEY_EPISODEID, KEY_PROFILEID);
 			db.execSQL(CREATE_EPISODE_TABLE);
-			
+
 			String CREATE_PROFILE_TABLE = String.format("CREATE TABLE %s(%s INTEGER PRIMARY KEY autoincrement,%s TEXT)", TABLE_PROFILE, KEY_ID, KEY_PROFILENAME);
 			db.execSQL(CREATE_PROFILE_TABLE);
-			
+
 		} catch (Exception e) {
 			Log.d("KillDb", "" + e.getMessage());
 			return false;
 		}
-		
+
 		return true;
 	}
-	
+
 	public void AddShow(Series series)
 	{
 		SQLiteDatabase db = this.getWritableDatabase();
@@ -213,7 +214,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 					values.put(KEY_SUMMARY, ep.getSummary());
 					values.put(KEY_TITLE, ep.getTitle());
 					values.put(KEY_LASTUPDATED, ep.getLastUpdated());
-					values.put(KEY_PROFILEID, Utils.selectedProfile);
 
 					db.update(TABLE_EPISODES, values, KEY_EPISODEID +"="+ ep.getEpisodeId(),null);
 				}
@@ -263,7 +263,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		}
 
 	}
-	
+
 	//DU HÖLL PÅ MED KOLLEN AV EPISODEERNA!!!!!	
 	private ArrayList<String> GetEpisodesForShow(String seriesId)
 	{
@@ -351,7 +351,41 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		ArrayList<ExtendedSeries> series = new ArrayList<ExtendedSeries>();
 		SQLiteDatabase db = this.getReadableDatabase();
 
-		String sql = "SELECT * FROM " + TABLE_SERIES + " WHERE ProfileId = "+ Utils.selectedProfile + " ORDER BY "+ KEY_NAME +" ASC";
+		String dateWithoutTime  = android.text.format.DateFormat.format("yyyy-MM-dd", new java.util.Date()).toString();
+
+		String sortOrder ="";
+
+		switch (Utils.PreferedSortOrder) {
+		case 0:
+			sortOrder ="Name ASC";
+			break;
+		case 1:
+			//sortOrder = "date(EpisodeAirDate) desc, Name ASC";
+			sortOrder = "CASE WHEN EpisodeAirDate IS NULL THEN 2 ELSE 1 END, EpisodeAirDate, Name ASC";
+			break;
+		case 2:
+			sortOrder = "UnwatchedEpisodes DESC";
+		default:
+			break;
+		}
+
+		String showShows = "";
+		switch (Utils.ShowShows) {
+		case 0:
+			showShows = "";
+			break;
+		case 1:
+			showShows = "AND Status = 'Continuing' ";
+			break;
+		case 2:
+			showShows = "AND Status = 'Ended' ";
+			break;
+		default:
+			break;
+		}
+
+
+		String sql = "SELECT Id, Summary , Name, Status, Image, SeriesId, (SELECT Aired FROM Episodes WHERE Aired != '' AND date(Aired) >= date('"+ dateWithoutTime +"') AND Episodes.SeriesId = Series.SeriesId AND ProfileId = "+Utils.selectedProfile+" LIMIT 1) As EpisodeAirDate, (SELECT COUNT(*) FROM " + TABLE_EPISODES + " WHERE " + KEY_SEASON + " != 0 AND " + KEY_AIRED + " != '' AND date(Aired) <= date('"+ dateWithoutTime +"') AND Episodes.SeriesId = Series.SeriesId AND " + KEY_PROFILEID + " = " + Utils.selectedProfile + " AND " + KEY_WATCHED + " = '0') As UnwatchedEpisodes FROM [Series] WHERE ProfileId = " + Utils.selectedProfile + " " + showShows + " ORDER BY " + sortOrder;
 
 		Cursor cursor = db.rawQuery(sql,null);
 		try {
@@ -359,41 +393,34 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 			while (!cursor.isAfterLast()) {
 				ExtendedSeries s = new ExtendedSeries();
 
-				s.setActors(cursor.getString(3));
-				s.setAirs(cursor.getString(4));
-				s.setImage(cursor.getString(9));
-				s.setGenre(cursor.getString(5));
 				s.setID(Integer.parseInt(cursor.getString(0)));
-				s.setImdbId(cursor.getString(6));
-				s.setName(cursor.getString(2));			
-				s.setRating(cursor.getString(7));
-				s.setStatus(cursor.getString(8));
 				s.setSummary(cursor.getString(1));
-				s.setFirstAired(cursor.getString(10));
-				s.setHeader(cursor.getString(11));
-				s.setSeriesId(cursor.getString(12));
+				s.setName(cursor.getString(2));
+				s.setStatus(cursor.getString(3));
+				s.setImage(cursor.getString(4));
+				s.setSeriesId(cursor.getString(5));
+				s.setNextEpisodeInformation(cursor.getString(6));
 
-				s.Episodes = new ArrayList<Episode>();
+				if(s.getNextEpisodeInformation() == null || s.getNextEpisodeInformation().equals(""))
+				{
+					s.setNextEpisodeInformation("No information about next episode");
+				}
+				else
+				{
+					Episode e = GetNextEpisodeForShow(s.getSeriesId(), s.getNextEpisodeInformation());
+					s.setNextEpisodeInformation(e.getAired() != null ? new DateHelper().Episodenumber(e) + " " + e.getTitle() + " - " + new DateHelper().DaysTilNextEpisode(e.getAired()) : "No information about next episode");
 
-				s.Episodes.add(GetNextEpisodeForShow(s.getSeriesId()));
-
-				Episode e = s.Episodes.get(0);
+				}
 
 				if(s.getStatus().equals("Ended"))
 				{
 					s.setNextEpisodeInformation("");
 				}
-				else
-				{
-					s.setNextEpisodeInformation(e.getAired() != null ? new DateHelper().Episodenumber(e) + " " + e.getTitle() + " - " + new DateHelper().DaysTilNextEpisode(e.getAired()) : "No information about next episode");	
-				}
-
 
 				s.setTotalEpisodes(GetTotalEpisodes(s.getSeriesId()));
 				s.setwatchedEpisodes(GetWatchedEpisodes(s.getSeriesId()));
 				series.add(s);
 				cursor.moveToNext();
-
 			}
 
 		} catch (Exception e) {
@@ -404,10 +431,57 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 			cursor.close();
 			db.close();
 		}
-
 		return series;
 	}
-	
+
+	public ArrayList<Episode> GetUnwatchedEpisodes(String fromDate)
+	{
+		ArrayList<Episode> episodes = new ArrayList<Episode>();
+		String dateWithoutTime  = android.text.format.DateFormat.format("yyyy-MM-dd", new java.util.Date()).toString();
+		String endDateWithoutTime  ="";
+
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(new java.util.Date());
+
+		String sql = "";
+		SQLiteDatabase db = this.getReadableDatabase();
+
+
+		sql = "SELECT * FROM "+ TABLE_EPISODES + " e INNER JOIN "+TABLE_SERIES+" s ON e.seriesId = s.SeriesId WHERE "+KEY_AIRED+" >= date('"+ fromDate +"') AND "+KEY_AIRED+" < date('"+dateWithoutTime+"') AND e.Watched = '0'  AND e.ProfileId = " + Utils.selectedProfile + " GROUP BY e.Id ORDER BY s.Name, e.Aired";
+		Cursor cursor = db.rawQuery(sql, null);
+
+		try {
+			cursor.moveToFirst();
+
+			while(!cursor.isAfterLast())
+			{
+				Episode e = new Episode();
+
+				e.setTitle(cursor.getString(3));
+				e.setAired(cursor.getString(4));
+				e.setSummary(cursor.getString(6));
+				e.setSeason(cursor.getString(1));
+				e.setEpisode(cursor.getString(2));
+				e.setSeriesId(cursor.getString(13));
+				e.setID(Integer.parseInt(cursor.getString(0)));
+
+				e.setWatched("0");
+
+				episodes.add(e);
+				cursor.moveToNext();
+			}
+
+		} catch (Exception e) {
+			Log.d("GetAllEpisodesForGivenTimePeriod",e.getMessage());
+			// TODO: handle exception
+		}
+		finally{
+			cursor.close();
+			db.close();	
+		}
+		return episodes;
+	}
+
 	public ArrayList<se.ja1984.twee.dto.Series> BackupShows()
 	{
 		ArrayList<se.ja1984.twee.dto.Series> series = new ArrayList<se.ja1984.twee.dto.Series>();
@@ -434,9 +508,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 				s.Header = cursor.getString(11);
 				s.SeriesId = cursor.getString(12);
 				s.LastUpdated = cursor.getString(13);
-				
+
 				s.Episodes = BackupEpisodes(s.SeriesId);
-				
+
 				series.add(s);
 				cursor.moveToNext();
 
@@ -453,7 +527,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
 		return series;
 	}
-	
+
 	public ArrayList<se.ja1984.twee.dto.Episode> BackupEpisodes(String showId)
 	{
 		ArrayList<se.ja1984.twee.dto.Episode> episodes = new ArrayList<se.ja1984.twee.dto.Episode>();
@@ -466,7 +540,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 			cursor.moveToFirst();
 			while (!cursor.isAfterLast()) {
 				se.ja1984.twee.dto.Episode e = new se.ja1984.twee.dto.Episode();
-				
+
 				e.Aired = cursor.getString(4);
 				e.Episode = cursor.getString(2);
 				e.Season =cursor.getString(1);
@@ -530,13 +604,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
 	}
 
-	public Episode GetNextEpisodeForShow(String seriesId)
+	public Episode GetNextEpisodeForShow(String seriesId, String airDate)
 	{
 		Episode e = new Episode();
 		SQLiteDatabase db = this.getReadableDatabase();
-		String dateWithoutTime  = android.text.format.DateFormat.format("yyyy-MM-dd", new java.util.Date()).toString();
 
-		String sql = "SELECT * FROM "+ TABLE_EPISODES +" WHERE date("+ KEY_AIRED +") >= date('"+ dateWithoutTime +"') AND "+KEY_SERIESID+" = "+ seriesId +" AND "+KEY_SEASON+" != 0 AND "+KEY_PROFILEID+" = "+Utils.selectedProfile+" ORDER BY "+ KEY_AIRED +" ASC LIMIT 1";	
+		String sql = "SELECT * FROM "+ TABLE_EPISODES +" WHERE date("+ KEY_AIRED +") >= date('"+ airDate +"') AND "+KEY_SERIESID+" = "+ seriesId +" AND "+KEY_SEASON+" != 0 AND "+KEY_PROFILEID+" = "+Utils.selectedProfile+" ORDER BY "+ KEY_AIRED +" ASC LIMIT 1";	
 
 		Cursor cursor = db.rawQuery(sql, null);
 		try {
@@ -565,7 +638,42 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		return e;
 
 	}
-	
+
+	public Episode GetNextEpisodeForShow(String seriesId)
+	{
+		Episode e = new Episode();
+		SQLiteDatabase db = this.getReadableDatabase();
+		String dateWithoutTime  = android.text.format.DateFormat.format("yyyy-MM-dd", new java.util.Date()).toString();
+
+		String sql = "SELECT * FROM "+ TABLE_EPISODES +" WHERE date("+ KEY_AIRED +") >= date('"+ dateWithoutTime +"') AND "+KEY_SERIESID+" = "+ seriesId +" AND "+KEY_SEASON+" != 0 AND "+KEY_PROFILEID+" = "+Utils.selectedProfile+" ORDER BY "+ KEY_AIRED +" ASC LIMIT 1";	
+		Cursor cursor = db.rawQuery(sql, null);
+		try {
+
+			if(cursor != null)
+			{
+				if(cursor.moveToFirst())
+				{
+					e.setAired(cursor.getString(4));
+					e.setEpisode(cursor.getString(2));
+					e.setSeason(cursor.getString(1));
+					e.setTitle(cursor.getString(3));
+					e.setSummary(cursor.getString(6));
+				}
+			}
+
+		} catch (Exception ex) {
+			Log.d("GetNextEpisodeForSeries", ex.getMessage());
+			// TODO: handle exception
+		}
+		finally{
+			cursor.close();
+			db.close();
+		}
+
+		return e;
+
+	}
+
 	public ArrayList<Episode> GetNextEpisodesForShow(String seriesId)
 	{
 		SQLiteDatabase db = this.getReadableDatabase();
@@ -595,7 +703,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
 				cursor.moveToNext();
 			}
-			
+
 
 		} catch (Exception ex) {
 			Log.d("GetNextEpisodesForSeries", ex.getMessage());
@@ -720,7 +828,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	public void ToggleEpisodeWatched(String id, boolean watched)
 	{
 		SQLiteDatabase db = this.getWritableDatabase();
-
+		Log.d("Id", id);
 		try {
 			String value;
 
@@ -886,24 +994,38 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
 	public ArrayList<Episode> GetAllEpisodesForGivenTimePeriod(int timeperiod)
 	{
+		Log.d("TimePeriod", "" + timeperiod);
 		ArrayList<Episode> episodes = new ArrayList<Episode>();
 		String dateWithoutTime  = android.text.format.DateFormat.format("yyyy-MM-dd", new java.util.Date()).toString();
+		String endDateWithoutTime  ="";
+
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(new java.util.Date());
+
 		String sql = "";
 		SQLiteDatabase db = this.getReadableDatabase();
 
 		switch (timeperiod) {
 		case 0: //Yesterday
-			sql = "SELECT * FROM "+ TABLE_EPISODES + " e INNER JOIN "+TABLE_SERIES+" s ON e.seriesId = s.SeriesId WHERE "+KEY_AIRED+" >= date('"+dateWithoutTime+"') AND STRFTIME('%j', "+ KEY_AIRED +") = STRFTIME('%j', '"+ dateWithoutTime +"') AND STRFTIME('%Y', "+ KEY_AIRED +") = STRFTIME('%Y', '"+ dateWithoutTime +"') AND s.ProfileId = " + Utils.selectedProfile + " ORDER BY " + KEY_AIRED;
+			cal.add(Calendar.DATE, -1);
+			endDateWithoutTime = android.text.format.DateFormat.format("yyyy-MM-dd", cal.getTime()).toString();
+			sql = "SELECT * FROM "+ TABLE_EPISODES +" e INNER JOIN "+TABLE_SERIES+" s ON e.seriesId = s.SeriesId WHERE "+KEY_AIRED+" = date('"+endDateWithoutTime+"') AND s.ProfileId = " + Utils.selectedProfile + " ORDER BY " + KEY_AIRED;
 			break;
+
 		case 1: //Today
 			sql = "SELECT * FROM "+ TABLE_EPISODES + " e INNER JOIN "+TABLE_SERIES+" s ON e.seriesId = s.SeriesId WHERE "+KEY_AIRED+" >= date('"+dateWithoutTime+"') AND STRFTIME('%j', "+ KEY_AIRED +") = STRFTIME('%j', '"+ dateWithoutTime +"') AND STRFTIME('%Y', "+ KEY_AIRED +") = STRFTIME('%Y', '"+ dateWithoutTime +"') AND s.ProfileId = " + Utils.selectedProfile + " ORDER BY " + KEY_AIRED;
 			break;
 		case 2: //This week
-			sql = "SELECT * FROM "+ TABLE_EPISODES +" e INNER JOIN "+TABLE_SERIES+" s ON e.seriesId = s.SeriesId WHERE "+KEY_AIRED+" >= date('"+dateWithoutTime+"') AND STRFTIME('%W', "+ KEY_AIRED +") = STRFTIME('%W', '"+ dateWithoutTime +"') AND STRFTIME('%Y', "+ KEY_AIRED +") = STRFTIME('%Y', '"+ dateWithoutTime +"') AND s.ProfileId = " + Utils.selectedProfile + " ORDER BY " + KEY_AIRED;
+			cal.add(Calendar.DATE, 7);
+			endDateWithoutTime = android.text.format.DateFormat.format("yyyy-MM-dd", cal.getTime()).toString();
+			sql = "SELECT * FROM "+ TABLE_EPISODES +" e INNER JOIN "+TABLE_SERIES+" s ON e.seriesId = s.SeriesId WHERE "+KEY_AIRED+" >= date('"+dateWithoutTime+"') AND "+KEY_AIRED+" <= date('"+endDateWithoutTime+"') AND s.ProfileId = " + Utils.selectedProfile + " ORDER BY " + KEY_AIRED;
 			break;
 		case 3: //This month
-			sql = "SELECT * FROM "+ TABLE_EPISODES +" e INNER JOIN "+TABLE_SERIES+" s ON e.seriesId = s.SeriesId WHERE "+KEY_AIRED+" >= date('"+dateWithoutTime+"') AND STRFTIME('%m', "+ KEY_AIRED +") = STRFTIME('%m', '"+ dateWithoutTime +"') AND STRFTIME('%Y', "+ KEY_AIRED +") = STRFTIME('%Y', '"+ dateWithoutTime +"') AND s.ProfileId = " + Utils.selectedProfile + " ORDER BY " + KEY_AIRED;
+			cal.add(Calendar.DATE, 31);
+			endDateWithoutTime = android.text.format.DateFormat.format("yyyy-MM-dd", cal.getTime()).toString();
+			sql = "SELECT * FROM "+ TABLE_EPISODES +" e INNER JOIN "+TABLE_SERIES+" s ON e.seriesId = s.SeriesId WHERE "+KEY_AIRED+" >= date('"+dateWithoutTime+"') AND "+KEY_AIRED+" <= date('"+endDateWithoutTime+"') AND s.ProfileId = " + Utils.selectedProfile + " ORDER BY " + KEY_AIRED;
 			break;
+
 		default:
 			break;
 		}
@@ -1012,7 +1134,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		finally{
 			db.close();
 		}
-		
+
 		return profileId;
 
 	}
@@ -1045,7 +1167,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		return name;
 	}
 
-	
+
 	public void EditProfile(String profileId, String name)
 	{
 		SQLiteDatabase db = this.getWritableDatabase();
@@ -1057,7 +1179,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		finally{
 			db.close();
 		}
-		
+
 		//TODO: implement!
 	}
 
@@ -1118,6 +1240,35 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		}
 		return episodes;
 	}
+
+//	private int GetUnWatchedEpisodes(String seriesId){
+//		SQLiteDatabase db = this.getReadableDatabase();
+//		int episodes = 0;
+//
+//		String sql = "SELECT COUNT(*) FROM " + TABLE_EPISODES + " WHERE " + KEY_SEASON + " != 0 AND " + KEY_AIRED + " != '' AND " +  KEY_SERIESID + " = " + seriesId + " AND " + KEY_PROFILEID + " = " + Utils.selectedProfile + " AND " + KEY_WATCHED + " = '0'";
+//
+//		Cursor cursor = db.rawQuery(sql, null);
+//		try {
+//
+//			if(cursor != null)
+//			{
+//				if(cursor.moveToFirst())
+//				{
+//					episodes = Integer.parseInt(cursor.getString(0));				
+//				}
+//
+//			}
+//
+//		} catch (Exception e) {
+//			Log.d("GetWatchedEpisodes",e.getMessage());
+//			// TODO: handle exception
+//		}
+//		finally{
+//			cursor.close();
+//			db.close();
+//		}
+//		return episodes;
+//	}
 
 }
 

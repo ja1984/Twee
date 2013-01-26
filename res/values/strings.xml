@@ -20,6 +20,9 @@
     <string name="settings_header_display">Home layout</string>
     <string name="settings_header_profile">Profiles</string>
     <string name="settings_description_profile">Different profiles allow you to have different users with their own shows and progresses. Note that the app settings are global.</string>
+    <string name="settings_sortorder_header">Sort order</string>
+    <string name="settings_header_sortorder">Home sort order</string>
+    <string name="settings_header_showshows">Shows to display</string>
     <string name="homeactivity_tag_seriesid">seriesId</string>
     <string name="homeactivity_tag_id">Id</string>
     <string name="season_markaswatched">Mark season as watched</string>
@@ -52,8 +55,8 @@
     <string name="section_title_summary">SUMMARY</string>
     <string name="section_dropdown_yesterday">Yesterday</string>
     <string name="section_dropdown_today">Today</string>
-    <string name="section_dropdown_tomorrow">This week</string>
-    <string name="section_dropdown_week">This month</string>
+    <string name="section_dropdown_tomorrow">One week</string>
+    <string name="section_dropdown_week">One month</string>
     <!-- /Sections -->
 
 
@@ -67,8 +70,12 @@
     <string name="menu_delete">Delete</string>
     <string name="menu_chooseprofile">Select profile</string>
     <string name="menu_downloadimages">Download missing images</string>
+    <string name="menu_downloadnewbanner">Download different banner</string>
     <string name="menu_tredning">Add from trakt.tv trending</string>
     <string name="menu_information">Information</string>
+    <string name="menu_unwatched">Backlog</string>
+    <string name="menu_setDate">Choose date</string>
+    <string name="menu_backlog">What\'s backlog?</string>
     <!-- /Menu -->
 
 
@@ -91,15 +98,20 @@
     <string name="message_downloading_images">Downloading images</string>
     <string name="message_downloading_images_success">Done downloading images</string>
     <string name="message_downloading_images_error">Error while downloading images</string>
+    <string name="message_downloading_banner_error">Error while downloading new banner</string>
+    <string name="message_downloading_show_error">Error while downloading show</string>
     <string name="message_backup_error">The backup failed</string>
     <string name="message_backup_complete">The backup has been saved to /sdcard/twee/backup.txt</string>
     <string name="message_restore_error">The restore failed</string>
     <string name="message_restore_complete">All information has been restored!</string>
     <string name="message_noplot">No plot available</string>
     <string name="message_empty_collection"><b>Your collection is empty!</b>\n<i>press the magnifier to start adding shows</i></string>
+    <string name="message_empty_backlog"><b>No episodes in the backlog</b>\n<i>press the clock to set backlog date</i></string>
     <string name="message_trending_information">These shows are the top 10 trending shows on Trakt.tv\n It\'s based on what people are watching <b>right now</b>\n\n <i>tip: refresh, and they may change :)</i></string>
+    <string name="message_backlog_information">The backlog is perfect when you\'ve been away for a while, just enter the date you last watched an show and you will get a complete list of all the unwatched episodes since. \n\n<i>tip: click to display plot and longpress to mark as watched</i></string>
     <string name="pref_header_display">Display options</string>
     <string name="pref_header_other">Other options</string>
+    <string name="message_episode_watched">Marked as watched</string>
     <!-- /Messages -->
 
 
@@ -112,14 +124,20 @@
     <string name="settings_display_option_small">Minimal</string>
     <string name="settings_display_option_deafult">Default</string>
     <string name="settings_header_backup">Backup and restore</string>
+    <string name="settings_sortorder_option_alphabetically">Alphabetically</string>
+    <string name="settings_sortorder_option_nextepisode">Next episode</string>
+    <string name="settings_sortorder_option_unwatched">Unwatched episodes</string>
+    <string name="settings_showepisodes_option_all">All</string>
+    <string name="settings_showepisodes_option_running">Continuing</string>
+    <string name="settings_showepisodes_option_ended">Ended</string>
 
     <!-- About -->
     <string name="about_close">Close</string>
     <string name="about_header">About Twee</string>
     <string name="about_text">Twee is getting all its information from thetvdb.com, support them in any way possible!</string>
     <string name="thanks_header">Thanks to</string>
-    <string name="thanks_text">klizzer, vastis, M203, Reconnnn, mates, Arias, toffe, grief, zero, happyoccasion, helevorn, milky81, Oxygen, Cat and Snargaflab</string>
-	<string name="stats_header">Numbers (beacause numbera are fun)</string>
+    <string name="thanks_text">klizzer, vastis, M203, Reconnnn, mates, Arias, toffe, grief, zero, happyoccasion, helevorn, milky81, Oxygen, Cat, Snargaflab and the awesomse UserNamer at xda-developers for being super helpful! :)</string>
+    <string name="stats_header">Numbers (beacause numbera are fun)</string>
     <!-- /About -->
 
 
@@ -128,6 +146,8 @@
     <string name="delete_proceed">Proceed</string>
     <string name="delete_cancel">Cancel</string>
     <string name="delete_text">This can not be undone!</string>
+    <string name="replace_banner_title">Replace banner</string>
+    <string name="replace_banner_text">Download this banner?</string>
     <!-- /Delete -->
 
 
@@ -137,8 +157,8 @@
 
     <string name="dialog_ok">OK</string>
     <string name="dialog_cancel">Cancel</string>
-    <string name="dialog_selectprofile_header">Select profile</string>
     <string name="settings_description_profile_popup">Enter the name of the new profile</string>
+    <string name="dialog_selectprofile_header">Select profile</string>
     <string name="dialog_addprofile_header">New profile</string>
     <string name="dialog_editprofile_header">Edit profile</string>
     <string name="hello_world">Hello world!</string>
@@ -149,5 +169,7 @@
     <string name="title_activity_backup">Backup and restore</string>
     <string name="title_activity_profile">Profiles</string>
     <string name="title_activity_trending">Trending on Trakt.tv</string>
+    <string name="title_activity_banner">BannerActivity</string>
+    <string name="title_activity_unwatched">Backlog</string>
 
 </resources>

@@ -62,6 +62,42 @@ public class ImageService {
 			return null;
 		}
 	}
+	
+	public String ReplaceBannerImage(String q, String name, Context ctx) throws Exception {
+		try {
+
+			String filename = name + ".jpg";
+
+			String uri = String.format("http://www.thetvdb.com/banners/%s",q);
+
+			//String name = java.util.UUID.randomUUID().toString();
+
+			URL url = new URL(uri);
+			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+			connection.setDoInput(true);
+			connection.connect();
+			InputStream input = connection.getInputStream();
+			//Bitmap myBitmap = BitmapFactory.decodeStream(input,null,new Options().);
+			
+					
+			
+			Bitmap myBitmap = BitmapFactory.decodeStream(input);
+
+			return SaveImage(myBitmap, name, ctx);
+		} catch (OutOfMemoryError e) {
+			Log.d("Fel vid sparning",e.getMessage());
+			
+			if(tryAgain)
+			{
+				tryAgain = false;
+				System.gc();
+				return getBitmapFromURL(q,name,ctx);
+			}
+
+			e.printStackTrace();
+			return null;
+		}
+	}
 
 	private String SaveImage(Bitmap bitmap, String name, Context context) throws Exception
 	{

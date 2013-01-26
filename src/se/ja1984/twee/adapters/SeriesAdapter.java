@@ -10,6 +10,7 @@ import se.ja1984.twee.models.ExtendedSeries;
 import se.ja1984.twee.utils.ImageService;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -21,7 +22,7 @@ import android.widget.TextView;
 public class SeriesAdapter extends ArrayAdapter<ExtendedSeries> {
 
 	public static Map<String, Bitmap> cache;
-	
+
 	static class viewHolder
 	{
 		ImageView image;
@@ -43,7 +44,7 @@ public class SeriesAdapter extends ArrayAdapter<ExtendedSeries> {
 		this.context = context;
 		this.series = objects;
 		this.resource = resource;
-		
+
 		cache = new HashMap<String, Bitmap>();
 	}
 
@@ -83,8 +84,11 @@ public class SeriesAdapter extends ArrayAdapter<ExtendedSeries> {
 
 			holder.progress.setMax(s.getTotalEpisodes());
 			holder.progress.setProgress(s.getWatchedEpisodes());
-			holder.image.setImageBitmap(getBitmapFromCache(s.getImage()));
-			holder.information.setText(s.getNextEpisodeInformation().equals("") ? context.getText(R.string.message_show_ended) : s.getNextEpisodeInformation());		
+			holder.information.setText(s.getNextEpisodeInformation().equals("") ? context.getText(R.string.message_show_ended) : s.getNextEpisodeInformation());
+
+			Bitmap bm = getBitmapFromCache(s.getImage());
+
+			holder.image.setImageBitmap(bm);
 
 		}
 
@@ -101,6 +105,9 @@ public class SeriesAdapter extends ArrayAdapter<ExtendedSeries> {
 		else
 		{
 			Bitmap bm = new ImageService().GetImage(imageName, context);
+			if(bm == null)
+				bm = BitmapFactory.decodeResource(context.getResources(), R.drawable.noimage);
+
 			cache.put(imageName, bm);
 			return bm;
 		}

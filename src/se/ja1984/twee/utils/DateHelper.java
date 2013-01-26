@@ -72,6 +72,25 @@ public class DateHelper {
 
 		return returndate;
 	}
+	
+	public String ShortDisplayDate(String date)
+	{
+		Date today = setTimeToMidnight(new Date());
+		Date d1 = null;
+		SimpleDateFormat df = new SimpleDateFormat ("yyyy-MM-dd");
+		DateFormat format = DateFormat.getDateInstance();
+
+		try {
+			d1 = df.parse(date);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+
+		if(d1 == null)
+			return date;
+
+		return format.format(d1);
+	}
 
 	public String DaysTilNextEpisode(String date)
 	{

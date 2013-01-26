@@ -23,5 +23,25 @@ public class SeriesHelper {
 		                dialog.cancel();
 		           }
 		       }).create().show();
-	}
+	};
+	
+	
+//	public void displayPlot(Context context, String summary, String aired )
+//	{
+//		
+//		DateHelper dateHelper = new DateHelper();
+//		
+//		String message = summary ? context.getString(R.string.message_noplot) : summary;
+//		
+//		AlertDialog.Builder builder = new AlertDialog.Builder(context);
+//		builder.setMessage(message + "\n\n" + dateHelper.Episodenumber(episode) + " | " + dateHelper.DisplayDate(aired))
+//		       .setCancelable(false)
+//		       .setTitle(episode.getTitle())
+//		       .setPositiveButton(R.string.about_close, new DialogInterface.OnClickListener() {
+//		           public void onClick(DialogInterface dialog, int id) {
+//		                dialog.cancel();
+//		           }
+//		       }).create().show();
+//	}
+	
 }

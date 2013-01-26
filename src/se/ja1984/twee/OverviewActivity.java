@@ -8,6 +8,7 @@ import org.w3c.dom.NodeList;
 
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -69,13 +70,29 @@ public class OverviewActivity extends FragmentActivity {
 		setContentView(R.layout.layout_overview);
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 
+
+		Log.d("SaveInstanceIsNnull","" + (savedInstanceState == null));
+		if(savedInstanceState != null)
+		{
+			seriesId =  savedInstanceState.getString("SeriesId");
+		}
+
 		Bundle extras = getIntent().getExtras();
 
+		if(extras == null)
+		{
+			finish();
+		}
+		
 		seriesId = extras.getString("SeriesId");
 
+		if(seriesId.equals("") || seriesId == null){
+			finish();
+		}
+		
 		tvdbSeriesId = seriesId;
 		series = new DatabaseHandler(getBaseContext()).GetShowById(seriesId);
-		//getActionBar().setTitle(series.getName());
+		getActionBar().setTitle(series.getName());
 
 		fragments = new ArrayList<Fragment>();
 
@@ -98,6 +115,24 @@ public class OverviewActivity extends FragmentActivity {
 		mViewPager.setCurrentItem(1);
 
 	}
+
+
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		outState.putString("SeriesId", seriesId);
+		Log.d("onSaveInstanceStad", outState.getString("SeriesId"));
+	}
+
+
+
+
+	@Override
+	protected void onDestroy() {
+		finish();
+		super.onDestroy();
+	}
+
 
 	public void Reload()
 	{
@@ -135,9 +170,14 @@ public class OverviewActivity extends FragmentActivity {
 			Refresh();
 			break;
 
-
 		case R.id.menu_downloadimages:
 			new DownloadImagesTask().execute();
+			break;
+
+		case R.id.menu_downloadbanner:
+			Intent intent = new Intent(this, BannerActivity.class);
+			intent.putExtra("showId", seriesId);
+			startActivity(intent);
 			break;
 
 		}
@@ -199,12 +239,12 @@ public class OverviewActivity extends FragmentActivity {
 					);
 
 		}
-		
+
 		protected void onProgressUpdate(String... value) {
 			super.onProgressUpdate(value);
 			saveDialog.setMessage(value[0]);
 		}
-		
+
 		@Override
 		protected Boolean doInBackground(Void... params) {
 
@@ -257,7 +297,7 @@ public class OverviewActivity extends FragmentActivity {
 			{
 				Toast.makeText(getBaseContext(), R.string.message_downloading_images_error, Toast.LENGTH_SHORT).show();
 			}
-						
+
 		}
 
 

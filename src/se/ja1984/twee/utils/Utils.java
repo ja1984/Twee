@@ -1,6 +1,9 @@
 package se.ja1984.twee.utils;
 
+import android.content.SharedPreferences;
 import android.os.Environment;
+import android.preference.PreferenceManager;
+import se.ja1984.twee.HomeActivity;
 import se.ja1984.twee.R;
 
 public class Utils {
@@ -8,8 +11,9 @@ public class Utils {
 
 
 	public static int selectedProfile;
-
-
+	public static int PreferedSortOrder;
+	public static int ShowShows;
+	
 	public static int GetTheme(int pref_theme){
 		switch (pref_theme) {
 		case 0:
@@ -24,6 +28,8 @@ public class Utils {
 	}
 	
 
+	
+	
 	public static Boolean StoreOnExternal(){
 		String state = Environment.getExternalStorageState();
 		if (Environment.MEDIA_MOUNTED.equals(state))

@@ -42,7 +42,7 @@ public class EpisodeAdapter extends ArrayAdapter<Episode> {
 
 		for (int i = 0; i < objects.size(); i++) {
 			itemChecked.add(i, objects.get(i).getWatched().equals("1"));
-			visibleItems.add(i, dateHelper.CompareDates(episodes.get(i).getAired(), dateHelper.GetTodaysDate()) >= 0);
+			visibleItems.add(i, dateHelper.CompareDates(episodes.get(i).getAired(), dateHelper.GetTodaysDate()) > 0);
 			showSeasonBanner.add(i,objects.get(i).getSeason().equals(this.season));
 
 			this.season = objects.get(i).getSeason();		

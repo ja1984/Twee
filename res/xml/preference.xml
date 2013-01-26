@@ -22,7 +22,8 @@
             android:key="pref_theme"
             android:summary="%s"
             android:title="@string/settings_theme_header" />
-
+        
+        
         <ListPreference
             android:defaultValue="0"
             android:dialogTitle="@string/settings_header_display"
@@ -31,7 +32,26 @@
             android:key="pref_display"
             android:summary="%s"
             android:title="@string/settings_header_display" />
-            />
+            />
+        <ListPreference
+            android:defaultValue="0"
+            android:dialogTitle="@string/settings_header_sortorder"
+            android:entries="@array/pref_sortorder_array"
+            android:entryValues="@array/pref_sortorder_array_values"
+            android:key="pref_sortorder"
+            android:summary="%s"
+            android:title="@string/settings_header_sortorder" />
+            />
+            
+        <ListPreference
+            android:defaultValue="0"
+            android:dialogTitle="@string/settings_header_showshows"
+            android:entries="@array/pref_showepisodes_array"
+            android:entryValues="@array/pref_showepisodes_array_values"
+            android:key="pref_showshows"
+            android:summary="%s"
+            android:title="@string/settings_header_showshows" />
+            />
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/pref_header_other" >
         <CheckBoxPreference
