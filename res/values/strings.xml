@@ -51,6 +51,7 @@
 
 	<string name="TAG_RUNTIME">TAG_RUNTIME</string>
 	<string name="TAG_AIRTIME">TAG_AIRTIME</string>
+	<string name="TAG_TVRAGEID">TAG_TVRAGEID</string>
 
     <!-- Sections -->
     <string name="section_title_episodes">EPISODES</string>

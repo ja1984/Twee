@@ -14,5 +14,6 @@ public class TraktSearchResult {
 	public String tvdb_id;
 	public Images images;
 	public String status;
+	public String tvrage_id;
 	
 }

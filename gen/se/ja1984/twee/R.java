@@ -342,11 +342,12 @@ containing a value of this type.
         /**  /Titles 
          */
         public static final int TAG_RUNTIME=0x7f080028;
+        public static final int TAG_TVRAGEID=0x7f08002a;
         /**  About 
          */
-        public static final int about_close=0x7f08007b;
-        public static final int about_header=0x7f08007e;
-        public static final int about_text=0x7f08007f;
+        public static final int about_close=0x7f08007c;
+        public static final int about_header=0x7f08007f;
+        public static final int about_text=0x7f080080;
         public static final int actors_header=0x7f080006;
         /**  General 
          */
@@ -358,147 +359,147 @@ containing a value of this type.
         /**  /Delete 
  ContentDescriptions 
          */
-        public static final int cd_series_header=0x7f080089;
-        public static final int delete_cancel=0x7f080085;
-        public static final int delete_proceed=0x7f080084;
-        public static final int delete_text=0x7f080086;
+        public static final int cd_series_header=0x7f08008a;
+        public static final int delete_cancel=0x7f080086;
+        public static final int delete_proceed=0x7f080085;
+        public static final int delete_text=0x7f080087;
         /**  /About 
  Delete 
          */
-        public static final int delete_title=0x7f080083;
+        public static final int delete_title=0x7f080084;
         public static final int details_lastaired=0x7f080002;
         public static final int details_totalwatched=0x7f080004;
         public static final int details_upcoming=0x7f080003;
-        public static final int dialog_addprofile_header=0x7f080090;
-        public static final int dialog_cancel=0x7f08008b;
-        public static final int dialog_editprofile_header=0x7f080091;
+        public static final int dialog_addprofile_header=0x7f080091;
+        public static final int dialog_cancel=0x7f08008c;
+        public static final int dialog_editprofile_header=0x7f080092;
         /**  /ContentDescriptions 
          */
-        public static final int dialog_ok=0x7f08008a;
-        public static final int dialog_remindme_later=0x7f08008d;
-        public static final int dialog_selectprofile_header=0x7f08008f;
-        public static final int dialog_update_now=0x7f08008c;
+        public static final int dialog_ok=0x7f08008b;
+        public static final int dialog_remindme_later=0x7f08008e;
+        public static final int dialog_selectprofile_header=0x7f080090;
+        public static final int dialog_update_now=0x7f08008d;
         public static final int edit_notimplemented=0x7f08001d;
         public static final int extension_description=0x7f08001f;
         public static final int extension_title=0x7f08001e;
-        public static final int hello_world=0x7f080092;
+        public static final int hello_world=0x7f080093;
         public static final int homeactivity_tag_id=0x7f080016;
         public static final int homeactivity_tag_seriesid=0x7f080015;
         public static final int imdb_header=0x7f080007;
-        public static final int menu_about=0x7f080033;
-        public static final int menu_add=0x7f080032;
-        public static final int menu_addtocalendar=0x7f080041;
-        public static final int menu_backlog=0x7f08003f;
-        public static final int menu_calendar=0x7f080035;
-        public static final int menu_chooseprofile=0x7f080038;
-        public static final int menu_cleanepisodes=0x7f080040;
-        public static final int menu_delete=0x7f080037;
-        public static final int menu_downloadimages=0x7f080039;
-        public static final int menu_downloadnewbanner=0x7f08003a;
-        public static final int menu_information=0x7f08003c;
-        public static final int menu_markseries=0x7f080036;
-        public static final int menu_refresh=0x7f080034;
-        public static final int menu_setDate=0x7f08003e;
+        public static final int menu_about=0x7f080034;
+        public static final int menu_add=0x7f080033;
+        public static final int menu_addtocalendar=0x7f080042;
+        public static final int menu_backlog=0x7f080040;
+        public static final int menu_calendar=0x7f080036;
+        public static final int menu_chooseprofile=0x7f080039;
+        public static final int menu_cleanepisodes=0x7f080041;
+        public static final int menu_delete=0x7f080038;
+        public static final int menu_downloadimages=0x7f08003a;
+        public static final int menu_downloadnewbanner=0x7f08003b;
+        public static final int menu_information=0x7f08003d;
+        public static final int menu_markseries=0x7f080037;
+        public static final int menu_refresh=0x7f080035;
+        public static final int menu_setDate=0x7f08003f;
         /**  /Sections 
  Menu 
          */
-        public static final int menu_settings=0x7f080031;
-        public static final int menu_tredning=0x7f08003b;
-        public static final int menu_unwatched=0x7f08003d;
-        public static final int message_backlog_information=0x7f08005f;
-        public static final int message_backup_complete=0x7f080058;
-        public static final int message_backup_error=0x7f080057;
-        public static final int message_backup_warning=0x7f08006a;
-        public static final int message_calendar_noepisodes=0x7f08006c;
-        public static final int message_clean_episodes=0x7f080064;
-        public static final int message_clean_episodes_done=0x7f080065;
-        public static final int message_clean_episodes_error=0x7f080066;
-        public static final int message_download_banner=0x7f08004c;
-        public static final int message_download_header=0x7f08004d;
-        public static final int message_download_information=0x7f08004b;
-        public static final int message_download_pleasewait=0x7f080050;
-        public static final int message_download_save_episodes=0x7f08004f;
-        public static final int message_download_save_series=0x7f08004e;
-        public static final int message_downloading_banner_error=0x7f080054;
-        public static final int message_downloading_images=0x7f080051;
-        public static final int message_downloading_images_error=0x7f080053;
-        public static final int message_downloading_images_success=0x7f080052;
-        public static final int message_downloading_show_error=0x7f080055;
-        public static final int message_empty_backlog=0x7f08005d;
-        public static final int message_empty_collection=0x7f08005c;
-        public static final int message_episode_watched=0x7f080062;
-        public static final int message_episodes_updates=0x7f080049;
-        public static final int message_episodes_updates_done=0x7f08004a;
-        public static final int message_nointernet=0x7f080046;
-        public static final int message_noplot=0x7f08005b;
-        public static final int message_noresult=0x7f080047;
-        public static final int message_profile_description=0x7f08006b;
-        public static final int message_restore_complete=0x7f08005a;
-        public static final int message_restore_error=0x7f080059;
-        public static final int message_season_watched=0x7f080043;
-        public static final int message_series_double=0x7f080048;
-        public static final int message_series_fetching=0x7f080044;
-        public static final int message_series_fetching_done=0x7f080045;
+        public static final int menu_settings=0x7f080032;
+        public static final int menu_tredning=0x7f08003c;
+        public static final int menu_unwatched=0x7f08003e;
+        public static final int message_backlog_information=0x7f080060;
+        public static final int message_backup_complete=0x7f080059;
+        public static final int message_backup_error=0x7f080058;
+        public static final int message_backup_warning=0x7f08006b;
+        public static final int message_calendar_noepisodes=0x7f08006d;
+        public static final int message_clean_episodes=0x7f080065;
+        public static final int message_clean_episodes_done=0x7f080066;
+        public static final int message_clean_episodes_error=0x7f080067;
+        public static final int message_download_banner=0x7f08004d;
+        public static final int message_download_header=0x7f08004e;
+        public static final int message_download_information=0x7f08004c;
+        public static final int message_download_pleasewait=0x7f080051;
+        public static final int message_download_save_episodes=0x7f080050;
+        public static final int message_download_save_series=0x7f08004f;
+        public static final int message_downloading_banner_error=0x7f080055;
+        public static final int message_downloading_images=0x7f080052;
+        public static final int message_downloading_images_error=0x7f080054;
+        public static final int message_downloading_images_success=0x7f080053;
+        public static final int message_downloading_show_error=0x7f080056;
+        public static final int message_empty_backlog=0x7f08005e;
+        public static final int message_empty_collection=0x7f08005d;
+        public static final int message_episode_watched=0x7f080063;
+        public static final int message_episodes_updates=0x7f08004a;
+        public static final int message_episodes_updates_done=0x7f08004b;
+        public static final int message_nointernet=0x7f080047;
+        public static final int message_noplot=0x7f08005c;
+        public static final int message_noresult=0x7f080048;
+        public static final int message_profile_description=0x7f08006c;
+        public static final int message_restore_complete=0x7f08005b;
+        public static final int message_restore_error=0x7f08005a;
+        public static final int message_season_watched=0x7f080044;
+        public static final int message_series_double=0x7f080049;
+        public static final int message_series_fetching=0x7f080045;
+        public static final int message_series_fetching_done=0x7f080046;
         /**  /Menu 
  Messages 
          */
-        public static final int message_series_watched=0x7f080042;
-        public static final int message_show_ended=0x7f080069;
-        public static final int message_trending_information=0x7f08005e;
-        public static final int message_update_show_error=0x7f080056;
-        public static final int opensource_header=0x7f08007c;
-        public static final int opensource_text=0x7f08007d;
-        public static final int pref_default_display_name=0x7f0800a6;
-        public static final int pref_description_social_recommendations=0x7f0800a4;
-        public static final int pref_display_summary=0x7f080096;
+        public static final int message_series_watched=0x7f080043;
+        public static final int message_show_ended=0x7f08006a;
+        public static final int message_trending_information=0x7f08005f;
+        public static final int message_update_show_error=0x7f080057;
+        public static final int opensource_header=0x7f08007d;
+        public static final int opensource_text=0x7f08007e;
+        public static final int pref_default_display_name=0x7f0800a7;
+        public static final int pref_description_social_recommendations=0x7f0800a5;
+        public static final int pref_display_summary=0x7f080097;
         /**  Example settings for Data & Sync 
          */
-        public static final int pref_header_data_sync=0x7f0800a8;
-        public static final int pref_header_display=0x7f080060;
+        public static final int pref_header_data_sync=0x7f0800a9;
+        public static final int pref_header_display=0x7f080061;
         /**  Strings related to Settings 
  Example General settings 
          */
-        public static final int pref_header_general=0x7f0800a2;
+        public static final int pref_header_general=0x7f0800a3;
         /**  Example settings for Notifications 
          */
-        public static final int pref_header_notifications=0x7f0800ab;
-        public static final int pref_header_other=0x7f080061;
-        public static final int pref_ringtone_silent=0x7f0800ae;
-        public static final int pref_themes_array_default=0x7f080094;
-        public static final int pref_themes_summary=0x7f080095;
-        public static final int pref_title_add_friends_to_messages=0x7f0800a7;
-        public static final int pref_title_display_name=0x7f0800a5;
-        public static final int pref_title_new_message_notifications=0x7f0800ac;
-        public static final int pref_title_ringtone=0x7f0800ad;
-        public static final int pref_title_social_recommendations=0x7f0800a3;
-        public static final int pref_title_sync_frequency=0x7f0800a9;
-        public static final int pref_title_system_sync_settings=0x7f0800aa;
-        public static final int pref_title_vibrate=0x7f0800af;
-        public static final int replace_banner_text=0x7f080088;
-        public static final int replace_banner_title=0x7f080087;
+        public static final int pref_header_notifications=0x7f0800ac;
+        public static final int pref_header_other=0x7f080062;
+        public static final int pref_ringtone_silent=0x7f0800af;
+        public static final int pref_themes_array_default=0x7f080095;
+        public static final int pref_themes_summary=0x7f080096;
+        public static final int pref_title_add_friends_to_messages=0x7f0800a8;
+        public static final int pref_title_display_name=0x7f0800a6;
+        public static final int pref_title_new_message_notifications=0x7f0800ad;
+        public static final int pref_title_ringtone=0x7f0800ae;
+        public static final int pref_title_social_recommendations=0x7f0800a4;
+        public static final int pref_title_sync_frequency=0x7f0800aa;
+        public static final int pref_title_system_sync_settings=0x7f0800ab;
+        public static final int pref_title_vibrate=0x7f0800b0;
+        public static final int replace_banner_text=0x7f080089;
+        public static final int replace_banner_title=0x7f080088;
         public static final int search_header=0x7f08000a;
         public static final int search_hint=0x7f080001;
         public static final int season_markaswatched=0x7f080017;
-        public static final int section_dropdown_today=0x7f08002e;
-        public static final int section_dropdown_tomorrow=0x7f08002f;
-        public static final int section_dropdown_week=0x7f080030;
-        public static final int section_dropdown_yesterday=0x7f08002d;
+        public static final int section_dropdown_today=0x7f08002f;
+        public static final int section_dropdown_tomorrow=0x7f080030;
+        public static final int section_dropdown_week=0x7f080031;
+        public static final int section_dropdown_yesterday=0x7f08002e;
         /**  Sections 
          */
-        public static final int section_title_episodes=0x7f08002a;
-        public static final int section_title_overview=0x7f08002b;
-        public static final int section_title_summary=0x7f08002c;
+        public static final int section_title_episodes=0x7f08002b;
+        public static final int section_title_overview=0x7f08002c;
+        public static final int section_title_summary=0x7f08002d;
         public static final int series_plot=0x7f080018;
         public static final int series_summary=0x7f080019;
         public static final int settings_description_profile=0x7f080011;
-        public static final int settings_description_profile_popup=0x7f08008e;
-        public static final int settings_display_option_deafult=0x7f080073;
+        public static final int settings_description_profile_popup=0x7f08008f;
+        public static final int settings_display_option_deafult=0x7f080074;
         /**  /Settings 
          */
-        public static final int settings_display_option_googlenow=0x7f080070;
-        public static final int settings_display_option_small=0x7f080072;
-        public static final int settings_display_option_text=0x7f080071;
-        public static final int settings_header_backup=0x7f080074;
+        public static final int settings_display_option_googlenow=0x7f080071;
+        public static final int settings_display_option_small=0x7f080073;
+        public static final int settings_display_option_text=0x7f080072;
+        public static final int settings_header_backup=0x7f080075;
         public static final int settings_header_description=0x7f08000e;
         public static final int settings_header_display=0x7f08000f;
         public static final int settings_header_header=0x7f08000c;
@@ -506,50 +507,50 @@ containing a value of this type.
         public static final int settings_header_showshows=0x7f080014;
         public static final int settings_header_sortorder=0x7f080013;
         public static final int settings_header_switch=0x7f08000d;
-        public static final int settings_ignorethe_description=0x7f080098;
-        public static final int settings_ignorethe_header=0x7f080097;
-        public static final int settings_localizedtime_description=0x7f08009a;
-        public static final int settings_localizedtime_header=0x7f080099;
-        public static final int settings_showepisodes_option_all=0x7f080078;
-        public static final int settings_showepisodes_option_ended=0x7f08007a;
-        public static final int settings_showepisodes_option_running=0x7f080079;
+        public static final int settings_ignorethe_description=0x7f080099;
+        public static final int settings_ignorethe_header=0x7f080098;
+        public static final int settings_localizedtime_description=0x7f08009b;
+        public static final int settings_localizedtime_header=0x7f08009a;
+        public static final int settings_showepisodes_option_all=0x7f080079;
+        public static final int settings_showepisodes_option_ended=0x7f08007b;
+        public static final int settings_showepisodes_option_running=0x7f08007a;
         public static final int settings_sortorder_header=0x7f080012;
-        public static final int settings_sortorder_option_alphabetically=0x7f080075;
-        public static final int settings_sortorder_option_nextepisode=0x7f080076;
-        public static final int settings_sortorder_option_unwatched=0x7f080077;
+        public static final int settings_sortorder_option_alphabetically=0x7f080076;
+        public static final int settings_sortorder_option_nextepisode=0x7f080077;
+        public static final int settings_sortorder_option_unwatched=0x7f080078;
         public static final int settings_theme_header=0x7f08000b;
-        public static final int settings_theme_option_dark=0x7f08006f;
-        public static final int settings_theme_option_darklight=0x7f08006e;
+        public static final int settings_theme_option_dark=0x7f080070;
+        public static final int settings_theme_option_darklight=0x7f08006f;
         /**  /Messages 
  Settings 
          */
-        public static final int settings_theme_option_light=0x7f08006d;
-        public static final int stats_header=0x7f080082;
+        public static final int settings_theme_option_light=0x7f08006e;
+        public static final int stats_header=0x7f080083;
         public static final int summary_header=0x7f080005;
         public static final int text_seriesrating=0x7f080009;
-        public static final int thanks_header=0x7f080080;
-        public static final int thanks_text=0x7f080081;
+        public static final int thanks_header=0x7f080081;
+        public static final int thanks_text=0x7f080082;
         public static final int title_activity_about=0x7f080026;
-        public static final int title_activity_backup=0x7f08009b;
-        public static final int title_activity_banner=0x7f08009e;
+        public static final int title_activity_backup=0x7f08009c;
+        public static final int title_activity_banner=0x7f08009f;
         public static final int title_activity_calendar=0x7f080025;
-        public static final int title_activity_dash_clock_extension=0x7f0800a0;
+        public static final int title_activity_dash_clock_extension=0x7f0800a1;
         /**  /General 
  Titles 
          */
         public static final int title_activity_home=0x7f080021;
         public static final int title_activity_overview=0x7f080023;
-        public static final int title_activity_preference=0x7f080093;
-        public static final int title_activity_profile=0x7f08009c;
+        public static final int title_activity_preference=0x7f080094;
+        public static final int title_activity_profile=0x7f08009d;
         public static final int title_activity_profile_choose=0x7f080027;
         public static final int title_activity_searchable=0x7f080024;
         public static final int title_activity_settings=0x7f080022;
-        public static final int title_activity_trending=0x7f08009d;
-        public static final int title_activity_unwatched=0x7f08009f;
-        public static final int title_activity_widget_configuration=0x7f0800a1;
-        public static final int title_clean_episodes=0x7f080063;
-        public static final int update_shows_message=0x7f080067;
-        public static final int update_shows_title=0x7f080068;
+        public static final int title_activity_trending=0x7f08009e;
+        public static final int title_activity_unwatched=0x7f0800a0;
+        public static final int title_activity_widget_configuration=0x7f0800a2;
+        public static final int title_clean_episodes=0x7f080064;
+        public static final int update_shows_message=0x7f080068;
+        public static final int update_shows_title=0x7f080069;
         public static final int widget_message_noshow=0x7f080020;
     }
     public static final class style {

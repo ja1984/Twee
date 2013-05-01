@@ -136,11 +136,12 @@ public class SearchableActivity extends ListActivity {
 						String seriesId = rowView.getTag().toString();
 						String runtime = rowView.getTag(R.string.TAG_RUNTIME).toString();
 						String airtime = rowView.getTag(R.string.TAG_AIRTIME).toString();
+						String tvRageId = rowView.getTag(R.string.TAG_TVRAGEID).toString();
 		
 						if(!db.ShowExists(seriesId))
 						{
 							FetchAndSaveSeries fas = new FetchAndSaveSeries();
-							fas.execute(seriesId, runtime, airtime);
+							fas.execute(seriesId, runtime, airtime, tvRageId);
 						}
 						else
 						{
@@ -295,6 +296,7 @@ public class SearchableActivity extends ListActivity {
 		protected Boolean doInBackground(String... q) {
 			saveDialog.setMessage(getString(R.string.message_download_information));
 			String completeAddress = String.format(KEY_FULLURL, TextUtils.htmlEncode(q[0].replaceAll("[^a-zA-Z0-9 ]+", "")));
+			String tvRageUrl = "http://services.tvrage.com/feeds/showinfo.php?sid=" + q[2];
 			//String completeAddress = "http://www.thetvdb.com/data/series/" + q[0] +"/all/";
 			XMLParser parser = new XMLParser();
 

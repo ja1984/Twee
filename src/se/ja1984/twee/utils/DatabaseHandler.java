@@ -37,7 +37,7 @@ import android.util.Log;
 
 public class DatabaseHandler extends SQLiteOpenHelper {
 
-	private static final int DATABASE_VERSION = 2;
+	private static final int DATABASE_VERSION = 3;
 	private static final String DATABASE_NAME = "Twee";
 
 	private static final String TABLE_SERIES = "Series";
@@ -64,6 +64,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	private static final String KEY_IMAGE = "Image";
 	private static final String KEY_HEADER = "Header";
 	private static final String KEY_RUNTIME = "Runtime";
+	private static final String KEY_TIMEZONE = "TimeZone";
 	private static final String KEY_AIRTIME = "Airtime";
 	private static final String KEY_FIRSTAIRED = "FirstAired";
 
@@ -87,7 +88,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	public void onCreate(SQLiteDatabase db) {
 		db.execSQL(ENCODING_SETTING);
 
-		String CREATE_SERIES_TABLE = String.format("CREATE TABLE if not exists %s(%s INTEGER PRIMARY KEY autoincrement, %s TEXT,%s TEXT,%s TEXT,%s TEXT,%s TEXT,%s TEXT,%s TEXT,%s TEXT,%s TEXT, %s TEXT, %s TEXT, %s TEXT, %s TEXT, %S TEXT, %S TEXT, %S TEXT)", TABLE_SERIES, KEY_ID, KEY_SUMMARY, KEY_NAME,KEY_ACTORS,KEY_DAYTIME,KEY_GENRE,KEY_IMDBID,KEY_RATING,KEY_STATUS,KEY_IMAGE, KEY_FIRSTAIRED, KEY_HEADER, KEY_SERIESID, KEY_LASTUPDATED, KEY_PROFILEID, KEY_RUNTIME, KEY_AIRTIME);
+		String CREATE_SERIES_TABLE = String.format("CREATE TABLE if not exists %s(%s INTEGER PRIMARY KEY autoincrement, %s TEXT,%s TEXT,%s TEXT,%s TEXT,%s TEXT,%s TEXT,%s TEXT,%s TEXT,%s TEXT, %s TEXT, %s TEXT, %s TEXT, %s TEXT, %S TEXT, %S TEXT, %S TEXT, %S TEXT)", TABLE_SERIES, KEY_ID, KEY_SUMMARY, KEY_NAME,KEY_ACTORS,KEY_DAYTIME,KEY_GENRE,KEY_IMDBID,KEY_RATING,KEY_STATUS,KEY_IMAGE, KEY_FIRSTAIRED, KEY_HEADER, KEY_SERIESID, KEY_LASTUPDATED, KEY_PROFILEID, KEY_RUNTIME, KEY_AIRTIME, KEY_TIMEZONE);
 		db.execSQL(CREATE_SERIES_TABLE);
 
 		String CREATE_EPISODE_TABLE = String.format("CREATE TABLE if not exists %s(%s INTEGER PRIMARY KEY autoincrement,%s TEXT,%s TEXT,%s TEXT,%s TEXT,%s TEXT,%s TEXT, %s TEXT, %s TEXT, %s TEXT, %S TEXT)", TABLE_EPISODES, KEY_ID, KEY_SEASON, KEY_EPISODE, KEY_TITLE, KEY_AIRED, KEY_WATCHED, KEY_SUMMARY, KEY_SERIESID, KEY_LASTUPDATED, KEY_EPISODEID, KEY_PROFILEID);
@@ -115,8 +116,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		Log.d("Rebuild db", "Start");
 		
 		if(oldVersion != newVersion){
-			db.execSQL("ALTER TABLE "+TABLE_SERIES+" ADD Runtime CHAR(25)");
-			db.execSQL("ALTER TABLE "+TABLE_SERIES+" ADD AirTime CHAR(25)");	
+			//db.execSQL("ALTER TABLE "+TABLE_SERIES+" ADD Runtime CHAR(25)");
+			//db.execSQL("ALTER TABLE "+TABLE_SERIES+" ADD AirTime CHAR(25)");
+			db.execSQL("ALTER TABLE "+TABLE_SERIES+" ADD "+KEY_TIMEZONE+" CHAR(25)");
 		}
 		else{
 			onCreate(db);	

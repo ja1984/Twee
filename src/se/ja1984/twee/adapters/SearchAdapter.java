@@ -66,6 +66,7 @@ public class SearchAdapter extends ArrayAdapter<TraktSearchResult>
 		rowView.setTag(show.tvdb_id);
 		rowView.setTag(R.string.TAG_AIRTIME, show.air_time);
 		rowView.setTag(R.string.TAG_RUNTIME, show.runtime);
+		rowView.setTag(R.string.TAG_TVRAGEID, show.tvrage_id);
 		
 
 		String showTitle = show.title + " (" + show.year + ")";
