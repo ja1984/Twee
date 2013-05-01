@@ -1,9 +1,6 @@
 package se.ja1984.twee.utils;
 
-import android.content.SharedPreferences;
 import android.os.Environment;
-import android.preference.PreferenceManager;
-import se.ja1984.twee.HomeActivity;
 import se.ja1984.twee.R;
 
 public class Utils {

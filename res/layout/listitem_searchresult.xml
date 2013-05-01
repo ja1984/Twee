@@ -35,12 +35,12 @@
 
             <TextView
                 android:id="@+id/txtShowCountry"
-                android:layout_below="@+id/txtShowName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingBottom="10dp"
-                android:textColor="#707070"
-                android:text="Sweden" />
+                android:layout_below="@+id/txtShowName"
+                android:paddingBottom="5dp"
+                android:text="Sweden"
+                android:textColor="#707070" />
 
             <TextView
                 android:id="@+id/txtShowPlot"

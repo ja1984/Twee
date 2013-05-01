@@ -182,6 +182,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 			values.put(KEY_PROFILEID, Utils.selectedProfile);
 			values.put(KEY_AIRTIME, series.getAirtime());
 			values.put(KEY_RUNTIME, series.getRuntime());
+			values.put(KEY_TIMEZONE, series.getTimeZone());
 
 			db.insert(TABLE_SERIES, null, values);
 
@@ -490,7 +491,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
 		String Name = !Utils.ignoreTheWhenOrder ? "Name" : "CASE WHEN Name LIKE 'The %' THEN substr(Name,5) ELSE Name END As NameWithoutThe";
 
-		String sql = "SELECT Id, Summary , "+Name+", Status, Image, SeriesId, Airtime, (SELECT Aired FROM Episodes WHERE Aired != '' AND date(Aired) >= date('"+ dateWithoutTime +"') AND Episodes.SeriesId = Series.SeriesId AND ProfileId = "+Utils.selectedProfile+" LIMIT 1) As EpisodeAirDate, (SELECT COUNT(*) FROM " + TABLE_EPISODES + " WHERE " + KEY_SEASON + " != 0 AND " + KEY_AIRED + " != '' AND date(Aired) <= date('"+ dateWithoutTime +"') AND Episodes.SeriesId = Series.SeriesId AND " + KEY_PROFILEID + " = " + Utils.selectedProfile + " AND " + KEY_WATCHED + " = '0') As UnwatchedEpisodes FROM [Series] WHERE ProfileId = " + Utils.selectedProfile + " " + showShows + " ORDER BY " + sortOrder;
+		String sql = "SELECT Id, Summary , "+Name+", Status, Image, SeriesId, Airtime, TimeZone, (SELECT Aired FROM Episodes WHERE Aired != '' AND date(Aired) >= date('"+ dateWithoutTime +"') AND Episodes.SeriesId = Series.SeriesId AND ProfileId = "+Utils.selectedProfile+" LIMIT 1) As EpisodeAirDate, (SELECT COUNT(*) FROM " + TABLE_EPISODES + " WHERE " + KEY_SEASON + " != 0 AND " + KEY_AIRED + " != '' AND date(Aired) <= date('"+ dateWithoutTime +"') AND Episodes.SeriesId = Series.SeriesId AND " + KEY_PROFILEID + " = " + Utils.selectedProfile + " AND " + KEY_WATCHED + " = '0') As UnwatchedEpisodes FROM [Series] WHERE ProfileId = " + Utils.selectedProfile + " " + showShows + " ORDER BY " + sortOrder;
 		Log.d("Test","" + sql);
 		Cursor cursor = db.rawQuery(sql,null);
 		try {
@@ -505,8 +506,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 				s.setImage(cursor.getString(4));
 				s.setSeriesId(cursor.getString(5));
 				s.setAirtime(cursor.getString(6));
-				s.setNextEpisodeInformation(cursor.getString(7));		
-				int unwatchedEpisodes = Integer.parseInt(cursor.getString(8)); 
+				s.setTimeZone(cursor.getString(7));
+				Log.d("TimeZone","" + s.getTimeZone());
+				s.setNextEpisodeInformation(cursor.getString(8));		
+				int unwatchedEpisodes = Integer.parseInt(cursor.getString(9)); 
 
 				if(s.getNextEpisodeInformation() == null || s.getNextEpisodeInformation().equals(""))
 				{

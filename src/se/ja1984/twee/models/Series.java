@@ -17,6 +17,7 @@ public class Series extends BaseEntity {
 	private String FirstAired;
 	private String Runtime;
 	private String Airtime;
+	private String TimeZone;
 	public ArrayList<Episode> Episodes;
 
 
@@ -82,6 +83,16 @@ public class Series extends BaseEntity {
 	public void setAirtime(String airtime)
 	{
 		this.Airtime = airtime;
+	}
+	
+	
+	public String getTimeZone()
+	{
+		return TimeZone;
+	}
+	public void setTimeZone(String timeZone)
+	{
+		this.TimeZone = timeZone;
 	}
 
 

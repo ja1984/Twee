@@ -7,14 +7,10 @@ import java.util.Map;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import se.ja1984.twee.R;
-import se.ja1984.twee.adapters.SeriesAdapter.viewHolder;
 import se.ja1984.twee.models.ExtendedSeries;
 import se.ja1984.twee.utils.ImageService;
 import se.ja1984.twee.utils.Utils;
-import android.R.anim;
-import android.R.color;
 import android.content.Context;
-import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;

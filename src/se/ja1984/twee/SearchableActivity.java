@@ -121,7 +121,7 @@ public class SearchableActivity extends ListActivity {
 		searchResult.setBackgroundColor(Color.parseColor("#e4e4e4"));
 		searchResult.setDividerHeight(0);
 		dateHelper = new DateHelper();
-		
+
 		Intent intent = getIntent();
 		if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
 			String query = intent.getStringExtra(SearchManager.QUERY);
@@ -130,27 +130,27 @@ public class SearchableActivity extends ListActivity {
 			doSearchQuery(query);
 		}
 
-				searchResult.setOnItemClickListener(new android.widget.AdapterView.OnItemClickListener() {
-		
-					public void onItemClick(AdapterView<?> arg0, View rowView, int arg2, long arg3) {
-						String seriesId = rowView.getTag().toString();
-						String runtime = rowView.getTag(R.string.TAG_RUNTIME).toString();
-						String airtime = rowView.getTag(R.string.TAG_AIRTIME).toString();
-						String tvRageId = rowView.getTag(R.string.TAG_TVRAGEID).toString();
-		
-						if(!db.ShowExists(seriesId))
-						{
-							FetchAndSaveSeries fas = new FetchAndSaveSeries();
-							fas.execute(seriesId, runtime, airtime, tvRageId);
-						}
-						else
-						{
-							Toast.makeText(getBaseContext(), R.string.message_series_double, Toast.LENGTH_SHORT).show();	
-						}
-		
-					}
-		
-				});
+		searchResult.setOnItemClickListener(new android.widget.AdapterView.OnItemClickListener() {
+
+			public void onItemClick(AdapterView<?> arg0, View rowView, int arg2, long arg3) {
+				String seriesId = rowView.getTag().toString();
+				String runtime = rowView.getTag(R.string.TAG_RUNTIME).toString();
+				String airtime = rowView.getTag(R.string.TAG_AIRTIME).toString();
+				String tvRageId = rowView.getTag(R.string.TAG_TVRAGEID).toString();
+
+				if(!db.ShowExists(seriesId))
+				{
+					FetchAndSaveSeries fas = new FetchAndSaveSeries();
+					fas.execute(seriesId, runtime, airtime, tvRageId);
+				}
+				else
+				{
+					Toast.makeText(getBaseContext(), R.string.message_series_double, Toast.LENGTH_SHORT).show();	
+				}
+
+			}
+
+		});
 
 	}
 
@@ -199,7 +199,7 @@ public class SearchableActivity extends ListActivity {
 
 		@Override
 		protected ArrayList<TraktSearchResult> doInBackground(String... q) {
-			
+
 			HttpClient client = new DefaultHttpClient();
 			URI uri = null;
 			try {
@@ -209,13 +209,12 @@ public class SearchableActivity extends ListActivity {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-			
+
 			HttpGet httpGet = new HttpGet(uri);
 			StringBuilder stringBuilder = new StringBuilder();
 			ArrayList<TraktSearchResult> shows = new ArrayList<TraktSearchResult>();
 			try {
 				HttpResponse response = client.execute(httpGet);
-				StatusLine statusLine = response.getStatusLine();
 
 				HttpEntity entity = response.getEntity();
 				InputStream content = entity.getContent();
@@ -229,44 +228,12 @@ public class SearchableActivity extends ListActivity {
 				Gson gson = new Gson();
 				Type traktShows = new TypeToken<ArrayList<TraktSearchResult>>(){}.getType();
 				shows = gson.fromJson(stringBuilder.toString(), traktShows);
-				
+
 			} catch (Exception e) {
 				// TODO: handle exception
 			}
-			
-				return shows;
-			
-//			//setProgressBarIndeterminateVisibility(true);
-//			String completeAddress = KEY_URL + q[0];
-//
-//			XMLParser parser = new XMLParser();
-//			String xml = parser.getXmlFromUrl(completeAddress);
-//			
-//			ArrayList<Series> series = new ArrayList<Series>();
-//			if(xml == null || xml.equals("") || xml.contains("Query failed"))
-//			{
-//				return series;
-//			}
-//			
-//			if (xml != null)
-//			{
-//				Document doc = parser.getDomElement(xml);
-//
-//				NodeList nl = doc.getElementsByTagName(KEY_SERIES);
-//
-//				for (int i = 0; i < nl.getLength(); i++) {
-//					Series s = new Series();
-//					Element e = (Element) nl.item(i);
-//
-//					s.setName(parser.getValue(e, KEY_NAME));
-//					s.setID(Integer.parseInt(parser.getValue(e, KEY_ID)));
-//					s.setAirs(parser.getValue(e, KEY_AIRED));
-//					s.setSummary(parser.getValue(e, KEY_SUMMARY));
-//
-//					series.add(s);
-//				}
-//			}
-//			return series;
+
+			return shows;
 
 		}
 
@@ -288,7 +255,7 @@ public class SearchableActivity extends ListActivity {
 		}
 
 	}
-	
+
 	public class FetchAndSaveSeries extends AsyncTask<String, String, Boolean>
 	{
 
@@ -296,7 +263,12 @@ public class SearchableActivity extends ListActivity {
 		protected Boolean doInBackground(String... q) {
 			saveDialog.setMessage(getString(R.string.message_download_information));
 			String completeAddress = String.format(KEY_FULLURL, TextUtils.htmlEncode(q[0].replaceAll("[^a-zA-Z0-9 ]+", "")));
-			String tvRageUrl = "http://services.tvrage.com/feeds/showinfo.php?sid=" + q[2];
+			String tvRageUrl = "http://services.tvrage.com/feeds/showinfo.php?sid=" + q[3];
+
+			String[] tvRageResponse = GetTimeZone(tvRageUrl);
+
+
+
 			//String completeAddress = "http://www.thetvdb.com/data/series/" + q[0] +"/all/";
 			XMLParser parser = new XMLParser();
 
@@ -304,12 +276,12 @@ public class SearchableActivity extends ListActivity {
 
 			if(xml == null || xml.equals(""))
 				return false;
-			
+
 			Document doc = parser.getDomElement(xml);
-			
+
 			if(doc == null || doc.equals(""))
 				return false;
-			
+
 			NodeList nl = doc.getElementsByTagName(KEY_SERIES);
 			NodeList episodes = doc.getElementsByTagName(KEY_EPISODE);		
 
@@ -369,7 +341,9 @@ public class SearchableActivity extends ListActivity {
 			s.setStatus(parser.getValue(e, KEY_STATUS));
 			s.setSummary(parser.getValue(e, KEY_SUMMARY));
 			s.setLastUpdated(parser.getValue(e, KEY_LASTUPDATED));
-			s.setAirtime(q[2]);
+			s.setAirtime(tvRageResponse[1]);
+			s.setTimeZone(tvRageResponse[0]);
+			
 			s.setRuntime(q[1]);
 			//Runtime = 1, Airtime = 2
 			db.AddShow(s);
@@ -380,9 +354,9 @@ public class SearchableActivity extends ListActivity {
 			{
 				Episode ep = new Episode();
 				e = (Element) episodes.item(i);
-				
-				
-				
+
+
+
 				ep.setAired(dateHelper.ConvertToLocalTime(parser.getValue(e, KEY_EP_AIRED), q[2]));
 				ep.setEpisode(parser.getValue(e, KEY_EP_EPISODE));
 				ep.setSeason(parser.getValue(e, KEY_EP_SEASON));
@@ -437,6 +411,30 @@ public class SearchableActivity extends ListActivity {
 			super.onPostExecute(result);
 		}
 
+	}
+
+	private String[] GetTimeZone(String tvRageUrl){
+		XMLParser parser = new XMLParser();
+
+		String[] tvRageInformation = new String[2];
+
+		String xml = parser.getXmlFromUrl(tvRageUrl);		
+		Log.d("XML","" + xml);
+		if(xml == null || xml.equals(""))
+			return tvRageInformation;
+
+		Document doc = parser.getDomElement(xml);
+
+		if(doc == null || doc.equals(""))
+			return tvRageInformation;
+
+		NodeList nl = doc.getElementsByTagName("Showinfo");
+		Element e = (Element) nl.item(0);
+
+		tvRageInformation[0] =parser.getValue(e, "timezone"); 
+		tvRageInformation[1] = parser.getValue(e, "airtime");
+
+		return  tvRageInformation;
 	}
 
 }

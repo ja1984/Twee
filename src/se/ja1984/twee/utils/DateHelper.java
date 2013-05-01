@@ -149,10 +149,11 @@ public class DateHelper {
 			try {
 
 				String dateString = airDate + " " + airTime;
-
+			
 				SimpleDateFormat sourceFormat = new SimpleDateFormat("yyyy-MM-dd H:mm");
 				sourceFormat.setTimeZone(TimeZone.getTimeZone("GMT-5"));
-
+				
+				
 				Date parsed;
 
 				parsed = sourceFormat.parse(dateString);
