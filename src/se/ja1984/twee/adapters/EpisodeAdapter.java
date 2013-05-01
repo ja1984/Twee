@@ -132,12 +132,13 @@ public class EpisodeAdapter extends ArrayAdapter<Episode> {
 			seasonWrapper.setVisibility(View.GONE);
 		}
 
+		Episode episode = episodes.get(pos);
 
 		seasonNumber.setText("Season " + episodes.get(pos).getSeason());
 
 		String _title = episodes.get(pos).getTitle();
 		title.setText(_title.equals("") ? "TBA" : _title);
-		information.setText(dateHelper.Episodenumber(episodes.get(pos)) + " | " + dateHelper.DisplayDate(episodes.get(pos).getAired()));
+		information.setText(dateHelper.Episodenumber(episodes.get(pos)) + " | " + dateHelper.DaysTilNextEpisode(episode));
 
 		return convertView;
 

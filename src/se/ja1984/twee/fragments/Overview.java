@@ -86,7 +86,7 @@ public class Overview extends Fragment{
 		if(lastAiredApisode.getID() != 0)
 		{
 			lastAiredEpisodeTitle.setText(lastAiredApisode.getTitle());
-			lastAiredEpisodeInformation.setText(dateHelper.Episodenumber(lastAiredApisode) + " | " + dateHelper.DisplayDate(lastAiredApisode.getAired()));
+			lastAiredEpisodeInformation.setText(dateHelper.Episodenumber(lastAiredApisode) + " | " + dateHelper.DaysTilNextEpisode(lastAiredApisode));
 			lastAiredEpisodeWatched.setChecked(lastAiredApisode.getWatched().equals("1"));
 
 			lastAiredEpisodeWatched.setOnClickListener(new View.OnClickListener() {
@@ -120,7 +120,7 @@ public class Overview extends Fragment{
 		if(nextEpisode.getTitle() != null)
 		{
 			nextEpisodeTitle.setText(nextEpisode.getTitle());
-			nextEpisodeNumber.setText(dateHelper.Episodenumber(nextEpisode) + " | " + dateHelper.DisplayDate(nextEpisode.getAired()));
+			nextEpisodeNumber.setText(dateHelper.Episodenumber(nextEpisode) + " | " + dateHelper.DaysTilNextEpisode(nextEpisode));
 
 			rlNextEpisode.setOnClickListener(new View.OnClickListener() {
 				public void onClick(View v) {

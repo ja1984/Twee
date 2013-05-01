@@ -7,9 +7,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
+
 import se.ja1984.twee.dto.TraktShow;
-import se.ja1984.twee.utils.ImageLoader;
-import se.ja1984.twee.utils.ImageLoader.LoadPair;
 import se.ja1984.twee.R;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -22,9 +22,7 @@ import android.widget.TextView;
 
 public class TrendingAdapter extends ArrayAdapter<TraktShow>{
 
-	public static Map<String, Bitmap> cache;
-
-	private ImageLoader imageLoader;
+	ImageLoader imageLoader;
 
 	static class viewHolder
 	{
@@ -42,8 +40,8 @@ public class TrendingAdapter extends ArrayAdapter<TraktShow>{
 		this.context = context;
 		this.resource = resource;
 		this.shows = objects;
-		imageLoader = new ImageLoader(lv);
-		cache = new HashMap<String, Bitmap>();
+		imageLoader = ImageLoader.getInstance();
+		//cache = new HashMap<String, Bitmap>();
 	}
 
 	@Override
@@ -60,10 +58,14 @@ public class TrendingAdapter extends ArrayAdapter<TraktShow>{
 			holder.showName = (TextView)convertView.findViewById(R.id.txtShowInformation);
 			holder.rating = (TextView)convertView.findViewById(R.id.txtRating);
 			
-			final ImageView pic = (ImageView) convertView.findViewById(R.id.imgSeriesImage);
-			pic.setImageBitmap(null);
+			final ImageView bannerImage = (ImageView) convertView.findViewById(R.id.imgSeriesImage);
+			//pic.setImageBitmap(null);
+			
 			try {
-				imageLoader.addImage(new URL(traktShow.images.banner), pic);
+				
+				
+				imageLoader.displayImage(traktShow.images.banner, bannerImage);
+				//imageLoader.addImage(new URL(traktShow.images.banner), pic);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

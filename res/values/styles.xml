@@ -10,6 +10,7 @@
         <item name="menu_trending">@drawable/ic_trending_light</item>
         <item name="menu_information">@drawable/ic_information_light</item>
         <item name="menu_backlog">@drawable/ic_backlog_light</item>
+        <item name="menu_addtocalendar">@drawable/ic_addtocalendar_light</item>
     </style>
 
     <style name="LightDark" parent="android:Theme.Holo.Light.DarkActionBar">
@@ -22,6 +23,7 @@
         <item name="menu_trending">@drawable/ic_trending_dark</item>
         <item name="menu_information">@drawable/ic_information_dark</item>
         <item name="menu_backlog">@drawable/ic_backlog_dark</item>
+        <item name="menu_addtocalendar">@drawable/ic_addtocalendar_dark</item>
     </style>
 
     <style name="Dark" parent="android:Theme.Holo">
@@ -33,7 +35,8 @@
         <item name="pref_backup">@drawable/ic_backup_dark</item>
         <item name="menu_trending">@drawable/ic_trending_dark</item>
         <item name="menu_information">@drawable/ic_information_dark</item>
-        <item name="menu_backlog">@drawable/ic_backlog_light</item>
+        <item name="menu_backlog">@drawable/ic_backlog_dark</item>
+        <item name="menu_addtocalendar">@drawable/ic_addtocalendar_light</item>
     </style>
 
     <style name="SkypeStyle" parent="@android:style/Theme.Holo.Light">

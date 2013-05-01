@@ -1,10 +1,25 @@
 package se.ja1984.twee;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.lang.reflect.Type;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.StatusLine;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import android.app.ActionBar;
 import android.app.ListActivity;
@@ -14,8 +29,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -35,9 +52,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 import se.ja1984.twee.R;
 import se.ja1984.twee.adapters.SearchAdapter;
+import se.ja1984.twee.dto.TraktSearchResult;
+import se.ja1984.twee.dto.TraktShow;
 import se.ja1984.twee.models.Episode;
 import se.ja1984.twee.models.Series;
 import se.ja1984.twee.utils.DatabaseHandler;
+import se.ja1984.twee.utils.DateHelper;
 import se.ja1984.twee.utils.ImageService;
 import se.ja1984.twee.utils.Utils;
 import se.ja1984.twee.utils.XMLParser;
@@ -77,6 +97,7 @@ public class SearchableActivity extends ListActivity {
 	ListView searchResult;
 	Boolean downloadHeader;
 	ProgressDialog saveDialog;
+	DateHelper dateHelper;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -97,7 +118,10 @@ public class SearchableActivity extends ListActivity {
 		imageService = new ImageService();
 		searchResult = (ListView)getListView();
 		emptyView = (RelativeLayout)findViewById(android.R.id.empty);
-
+		searchResult.setBackgroundColor(Color.parseColor("#e4e4e4"));
+		searchResult.setDividerHeight(0);
+		dateHelper = new DateHelper();
+		
 		Intent intent = getIntent();
 		if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
 			String query = intent.getStringExtra(SearchManager.QUERY);
@@ -106,24 +130,26 @@ public class SearchableActivity extends ListActivity {
 			doSearchQuery(query);
 		}
 
-		searchResult.setOnItemClickListener(new android.widget.AdapterView.OnItemClickListener() {
-
-			public void onItemClick(AdapterView<?> arg0, View rowView, int arg2, long arg3) {
-				String seriesId = rowView.getTag().toString();
-
-				if(!db.ShowExists(seriesId))
-				{
-					FetchAndSaveSeries fas = new FetchAndSaveSeries();
-					fas.execute(seriesId);
-				}
-				else
-				{
-					Toast.makeText(getBaseContext(), R.string.message_series_double, Toast.LENGTH_SHORT).show();	
-				}
-
-			}
-
-		});
+				searchResult.setOnItemClickListener(new android.widget.AdapterView.OnItemClickListener() {
+		
+					public void onItemClick(AdapterView<?> arg0, View rowView, int arg2, long arg3) {
+						String seriesId = rowView.getTag().toString();
+						String runtime = rowView.getTag(R.string.TAG_RUNTIME).toString();
+						String airtime = rowView.getTag(R.string.TAG_AIRTIME).toString();
+		
+						if(!db.ShowExists(seriesId))
+						{
+							FetchAndSaveSeries fas = new FetchAndSaveSeries();
+							fas.execute(seriesId, runtime, airtime);
+						}
+						else
+						{
+							Toast.makeText(getBaseContext(), R.string.message_series_double, Toast.LENGTH_SHORT).show();	
+						}
+		
+					}
+		
+				});
 
 	}
 
@@ -168,46 +194,83 @@ public class SearchableActivity extends ListActivity {
 	}
 
 
-	public class Search extends AsyncTask<String, Void, ArrayList<Series>>{
+	public class Search extends AsyncTask<String, Void, ArrayList<TraktSearchResult>>{
 
 		@Override
-		protected ArrayList<Series> doInBackground(String... q) {
-			//setProgressBarIndeterminateVisibility(true);
-			String completeAddress = KEY_URL + q[0];
-
-			XMLParser parser = new XMLParser();
-			String xml = parser.getXmlFromUrl(completeAddress);
+		protected ArrayList<TraktSearchResult> doInBackground(String... q) {
 			
-			ArrayList<Series> series = new ArrayList<Series>();
-			if(xml == null || xml.equals("") || xml.contains("Query failed"))
-			{
-				return series;
+			HttpClient client = new DefaultHttpClient();
+			URI uri = null;
+			try {
+				uri = new URI("http://api.trakt.tv/search/shows.json/68f70fec5b671144a1f7626b342723b1/" + q[0].replace(" ", "+"));
+				Log.d("test",uri.toString());
+			} catch (URISyntaxException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
 			}
 			
-			if (xml != null)
-			{
-				Document doc = parser.getDomElement(xml);
+			HttpGet httpGet = new HttpGet(uri);
+			StringBuilder stringBuilder = new StringBuilder();
+			ArrayList<TraktSearchResult> shows = new ArrayList<TraktSearchResult>();
+			try {
+				HttpResponse response = client.execute(httpGet);
+				StatusLine statusLine = response.getStatusLine();
 
-				NodeList nl = doc.getElementsByTagName(KEY_SERIES);
+				HttpEntity entity = response.getEntity();
+				InputStream content = entity.getContent();
+				BufferedReader reader = new BufferedReader(new InputStreamReader(content));
 
-				for (int i = 0; i < nl.getLength(); i++) {
-					Series s = new Series();
-					Element e = (Element) nl.item(i);
-
-					s.setName(parser.getValue(e, KEY_NAME));
-					s.setID(Integer.parseInt(parser.getValue(e, KEY_ID)));
-					s.setAirs(parser.getValue(e, KEY_AIRED));
-					s.setSummary(parser.getValue(e, KEY_SUMMARY));
-
-					series.add(s);
+				String line;
+				while((line = reader.readLine()) != null){
+					stringBuilder.append(line);
 				}
+
+				Gson gson = new Gson();
+				Type traktShows = new TypeToken<ArrayList<TraktSearchResult>>(){}.getType();
+				shows = gson.fromJson(stringBuilder.toString(), traktShows);
+				
+			} catch (Exception e) {
+				// TODO: handle exception
 			}
-			return series;
+			
+				return shows;
+			
+//			//setProgressBarIndeterminateVisibility(true);
+//			String completeAddress = KEY_URL + q[0];
+//
+//			XMLParser parser = new XMLParser();
+//			String xml = parser.getXmlFromUrl(completeAddress);
+//			
+//			ArrayList<Series> series = new ArrayList<Series>();
+//			if(xml == null || xml.equals("") || xml.contains("Query failed"))
+//			{
+//				return series;
+//			}
+//			
+//			if (xml != null)
+//			{
+//				Document doc = parser.getDomElement(xml);
+//
+//				NodeList nl = doc.getElementsByTagName(KEY_SERIES);
+//
+//				for (int i = 0; i < nl.getLength(); i++) {
+//					Series s = new Series();
+//					Element e = (Element) nl.item(i);
+//
+//					s.setName(parser.getValue(e, KEY_NAME));
+//					s.setID(Integer.parseInt(parser.getValue(e, KEY_ID)));
+//					s.setAirs(parser.getValue(e, KEY_AIRED));
+//					s.setSummary(parser.getValue(e, KEY_SUMMARY));
+//
+//					series.add(s);
+//				}
+//			}
+//			return series;
 
 		}
 
 		@Override
-		protected void onPostExecute(ArrayList<Series> series) {
+		protected void onPostExecute(ArrayList<TraktSearchResult> series) {
 			setProgressBarIndeterminateVisibility(false);
 
 			//emptyView.setText(R.string.message_noresult);
@@ -224,7 +287,7 @@ public class SearchableActivity extends ListActivity {
 		}
 
 	}
-
+	
 	public class FetchAndSaveSeries extends AsyncTask<String, String, Boolean>
 	{
 
@@ -304,7 +367,9 @@ public class SearchableActivity extends ListActivity {
 			s.setStatus(parser.getValue(e, KEY_STATUS));
 			s.setSummary(parser.getValue(e, KEY_SUMMARY));
 			s.setLastUpdated(parser.getValue(e, KEY_LASTUPDATED));
-
+			s.setAirtime(q[2]);
+			s.setRuntime(q[1]);
+			//Runtime = 1, Airtime = 2
 			db.AddShow(s);
 
 			publishProgress(getString(R.string.message_download_save_episodes));
@@ -313,8 +378,10 @@ public class SearchableActivity extends ListActivity {
 			{
 				Episode ep = new Episode();
 				e = (Element) episodes.item(i);
-
-				ep.setAired(parser.getValue(e, KEY_EP_AIRED));
+				
+				
+				
+				ep.setAired(dateHelper.ConvertToLocalTime(parser.getValue(e, KEY_EP_AIRED), q[2]));
 				ep.setEpisode(parser.getValue(e, KEY_EP_EPISODE));
 				ep.setSeason(parser.getValue(e, KEY_EP_SEASON));
 				ep.setSeriesId(q[0].toString());
@@ -369,7 +436,5 @@ public class SearchableActivity extends ListActivity {
 		}
 
 	}
-
-
 
 }

@@ -13,6 +13,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.utils.URIUtils;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -38,7 +39,9 @@ public class XMLParser {
 			
 			DefaultHttpClient httpClient = new DefaultHttpClient();
 						
-			HttpPost httpPost = new HttpPost(url.replace(" ", "%20"));
+						
+//			HttpPost httpPost = new HttpPost(url.replace(" ", "%20"));
+			HttpGet httpPost = new HttpGet(url.replace(" ", "%20"));
 
 						
 			HttpResponse httpResponse = httpClient.execute(httpPost);

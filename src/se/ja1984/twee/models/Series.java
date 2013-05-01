@@ -15,10 +15,12 @@ public class Series extends BaseEntity {
 	private String Image;
 	private String Header;
 	private String FirstAired;
+	private String Runtime;
+	private String Airtime;
 	public ArrayList<Episode> Episodes;
-	
-	
-	
+
+
+
 	public String getName()
 	{
 		return Name;
@@ -27,7 +29,7 @@ public class Series extends BaseEntity {
 	{
 		this.Name = name;
 	}
-	
+
 	public String getActors()
 	{
 		return Actors;
@@ -36,7 +38,7 @@ public class Series extends BaseEntity {
 	{
 		this.Actors = actors;
 	}
-	
+
 	public String getAirs()
 	{
 		return Airs;
@@ -45,7 +47,7 @@ public class Series extends BaseEntity {
 	{
 		this.Airs = airs;
 	}
-	
+
 	public String getGenre()
 	{
 		return Genre;
@@ -54,7 +56,7 @@ public class Series extends BaseEntity {
 	{
 		this.Genre = genre;
 	}
-	
+
 	public String getImdbId()
 	{
 		return ImdbId;
@@ -63,7 +65,7 @@ public class Series extends BaseEntity {
 	{
 		this.ImdbId = imdbid;
 	}
-	
+
 	public String getRating()
 	{
 		return Rating;
@@ -73,6 +75,28 @@ public class Series extends BaseEntity {
 		this.Rating = rating;
 	}
 
+	public String getAirtime()
+	{
+		return Airtime;
+	}
+	public void setAirtime(String airtime)
+	{
+		this.Airtime = airtime;
+	}
+
+
+	public String getRuntime()
+	{
+		return Runtime;
+	}
+	public void setRuntime(String runtime)
+	{
+		this.Runtime = runtime;
+	}
+
+
+
+
 	public String getStatus()
 	{
 		return Status;
@@ -81,7 +105,7 @@ public class Series extends BaseEntity {
 	{
 		this.Status = status;
 	}
-	
+
 	public String getImage()
 	{
 		return Image;
@@ -90,7 +114,7 @@ public class Series extends BaseEntity {
 	{
 		this.Image = image;
 	}
-	
+
 	public String getHeader()
 	{
 		return Header;
@@ -99,17 +123,17 @@ public class Series extends BaseEntity {
 	{
 		this.Header = header;
 	}
-	
+
 	public ArrayList<Episode> getEpisodes()
 	{
 		return Episodes;
 	}
-	
+
 	public String getFirstAired()
 	{
 		return FirstAired;
-		}
-	
+	}
+
 	public void setFirstAired(String firstAired)
 	{
 		this.FirstAired = firstAired;

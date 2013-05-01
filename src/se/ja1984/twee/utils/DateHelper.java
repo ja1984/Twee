@@ -1,16 +1,28 @@
 package se.ja1984.twee.utils;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.TimeZone;
+
+import org.joda.time.DateTime;
+import org.joda.time.Days;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+import org.joda.time.tz.DateTimeZoneBuilder;
+
+import android.text.format.DateUtils;
+import android.util.Log;
 
 import se.ja1984.twee.models.Episode;
 
 public class DateHelper {
 
-	
-	
+
+
 	public String Episodenumber(Episode episode)
 	{
 		String s = episode.getSeason();
@@ -72,7 +84,7 @@ public class DateHelper {
 
 		return returndate;
 	}
-	
+
 	public String ShortDisplayDate(String date)
 	{
 		Date today = setTimeToMidnight(new Date());
@@ -94,6 +106,8 @@ public class DateHelper {
 
 	public String DaysTilNextEpisode(String date)
 	{
+
+
 		Date today = setTimeToMidnight(new Date());
 		Date d1 = null;
 		SimpleDateFormat df = new SimpleDateFormat ("yyyy-MM-dd");
@@ -108,19 +122,127 @@ public class DateHelper {
 		if(d1 == null)
 			return date;
 
+		int daysBetween = Days.daysBetween(new DateTime(today), new DateTime(d1)).getDays();
 
-		long timeOne = today.getTime();
-		long timeTwo = d1.getTime();
-		long oneDay = 1000 * 60 * 60 * 24;
-		long delta = (timeTwo - timeOne) / oneDay;
-
-		if(delta == 0)
+		if(daysBetween == 0)
 		{
 			return "Airs today";
 		}
+		else if(daysBetween == 1)
+		{
+			return "Airs tomorrow";
+		}
 		else
 		{
-			return "Airs in " + delta + " days";
+			return "Airs in " + daysBetween + " days";
+		}
+
+	}
+
+	public String ConvertToLocalTimeTest(String airDate, String airTime){
+
+		if(airTime.equals("") || airTime == null)
+			return airDate;
+
+		String result = airDate;
+		if(Utils.useLocalizedTimezone){
+			try {
+
+				String dateString = airDate + " " + airTime;
+
+				SimpleDateFormat sourceFormat = new SimpleDateFormat("yyyy-MM-dd H:mm");
+				sourceFormat.setTimeZone(TimeZone.getTimeZone("GMT-5"));
+
+				Date parsed;
+
+				parsed = sourceFormat.parse(dateString);
+				TimeZone tz = TimeZone.getDefault();
+				SimpleDateFormat destFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+				destFormat.setTimeZone(tz);
+
+				result = destFormat.format(parsed);
+			} catch (ParseException e) {
+				return airDate;
+			}
+		}
+		return result;
+	}
+	
+	public String ConvertToLocalTime(String airDate, String airTime){
+
+		if(airTime.equals("") || airTime == null)
+			return airDate;
+
+		String result = airDate;
+		if(Utils.useLocalizedTimezone){
+			try {
+
+				String dateString = airDate + " " + airTime.toUpperCase();
+
+				SimpleDateFormat sourceFormat = new SimpleDateFormat("yyyy-MM-dd K:mma");
+				sourceFormat.setTimeZone(TimeZone.getTimeZone("GMT-8"));
+
+				Date parsed;
+
+				parsed = sourceFormat.parse(dateString);
+				TimeZone tz = TimeZone.getDefault();
+				SimpleDateFormat destFormat = new SimpleDateFormat("yyyy-MM-dd");
+				destFormat.setTimeZone(tz);
+
+				result = destFormat.format(parsed);
+			} catch (ParseException e) {
+				return airDate;
+			}
+		}
+		return result;
+	}
+
+	public String DaysTilNextEpisode(Episode episode)
+	{
+		return DaysTilNextEpisode(episode.getAired(), episode.getAirtime() == null ? "" : episode.getAirtime());
+	}
+
+	public String DaysTilNextEpisode(String date, String airtime)
+	{
+
+		//		if(airtime.equals("") || airtime == null)
+		//			airtime = "8:00pm";
+		//
+		//		String dateString = date + " " + airtime.toUpperCase();
+		//
+		//		SimpleDateFormat sourceFormat = new SimpleDateFormat("yyyy-MM-dd K:mma");
+		//		sourceFormat.setTimeZone(TimeZone.getTimeZone("GMT-8"));
+		//
+		//		Date parsed;
+		//		String result = "";
+		//		try {
+		//			parsed = sourceFormat.parse(dateString);
+		//			TimeZone tz = TimeZone.getDefault();
+		//			SimpleDateFormat destFormat = new SimpleDateFormat("yyyy-MM-dd");
+		//			destFormat.setTimeZone(tz);
+		//
+		//			result = destFormat.format(parsed);
+		//		} catch (ParseException e) {
+		//
+		//		}
+
+		Date today = setTimeToMidnight(new Date());
+		int daysBetween = Days.daysBetween(new DateTime(today), new DateTime(date)).getDays();
+
+		if(daysBetween == 0)
+		{
+			return "Airs today";
+		}
+		else if(daysBetween == 1)
+		{
+			return "Airs tomorrow";
+		}
+		else if(daysBetween < 0){
+			return "Aired " + date;
+		}
+		else
+		{
+			return "Airs in " + daysBetween + " days";
 		}
 
 	}

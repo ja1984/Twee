@@ -9,6 +9,7 @@ public class Episode extends BaseEntity {
 	private String Watched;
 	private boolean Selected;
 	private String EpisodeId;
+	private String Airtime;
 	
 	
 	public boolean isSelected()
@@ -66,6 +67,17 @@ public class Episode extends BaseEntity {
 	{
 		this.Aired = aired;
 	}
+	
+	
+	public String getAirtime()
+	{
+		return Airtime;
+	}
+	public void setAirtime(String airtime)
+	{
+		this.Airtime = airtime;
+	}
+	
 
 	public String getWatched()
 	{

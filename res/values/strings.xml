@@ -28,13 +28,13 @@
     <string name="season_markaswatched">Mark season as watched</string>
     <string name="series_plot">Plot</string>
     <string name="series_summary">Summary</string>
-    <string name="message_show_ended">This show has ended</string>
     <string name="button_title_restore">Restore</string>
     <string name="button_title_backup">Backup</string>
     <string name="button_title_newprofile">Add new profile</string>
-    <string name="message_backup_warning">Backup or restore all your profiles and their added shows. \n\n<b>CAUTION!</b>\nWhen you restore a backup the database is wiped before restore, all non backed up information will be deleted!</string>
-    <string name="message_profile_description">Multiple profiles makes it possible for your iPhone-using partner to experience the pure awesomeness of <b>Twee</b> without spoiling your nice collection of shows with his or her sucky shows ;D </string>
     <string name="edit_notimplemented">Edit profile is not implemented yet.</string>
+    <string name="extension_title">Twee</string>
+    <string name="extension_description">Get notified about episodes airing today</string>
+    <string name="widget_message_noshow">No shows airing today!</string>
     <!-- /General -->
 
 
@@ -48,6 +48,9 @@
     <string name="title_activity_profile_choose">Choose profile</string>
     <!-- /Titles -->
 
+
+	<string name="TAG_RUNTIME">TAG_RUNTIME</string>
+	<string name="TAG_AIRTIME">TAG_AIRTIME</string>
 
     <!-- Sections -->
     <string name="section_title_episodes">EPISODES</string>
@@ -64,7 +67,7 @@
     <string name="menu_settings">Settings</string>
     <string name="menu_add">Add</string>
     <string name="menu_about">About</string>
-    <string name="menu_refresh">Refresh</string>
+    <string name="menu_refresh">Update all shows</string>
     <string name="menu_calendar">Calendar</string>
     <string name="menu_markseries">Mark show as watched</string>
     <string name="menu_delete">Delete</string>
@@ -76,6 +79,8 @@
     <string name="menu_unwatched">Backlog</string>
     <string name="menu_setDate">Choose date</string>
     <string name="menu_backlog">What\'s backlog?</string>
+    <string name="menu_cleanepisodes">Clean episodes</string>
+    <string name="menu_addtocalendar">Add next episode to calendar</string>
     <!-- /Menu -->
 
 
@@ -100,6 +105,7 @@
     <string name="message_downloading_images_error">Error while downloading images</string>
     <string name="message_downloading_banner_error">Error while downloading new banner</string>
     <string name="message_downloading_show_error">Error while downloading show</string>
+    <string name="message_update_show_error">Error while updating show</string>
     <string name="message_backup_error">The backup failed</string>
     <string name="message_backup_complete">The backup has been saved to /sdcard/twee/backup.txt</string>
     <string name="message_restore_error">The restore failed</string>
@@ -112,6 +118,16 @@
     <string name="pref_header_display">Display options</string>
     <string name="pref_header_other">Other options</string>
     <string name="message_episode_watched">Marked as watched</string>
+    <string name="title_clean_episodes">Clean episodes</string>
+    <string name="message_clean_episodes">Proceeding with this wil remove all TBA episodes from this show</string>
+    <string name="message_clean_episodes_done">Successfully cleaned episodes, you must re-open this show to see the changes!</string>
+    <string name="message_clean_episodes_error">Something went wrong when cleaning episodes!</string>
+    <string name="update_shows_message">You haven´t updated your shows in <b>7</b> days, do you want to do it now?</string>
+    <string name="update_shows_title">Update warning</string>
+    <string name="message_show_ended">This show has ended</string>
+    <string name="message_backup_warning">Backup or restore all your profiles and their added shows. \n\n<b>CAUTION!</b>\nWhen you restore a backup the database is wiped before restore, all non backed up information will be deleted!</string>
+    <string name="message_profile_description">Multiple profiles makes it possible for your iPhone-using partner to experience the pure awesomeness of <b>Twee</b> without spoiling your nice collection of shows with his or her sucky shows ;D </string>
+    <string name="message_calendar_noepisodes">No upcoming episodes for this show!</string>
     <!-- /Messages -->
 
 
@@ -121,6 +137,8 @@
     <string name="settings_theme_option_dark">Dark theme</string>
     <!-- /Settings -->
 
+	<string name="settings_display_option_googlenow">Google Now</string>
+	<string name="settings_display_option_text">Text</string>
     <string name="settings_display_option_small">Minimal</string>
     <string name="settings_display_option_deafult">Default</string>
     <string name="settings_header_backup">Backup and restore</string>
@@ -133,6 +151,9 @@
 
     <!-- About -->
     <string name="about_close">Close</string>
+    <string name="opensource_header">Open source libraries</string>
+    <string name="opensource_text"><b>google-gson</b>\nhttps://code.google.com/p/google-gson/\n\n<b>Joda</b>\nhttp://joda-time.sourceforge.net/\n\n<b>Android-Universal-Image-Loader</b>\nhttps://github.com/nostra13/Android-Universal-Image-Loader</string>
+    
     <string name="about_header">About Twee</string>
     <string name="about_text">Twee is getting all its information from thetvdb.com, support them in any way possible!</string>
     <string name="thanks_header">Thanks to</string>
@@ -157,6 +178,8 @@
 
     <string name="dialog_ok">OK</string>
     <string name="dialog_cancel">Cancel</string>
+    <string name="dialog_update_now">Update now</string>
+    <string name="dialog_remindme_later">No, remind me in 7 days</string>
     <string name="settings_description_profile_popup">Enter the name of the new profile</string>
     <string name="dialog_selectprofile_header">Select profile</string>
     <string name="dialog_addprofile_header">New profile</string>
@@ -166,10 +189,18 @@
     <string name="pref_themes_array_default">Light</string>
     <string name="pref_themes_summary">Selected theme: %s</string>
     <string name="pref_display_summary">Display layout: %s</string>
+    
+    <string name="settings_ignorethe_header">Ignore The in show name</string>
+    <string name="settings_ignorethe_description">Ignore the leading "The" in show names when sorting alphabetically</string>
+    
+    <string name="settings_localizedtime_header">Localized air dates</string>
+    <string name="settings_localizedtime_description">Use localized air dates (based on time zone set on phone)</string>
+        
     <string name="title_activity_backup">Backup and restore</string>
     <string name="title_activity_profile">Profiles</string>
     <string name="title_activity_trending">Trending on Trakt.tv</string>
-    <string name="title_activity_banner">BannerActivity</string>
+    <string name="title_activity_banner">Download new banner image</string>
     <string name="title_activity_unwatched">Backlog</string>
+    <string name="title_activity_dash_clock_extension">DashClockExtension</string>
 
 </resources>

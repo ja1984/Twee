@@ -24,6 +24,7 @@ import se.ja1984.twee.utils.Utils;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -55,7 +56,7 @@ public class TrendingActivity extends BaseActivity {
 		setContentView(R.layout.layout_trending);
 		// Show the Up button in the action bar.
 		getActionBar().setDisplayHomeAsUpEnabled(true);
-
+		
 		lstTrending = (ListView) findViewById(R.id.lstTrending);
 
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -167,7 +168,7 @@ public class TrendingActivity extends BaseActivity {
 				// TODO: handle exception
 			}
 
-			return shows.subList(0, 10);
+			return shows.subList(0, 20);
 		}
 
 	}

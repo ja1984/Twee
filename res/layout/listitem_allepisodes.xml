@@ -5,7 +5,6 @@
     android:clickable="true"
     android:orientation="vertical" >
 
-
     <RelativeLayout
         android:id="@+id/seasonTest"
         android:layout_width="match_parent"
@@ -35,7 +34,7 @@
         <CheckBox
             android:id="@+id/chkWatchedSeason"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="fill_parent"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
             android:layout_margin="0dp"
@@ -47,6 +46,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
+            android:background="@drawable/button_watched"
+            android:clickable="true"
             android:padding="10dip"
             android:scrollHorizontally="true"
             android:scrollbars="none"
@@ -59,16 +60,14 @@
             android:textColor="#FFFFFF"
             android:textSize="11sp"
             android:textStyle="normal|bold"
-            android:typeface="normal"
-            android:clickable="true"
-            android:background="@drawable/button_watched" />
-
+            android:typeface="normal" />
     </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/layoutEpisode"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:padding="5dp" >
 
         <TextView
             android:id="@+id/txtExtra"
@@ -101,9 +100,12 @@
             android:id="@+id/chkWatched"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBaseline="@id/txtTitle"
+            android:layout_alignBottom="@+id/txtEpisodeNumber"
             android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true" />
+            android:layout_alignParentTop="true"
+            android:padding="5dp"
+            android:textSize="0sp" />
+
     </RelativeLayout>
 
 </LinearLayout>

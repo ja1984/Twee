@@ -22,8 +22,6 @@
             android:key="pref_theme"
             android:summary="%s"
             android:title="@string/settings_theme_header" />
-        
-        
         <ListPreference
             android:defaultValue="0"
             android:dialogTitle="@string/settings_header_display"
@@ -32,7 +30,7 @@
             android:key="pref_display"
             android:summary="%s"
             android:title="@string/settings_header_display" />
-            />
+            />
         <ListPreference
             android:defaultValue="0"
             android:dialogTitle="@string/settings_header_sortorder"
@@ -41,8 +39,7 @@
             android:key="pref_sortorder"
             android:summary="%s"
             android:title="@string/settings_header_sortorder" />
-            />
-            
+            />
         <ListPreference
             android:defaultValue="0"
             android:dialogTitle="@string/settings_header_showshows"
@@ -51,7 +48,7 @@
             android:key="pref_showshows"
             android:summary="%s"
             android:title="@string/settings_header_showshows" />
-            />
+            />
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/pref_header_other" >
         <CheckBoxPreference
@@ -59,6 +56,16 @@
             android:key="pref_downloadheader"
             android:summary="@string/settings_header_description"
             android:title="@string/settings_header_header" />
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="pref_ignorethe"
+            android:summary="@string/settings_ignorethe_description"
+            android:title="@string/settings_ignorethe_header" />
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="pref_localizedtime"
+            android:summary="@string/settings_localizedtime_description"
+            android:title="@string/settings_localizedtime_header" />
     </PreferenceCategory>
 
 </PreferenceScreen>

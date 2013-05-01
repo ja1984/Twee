@@ -1,6 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ListView xmlns:android="http://schemas.android.com/apk/res/android"
-  android:id="@+id/lstWidgetItems"
-  android:layout_width="match_parent"
-  android:layout_height="match_parent"
-/>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:id="@+id/widgetItemWrapper"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#99000000"
+        android:clickable="false" >
+
+        <ImageView
+            android:id="@+id/btnOpenTwee"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/btnRefreshWidget"
+            android:layout_alignParentLeft="true"
+            android:background="@drawable/background_widget_refresh"
+            android:paddingBottom="4dp"
+            android:paddingLeft="-2dp"
+            android:paddingRight="0dp"
+            android:paddingTop="4dp"
+            android:src="@drawable/ic_launcher" />
+
+        <ImageView
+            android:id="@+id/btnRefreshWidget"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/background_widget_refresh"
+            android:padding="8dp"
+            android:src="@drawable/ic_refresh_dark" />
+    </RelativeLayout>
+
+    <ListView
+        android:id="@+id/lstWidgetList"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_marginTop="1dp"
+        android:background="#40000000" >
+    </ListView>
+
+    <TextView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/empty_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="1dp"
+        android:background="#40000000"
+        android:gravity="center"
+        android:shadowColor="@android:color/black"
+        android:shadowDx="1"
+        android:shadowDy="1"
+        android:shadowRadius="1"
+        android:text="@string/widget_message_noshow"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp" />
+
+</LinearLayout>

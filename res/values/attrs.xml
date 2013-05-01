@@ -10,4 +10,6 @@
     <attr name="menu_trending" format="integer" />
     <attr name="menu_information" format="integer" />
     <attr name="menu_backlog" format="integer" />
+    <attr name="menu_addtocalendar" format="integer" />
+
 </resources>

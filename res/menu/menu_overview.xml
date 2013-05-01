@@ -10,11 +10,15 @@
         android:orderInCategory="99"
         android:showAsAction="never"
         android:title="@string/menu_downloadimages"/>
-    
+        <item
+        android:id="@+id/menu_cleanepisodes"
+        android:orderInCategory="99"
+        android:showAsAction="never"
+      android:title="@string/menu_cleanepisodes"/>
     <item
         android:id="@+id/menu_downloadbanner"
         android:orderInCategory="99"
         android:showAsAction="never"
-        android:title="@string/menu_downloadnewbanner"/>
+      android:title="@string/menu_downloadnewbanner"/>
 
 </menu>

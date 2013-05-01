@@ -9,7 +9,9 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:paddingLeft="5dp"
-        android:paddingRight="5dp" >
+        android:paddingRight="5dp"
+        android:paddingBottom="5dp"
+         >
 
         <ImageView
             android:id="@+id/imageView1"
@@ -64,6 +66,31 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:text="@string/thanks_text"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+        
+        <TextView
+            android:id="@+id/txtOpenSource"
+            style="?android:attr/listSeparatorTextViewStyle"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:text="@string/opensource_header"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@android:color/holo_blue_light"
+            android:textSize="11sp"
+            android:textStyle="normal|bold"
+            android:typeface="normal" />
+
+        <TextView
+            android:id="@+id/txtOpenSourceText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:text="@string/opensource_text"
+            android:textSize="11sp"
             android:textAppearance="?android:attr/textAppearanceMedium" />
     </LinearLayout>
 

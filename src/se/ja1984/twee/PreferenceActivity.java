@@ -1,7 +1,9 @@
 package se.ja1984.twee;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import se.ja1984.twee.R;
@@ -15,13 +17,16 @@ public class PreferenceActivity extends BaseActivity {
         getFragmentManager().beginTransaction().replace(android.R.id.content, new PreferenceFragm()).commit();
     }
 
+    
+    
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_preference, menu);
         return true;
     }
     
-    @Override
+
+	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case android.R.id.home:

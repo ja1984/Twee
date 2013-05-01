@@ -69,7 +69,7 @@ public class ImageService {
 			String filename = name + ".jpg";
 
 			String uri = String.format("http://www.thetvdb.com/banners/%s",q);
-
+			Log.d("BannerUrl", "" + uri);
 			//String name = java.util.UUID.randomUUID().toString();
 
 			URL url = new URL(uri);

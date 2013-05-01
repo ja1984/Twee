@@ -6,6 +6,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -25,6 +26,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 import se.ja1984.twee.R;
+import se.ja1984.twee.HomeActivity.GetMySeries;
 import se.ja1984.twee.fragments.Episodes;
 import se.ja1984.twee.fragments.Overview;
 import se.ja1984.twee.fragments.Summary;
@@ -43,6 +45,9 @@ public class OverviewActivity extends FragmentActivity {
 	 * to switch to a {@link android.support.v4.app.FragmentStatePagerAdapter}.
 	 */
 	SectionsPagerAdapter mSectionsPagerAdapter;
+
+
+
 	static ArrayList<Fragment> fragments;
 	Series series;
 	int totalEpisodes;
@@ -70,8 +75,6 @@ public class OverviewActivity extends FragmentActivity {
 		setContentView(R.layout.layout_overview);
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 
-
-		Log.d("SaveInstanceIsNnull","" + (savedInstanceState == null));
 		if(savedInstanceState != null)
 		{
 			seriesId =  savedInstanceState.getString("SeriesId");
@@ -133,6 +136,16 @@ public class OverviewActivity extends FragmentActivity {
 		super.onDestroy();
 	}
 
+	@Override
+	protected void onRestart() {
+		Bundle extras = getIntent().getExtras();
+
+		if(extras == null)
+		{
+			finish();
+		}
+		super.onRestart();
+	}
 
 	public void Reload()
 	{
@@ -173,8 +186,14 @@ public class OverviewActivity extends FragmentActivity {
 		case R.id.menu_downloadimages:
 			new DownloadImagesTask().execute();
 			break;
+			
+		case R.id.menu_cleanepisodes:
+			CleanEpisodes();
+			break;
 
 		case R.id.menu_downloadbanner:
+					
+			//Toast.makeText(this, "This feature has been disabled", Toast.LENGTH_LONG).show();
 			Intent intent = new Intent(this, BannerActivity.class);
 			intent.putExtra("showId", seriesId);
 			startActivity(intent);
@@ -306,5 +325,33 @@ public class OverviewActivity extends FragmentActivity {
 
 	}
 
+	private void CleanEpisodes()
+	{
+		new AlertDialog.Builder(this)
+		.setMessage(R.string.message_clean_episodes)
+		.setTitle(R.string.title_clean_episodes)
+		.setCancelable(false)
+		.setPositiveButton(R.string.dialog_ok, new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
+			 if(new DatabaseHandler(OverviewActivity.this).CleanEpisodes(seriesId)){
+				 Toast.makeText(getBaseContext(), R.string.message_clean_episodes_done, Toast.LENGTH_SHORT).show();
+				 Refresh();
+			 }
+			 else
+			 {
+				 Toast.makeText(getBaseContext(), R.string.message_clean_episodes_error, Toast.LENGTH_SHORT).show();
+			 }
+			}
+		})
+		.setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				// TODO Auto-generated method stub
+				
+			}
+		})
+		.show();
+	}
 
 }

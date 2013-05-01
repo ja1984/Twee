@@ -125,8 +125,7 @@ public class CalendarActivity extends FragmentActivity implements ActionBar.OnNa
                
 
         @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                Bundle savedInstanceState) {
+        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         	ListView listView = new ListView(getActivity());
             Bundle args = getArguments();
 

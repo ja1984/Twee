@@ -4,13 +4,20 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
+
 import se.ja1984.twee.R;
 import se.ja1984.twee.adapters.SeriesAdapter.viewHolder;
 import se.ja1984.twee.models.ExtendedSeries;
 import se.ja1984.twee.utils.ImageService;
+import se.ja1984.twee.utils.Utils;
+import android.R.anim;
+import android.R.color;
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -31,12 +38,14 @@ public class SeriesAdapter extends ArrayAdapter<ExtendedSeries> {
 		String season;
 		ProgressBar progress;
 		TextView txtSmallView;
+		TextView showName;
 	}
 
 	private final Context context;
 	private final ArrayList<ExtendedSeries> series;
 	Object mActionMode;
 	int resource;
+	ImageLoader imageLoader;
 
 	public SeriesAdapter(Context context, int resource, ListView lv, ArrayList<ExtendedSeries> objects)
 	{
@@ -44,7 +53,7 @@ public class SeriesAdapter extends ArrayAdapter<ExtendedSeries> {
 		this.context = context;
 		this.series = objects;
 		this.resource = resource;
-
+		this.imageLoader = ImageLoader.getInstance();
 		cache = new HashMap<String, Bitmap>();
 	}
 
@@ -64,7 +73,8 @@ public class SeriesAdapter extends ArrayAdapter<ExtendedSeries> {
 
 			holder.image = (ImageView)convertView.findViewById(R.id.imgSeriesImage);
 			holder.information = (TextView)convertView.findViewById(R.id.txtUpcomingEpisode);
-			holder.progress = (ProgressBar)convertView.findViewById(R.id.pgrWatched);						
+			holder.progress = (ProgressBar)convertView.findViewById(R.id.pgrWatched);	
+			holder.showName = (TextView)convertView.findViewById(R.id.txtShowName);
 
 			convertView.setTag(holder);
 		}
@@ -78,7 +88,6 @@ public class SeriesAdapter extends ArrayAdapter<ExtendedSeries> {
 		{
 			holder.seriesId = s.getImage();
 
-
 			convertView.setTag(R.string.homeactivity_tag_id,s.getID());
 			convertView.setTag(R.string.homeactivity_tag_seriesid,s.getSeriesId());
 
@@ -86,9 +95,16 @@ public class SeriesAdapter extends ArrayAdapter<ExtendedSeries> {
 			holder.progress.setProgress(s.getWatchedEpisodes());
 			holder.information.setText(s.getNextEpisodeInformation().equals("") ? context.getText(R.string.message_show_ended) : s.getNextEpisodeInformation());
 
-			Bitmap bm = getBitmapFromCache(s.getImage());
-
-			holder.image.setImageBitmap(bm);
+			if(resource != R.layout.listitem_series_alt2){
+				String imageUrl = "file:///mnt/sdcard/twee/" + s.getImage();
+				imageLoader.displayImage(imageUrl, holder.image);
+				
+//				Bitmap bm = getBitmapFromCache(s.getImage());
+//				holder.image.setImageBitmap(bm);
+			}else{
+				holder.showName.setTextColor(Utils.activeTheme == R.style.Dark ? Color.WHITE :  Color.BLACK);
+				holder.showName.setText(s.getName());
+			}
 
 		}
 

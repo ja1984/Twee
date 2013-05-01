@@ -20,6 +20,7 @@ public class Episodes extends Fragment{
 	DateHelper dateHelper;
 	TextView markSeasonAsWatched;
 	ListView episodes;
+	static String showId;
 	static EpisodeAdapter allEpisodes;
 
 	public Episodes(){
@@ -32,7 +33,9 @@ public class Episodes extends Fragment{
     	View v = inflater.inflate(R.layout.view_episodes, container, false);
     	 episodes = (ListView)v.findViewById(R.id.lstAllEpisodes);        		
     	
-    	new GetEpisodesTask().execute(getArguments().getString("showId"));
+    	 showId = getArguments().getString("showId");
+    	 
+    	new GetEpisodesTask().execute(showId);
     	 	
         return v;
     }
@@ -62,7 +65,7 @@ public class Episodes extends Fragment{
     	EpisodeAdapter.MarkShowAsWatched();
     	allEpisodes.notifyDataSetChanged();
     }
-    
+        
     public static void MarkLastAiredEpisodesAsWatched()
     {
     	allEpisodes.notifyDataSetChanged();

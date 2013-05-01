@@ -11,20 +11,27 @@ public class Utils {
 
 
 	public static int selectedProfile;
+	public static int activeTheme;
 	public static int PreferedSortOrder;
 	public static int ShowShows;
+	public static Boolean ignoreTheWhenOrder;
+	public static Boolean useLocalizedTimezone;
 	
 	public static int GetTheme(int pref_theme){
 		switch (pref_theme) {
 		case 0:
-			return R.style.Dark;
+			activeTheme = R.style.Dark;
+			break;
 		case 1:
-			return R.style.LightDark;
+			activeTheme = R.style.LightDark;
+			break;
 		case 2:
-			return R.style.Light;
+			activeTheme = R.style.Light;
+			break;
 		default:
-			return R.style.Light;
+			break;
 		}
+		return activeTheme;		
 	}
 	
 
