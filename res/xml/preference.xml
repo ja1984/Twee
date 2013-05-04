@@ -62,7 +62,7 @@
             android:summary="@string/settings_ignorethe_description"
             android:title="@string/settings_ignorethe_header" />
         <CheckBoxPreference
-            android:defaultValue="true"
+            android:defaultValue="false"
             android:key="pref_localizedtime"
             android:summary="@string/settings_localizedtime_description"
             android:title="@string/settings_localizedtime_header" />

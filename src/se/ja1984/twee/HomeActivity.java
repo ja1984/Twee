@@ -96,14 +96,12 @@ public class HomeActivity extends BaseActivity {
 		
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(HomeActivity.this);
 		Utils.ignoreTheWhenOrder = prefs.getBoolean("pref_ignorethe", true);
-		Utils.useLocalizedTimezone = prefs.getBoolean("pref_localizedtime", true);
+		Utils.useLocalizedTimezone = prefs.getBoolean("pref_localizedtime", false);
 		
 		
 		settings = getSharedPreferences("Twee", 0);
 		Utils.selectedProfile = settings.getInt("Profile", 1);
 		String lastUpdate = settings.getString("LastUpdate", "");
-
-		Log.d("Test","" + new DateHelper().ConvertToLocalTimeTest("2013-05-01", "21:00"));
 		
 		if(lastUpdate.equals("")){
 			SharedPreferences.Editor editor = settings.edit();
